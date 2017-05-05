@@ -3,3 +3,12 @@
 // license that can be found in the LICENSE file.
 
 package crt
+
+import (
+	"os"
+)
+
+// void exit(int);
+func X__builtin_exit(n int32) {
+	os.Exit(int(n))
+}
