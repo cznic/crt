@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"unsafe"
 )
 
 //TODO remove me.
@@ -18,3 +19,5 @@ func TODO(msg string, more ...interface{}) string { //TODOOK
 	os.Stderr.Sync()
 	panic(fmt.Errorf("%s:%d: TODO %v", path.Base(fn), fl, fmt.Sprintf(msg, more...))) //TODOOK
 }
+
+func readI8(p uintptr) int8 { return *(*int8)(unsafe.Pointer(p)) }
