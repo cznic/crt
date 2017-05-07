@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// Package crt provides C-runtime services. (Work In Progress)
 package crt
 
 import (
