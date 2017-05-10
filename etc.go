@@ -7,9 +7,11 @@ package crt
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"path"
 	"runtime"
+	"unsafe"
 )
 
 //TODO remove me.
@@ -18,4 +20,8 @@ func TODO(msg string, more ...interface{}) string { //TODOOK
 	fmt.Fprintf(os.Stderr, "%s:%d: %v\n", path.Base(fn), fl, fmt.Sprintf(msg, more...))
 	os.Stderr.Sync()
 	panic(fmt.Errorf("%s:%d: TODO %v", path.Base(fn), fl, fmt.Sprintf(msg, more...))) //TODOOK
+}
+
+func movemem(dst, src uintptr, n int) int {
+	return copy((*[math.MaxInt32]byte)(unsafe.Pointer(dst))[:n], (*[math.MaxInt32]byte)(unsafe.Pointer(src))[:n])
 }

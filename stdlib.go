@@ -9,6 +9,9 @@ import (
 )
 
 // void exit(int);
+func Xexit(n int32) { X__builtin_exit(n) }
+
+// void exit(int);
 func X__builtin_exit(n int32) {
 	os.Exit(int(n))
 }
