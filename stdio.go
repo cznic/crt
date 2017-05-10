@@ -24,7 +24,7 @@ type vaReader interface {
 	readI32() int32
 	readI64() int64
 	readLong() int64
-	readPtr() uintptr
+	readPtr() unsafe.Pointer
 	readU32() uint32
 	readU64() uint64
 	readULong() uint64
@@ -32,9 +32,9 @@ type vaReader interface {
 
 type argsReader []interface{}
 
-func (r *argsReader) readPtr() uintptr {
+func (r *argsReader) readPtr() unsafe.Pointer {
 	s := *r
-	v := s[0].(uintptr)
+	v := s[0].(unsafe.Pointer)
 	*r = s[1:]
 	return v
 }
@@ -46,9 +46,20 @@ func (r *argsReader) readF64() float64 {
 	return v
 }
 
-func (r *argsReader) readI32() int32 {
+func (r *argsReader) readI32() (v int32) {
 	s := *r
-	v := s[0].(int32)
+	switch x := s[0].(type) {
+	case int32:
+		v = x
+	case uint32:
+		v = int32(x)
+	case int64:
+		v = int32(x)
+	case uint64:
+		v = int32(x)
+	default:
+		panic(fmt.Errorf("%T", x))
+	}
 	*r = s[1:]
 	return v
 }
@@ -82,17 +93,17 @@ func X__register_stdfiles(in, out, err uintptr) {
 }
 
 // int printf(const char *format, ...);
-func Xprintf(format uintptr, args ...interface{}) int32 {
+func Xprintf(format *int8, args ...interface{}) int32 {
 	r := argsReader(args)
 	return goFprintf(os.Stdout, format, &r)
 }
 
-func goFprintf(w io.Writer, format uintptr, ap vaReader) int32 {
+func goFprintf(w io.Writer, format *int8, ap vaReader) int32 {
 	var b buffer.Bytes
 	written := 0
 	for {
-		ch := readI8(format)
-		format++
+		ch := *format
+		*(*uintptr)(unsafe.Pointer(&format))++
 		switch ch {
 		case 0:
 			_, err := b.WriteTo(w)
@@ -107,8 +118,8 @@ func goFprintf(w io.Writer, format uintptr, ap vaReader) int32 {
 			long := 0
 			var w []interface{}
 		more:
-			ch := readI8(format)
-			format++
+			ch := *format
+			*(*uintptr)(unsafe.Pointer(&format))++
 			switch ch {
 			case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.':
 				modifiers += string(ch)
@@ -166,22 +177,22 @@ func goFprintf(w io.Writer, format uintptr, ap vaReader) int32 {
 				written += n
 			case 'p':
 				arg := ap.readPtr()
-				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sp", modifiers), append(w, unsafe.Pointer(arg))...)
+				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sp", modifiers), append(w, arg)...)
 				written += n
 			case 'g':
 				arg := ap.readF64()
 				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sg", modifiers), append(w, arg)...)
 				written += n
 			case 's':
-				arg := ap.readPtr()
-				if arg == 0 {
+				arg := (*int8)(ap.readPtr())
+				if arg == nil {
 					break
 				}
 
 				var b2 buffer.Bytes
 				for {
-					c := readI8(arg)
-					arg++
+					c := *arg
+					*(*uintptr)(unsafe.Pointer(&arg))++
 					if c == 0 {
 						n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%ss", modifiers), append(w, b2.Bytes())...)
 						b2.Close()
