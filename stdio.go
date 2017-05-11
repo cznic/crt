@@ -98,6 +98,15 @@ func Xprintf(format *int8, args ...interface{}) int32 {
 	return goFprintf(os.Stdout, format, &r)
 }
 
+// int sprintf(char *str, const char *format, ...);
+func Xsprintf(str, format *int8, args ...interface{}) int32 {
+	w := memWriter(uintptr(unsafe.Pointer(str)))
+	r := argsReader(args)
+	n := goFprintf(&w, format, &r)
+	w.WriteByte(0)
+	return n
+}
+
 func goFprintf(w io.Writer, format *int8, ap vaReader) int32 {
 	var b buffer.Bytes
 	written := 0

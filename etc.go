@@ -22,6 +22,23 @@ func TODO(msg string, more ...interface{}) string { //TODOOK
 	panic(fmt.Errorf("%s:%d: TODO %v", path.Base(fn), fl, fmt.Sprintf(msg, more...))) //TODOOK
 }
 
+type memWriter uintptr
+
+func (m *memWriter) Write(b []byte) (int, error) {
+	if len(b) == 0 {
+		return 0, nil
+	}
+
+	*m += memWriter(movemem(uintptr(*m), uintptr((unsafe.Pointer)(&b[0])), len(b)))
+	return len(b), nil
+}
+
+func (m *memWriter) WriteByte(b byte) error {
+	*(*byte)(unsafe.Pointer(m)) = b
+	*m++
+	return nil
+}
+
 func movemem(dst, src uintptr, n int) int {
 	return copy((*[math.MaxInt32]byte)(unsafe.Pointer(dst))[:n], (*[math.MaxInt32]byte)(unsafe.Pointer(src))[:n])
 }
