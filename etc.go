@@ -14,6 +14,17 @@ import (
 	"unsafe"
 
 	"github.com/cznic/internal/buffer"
+	"github.com/cznic/mathutil"
+)
+
+const (
+	ptrSize   = mathutil.UintPtrBits / 8
+	heapAlign = 2 * ptrSize
+)
+
+var (
+	heap          uintptr
+	heapAvailable int64
 )
 
 //TODO remove me.
@@ -64,3 +75,11 @@ func GoString(s *int8) string {
 		*(*uintptr)(unsafe.Pointer(&s))++
 	}
 }
+
+func RegisterHeap(h uintptr, n int64) {
+	heap = h
+	heapAvailable = n
+}
+
+// if n%m != 0 { n += m-n%m }. m must be a power of 2.
+func roundupI64(n, m int64) int64 { return (n + m - 1) &^ (m - 1) }
