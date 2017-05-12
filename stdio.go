@@ -5,9 +5,12 @@
 package crt
 
 import (
+	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"sync"
 	"unsafe"
 
 	"github.com/cznic/internal/buffer"
@@ -18,6 +21,62 @@ var (
 
 	stdin, stdout, stderr uintptr
 )
+
+var (
+	files = &fmap{
+		m: map[uintptr]*os.File{},
+	}
+	nullReader = bytes.NewBuffer(nil)
+)
+
+type fmap struct {
+	m  map[uintptr]*os.File
+	mu sync.Mutex
+}
+
+func (m *fmap) add(f *os.File, u uintptr) {
+	m.mu.Lock()
+	m.m[u] = f
+	m.mu.Unlock()
+}
+
+func (m *fmap) reader(u uintptr) io.Reader {
+	switch u {
+	case stdin:
+		return os.Stdin
+	case stdout, stderr:
+		return nullReader
+	}
+
+	m.mu.Lock()
+	f := m.m[u]
+	m.mu.Unlock()
+	return f
+}
+
+func (m *fmap) writer(u uintptr) io.Writer {
+	switch u {
+	case stdin:
+		return ioutil.Discard
+	case stdout:
+		return os.Stdout
+	case stderr:
+		return os.Stderr
+	}
+
+	m.mu.Lock()
+	f := m.m[u]
+	m.mu.Unlock()
+	return f
+}
+
+func (m *fmap) extract(u uintptr) *os.File {
+	m.mu.Lock()
+	f := m.m[u]
+	delete(m.m, u)
+	m.mu.Unlock()
+	return f
+}
 
 type vaReader interface {
 	readF64() float64
