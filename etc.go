@@ -47,7 +47,7 @@ func (m *memWriter) Write(b []byte) (int, error) {
 }
 
 func (m *memWriter) WriteByte(b byte) error {
-	*(*byte)(unsafe.Pointer(m)) = b
+	*(*byte)(unsafe.Pointer(*m)) = b
 	*m++
 	return nil
 }

@@ -7,10 +7,6 @@
 
 package crt
 
-const (
-	longBits = 64
-)
-
 type file *struct {
 	X0  int32
 	X1  *int8

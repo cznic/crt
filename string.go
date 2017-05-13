@@ -33,24 +33,24 @@ func Xstrcat(dest, src *int8) *int8 {
 		*(*uintptr)(unsafe.Pointer(&dest))++
 	}
 	for {
-		ch := *src
+		c := *src
 		*(*uintptr)(unsafe.Pointer(&src))++
-		*dest = ch
+		*dest = c
 		*(*uintptr)(unsafe.Pointer(&dest))++
-		if ch == 0 {
+		if c == 0 {
 			return ret
 		}
 	}
 }
 
 // char *index(const char *s, int c)
-func Xindex(s *int8, ch int32) *int8 { return Xstrchr(s, ch) }
+func Xindex(s *int8, c int32) *int8 { return Xstrchr(s, c) }
 
 // char *strchr(const char *s, int c)
-func Xstrchr(s *int8, ch int32) *int8 {
+func Xstrchr(s *int8, c int32) *int8 {
 	for {
 		ch2 := byte(*s)
-		if ch2 == byte(ch) {
+		if ch2 == byte(c) {
 			return s
 		}
 
@@ -79,11 +79,11 @@ func Xstrcmp(s1, s2 *int8) int32 {
 func Xstrcpy(dest, src *int8) *int8 {
 	r := dest
 	for {
-		ch := *src
+		c := *src
 		*(*uintptr)(unsafe.Pointer(&src))++
-		*dest = ch
+		*dest = c
 		*(*uintptr)(unsafe.Pointer(&dest))++
-		if ch == 0 {
+		if c == 0 {
 			return r
 		}
 	}
@@ -110,10 +110,10 @@ func Xstrcpy(dest, src *int8) *int8 {
 // }
 
 // char *rindex(const char *s, int c)
-func Xrindex(s *int8, ch int32) *int8 { return Xstrrchr(s, ch) }
+func Xrindex(s *int8, c int32) *int8 { return Xstrrchr(s, c) }
 
 // char *strrchr(const char *s, int c)
-func Xstrrchr(s *int8, ch int32) *int8 {
+func Xstrrchr(s *int8, c int32) *int8 {
 	var ret *int8
 	for {
 		ch2 := byte(*s)
@@ -121,7 +121,7 @@ func Xstrrchr(s *int8, ch int32) *int8 {
 			return ret
 		}
 
-		if ch2 == byte(ch) {
+		if ch2 == byte(c) {
 			ret = s
 		}
 		*(*uintptr)(unsafe.Pointer(&s))++

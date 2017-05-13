@@ -13,11 +13,11 @@ import (
 // char *strncpy(char *dest, const char *src, size_t n)
 func Xstrncpy(dest, src *int8, n uint64) *int8 {
 	ret := dest
-	for ch := *src; ch != 0 && n > 0; n-- {
-		*dest = ch
+	for c := *src; c != 0 && n > 0; n-- {
+		*dest = c
 		*(*uintptr)(unsafe.Pointer(&dest))++
 		*(*uintptr)(unsafe.Pointer(&src))++
-		ch = *src
+		c = *src
 	}
 	for ; n > 0; n-- {
 		*dest = 0
@@ -56,10 +56,10 @@ func Xstrncmp(s1, s2 *int8, n uint64) int32 {
 }
 
 // void *memset(void *s, int c, size_t n)
-func Xmemset(s uintptr, ch int32, n uint64) uintptr {
+func Xmemset(s uintptr, c int32, n uint64) uintptr {
 	ret := s
 	for d := (*int8)(unsafe.Pointer(s)); n > 0; n-- {
-		*d = int8(ch)
+		*d = int8(c)
 		*(*uintptr)(unsafe.Pointer(&d))++
 	}
 	return ret

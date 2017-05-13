@@ -6,10 +6,6 @@
 
 package crt
 
-const (
-	longBits = 32
-)
-
 func (r *varargReader) readLong() int64 {
 	s := *r
 	v := s[0].(int32)

@@ -173,9 +173,9 @@ func goFprintf(w io.Writer, format *int8, ap vaReader) int32 {
 	var b buffer.Bytes
 	written := 0
 	for {
-		ch := *format
+		c := *format
 		*(*uintptr)(unsafe.Pointer(&format))++
-		switch ch {
+		switch c {
 		case 0:
 			_, err := b.WriteTo(w)
 			b.Close()
@@ -189,15 +189,15 @@ func goFprintf(w io.Writer, format *int8, ap vaReader) int32 {
 			long := 0
 			var w []interface{}
 		more:
-			ch := *format
+			c := *format
 			*(*uintptr)(unsafe.Pointer(&format))++
-			switch ch {
+			switch c {
 			case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.':
-				modifiers += string(ch)
+				modifiers += string(c)
 				goto more
 			case '*':
 				w = append(w, ap.readI32())
-				modifiers += string(ch)
+				modifiers += string(c)
 				goto more
 			case 'c':
 				arg := ap.readI32()
@@ -274,12 +274,12 @@ func goFprintf(w io.Writer, format *int8, ap vaReader) int32 {
 					b2.WriteByte(byte(c))
 				}
 			default:
-				panic(fmt.Errorf("TODO %q", "%"+string(ch)))
+				panic(fmt.Errorf("TODO %q", "%"+string(c)))
 			}
 		default:
-			b.WriteByte(byte(ch))
+			b.WriteByte(byte(c))
 			written++
-			if ch == '\n' {
+			if c == '\n' {
 				if _, err := b.WriteTo(w); err != nil {
 					b.Close()
 					return -1
@@ -431,4 +431,10 @@ func Xfgets(s *int8, size int32, stream file) *int8 {
 	buffer.Put(p)
 	return s
 
+}
+
+// int fprintf(FILE * stream, const char *format, ...);
+func Xfprintf(stream file, format *int8, args ...interface{}) int32 {
+	r := argsReader(args)
+	return goFprintf(files.writer(uintptr(unsafe.Pointer(stream))), format, &r)
 }
