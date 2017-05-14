@@ -37,3 +37,9 @@ func malloc(size uint64) uintptr {
 func Xfree(ptr uintptr) {
 	//TODO
 }
+
+// void abort();
+func Xabort() { X__builtin_abort() }
+
+// void abort();
+func X__builtin_abort() { os.Exit(1) }
