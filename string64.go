@@ -56,13 +56,15 @@ func Xstrncmp(s1, s2 *int8, n uint64) int32 {
 }
 
 // void *memset(void *s, int c, size_t n)
-func Xmemset(s uintptr, c int32, n uint64) uintptr {
-	ret := s
+func Xmemset(s uintptr, c int32, n uint64) uintptr { return X__builtin_memset(s, c, n) }
+
+// void *memset(void *s, int c, size_t n)
+func X__builtin_memset(s uintptr, c int32, n uint64) uintptr {
 	for d := (*int8)(unsafe.Pointer(s)); n > 0; n-- {
 		*d = int8(c)
 		*(*uintptr)(unsafe.Pointer(&d))++
 	}
-	return ret
+	return s
 }
 
 // void *memcpy(void *dest, const void *src, size_t n)
