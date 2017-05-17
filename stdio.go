@@ -433,8 +433,13 @@ func Xfgets(s *int8, size int32, stream file) *int8 {
 
 }
 
+// int __builtin_fprintf(void* stream, const char *format, ...);
+func X__builtin_fprintf(stream uintptr, format *int8, args ...interface{}) int32 {
+	r := argsReader(args)
+	return goFprintf(files.writer(stream), format, &r)
+}
+
 // int fprintf(FILE * stream, const char *format, ...);
 func Xfprintf(stream file, format *int8, args ...interface{}) int32 {
-	r := argsReader(args)
-	return goFprintf(files.writer(uintptr(unsafe.Pointer(stream))), format, &r)
+	return X__builtin_fprintf(uintptr(unsafe.Pointer(stream)), format, args...)
 }
