@@ -19,7 +19,7 @@ func X__builtin_exit(n int32) {
 }
 
 // void *malloc(size_t size);
-func malloc(size uint64) uintptr {
+func malloc(size int) uintptr {
 	if size != 0 && size <= mathutil.MaxInt {
 		if size != 0 {
 			p := sbrk(int64(size))
@@ -43,3 +43,14 @@ func Xabort() { X__builtin_abort() }
 
 // void abort();
 func X__builtin_abort() { os.Exit(1) }
+
+// void *realloc(void *ptr, size_t size);
+func realloc(ptr uintptr, size int) uintptr {
+	q := malloc(size)
+	if q == 0 {
+		return 0
+	}
+
+	movemem(q, ptr, size)
+	return q
+}

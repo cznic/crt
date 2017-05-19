@@ -5,4 +5,9 @@
 package crt
 
 // void *malloc(size_t size);
-func Xmalloc(size uint64) uintptr { return malloc(size) }
+func Xmalloc(size uint64) uintptr { return malloc(int(size)) }
+
+// void *realloc(void *ptr, size_t size);
+func Xrealloc(ptr uintptr, size uint64) uintptr {
+	return realloc(ptr, int(size))
+}
