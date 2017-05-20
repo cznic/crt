@@ -93,3 +93,9 @@ func Xmemcmp(s1, s2 uintptr, n uint64) int32 {
 
 	return 0
 }
+
+// void *memmove(void *dest, const void *src, size_t n);
+func Xmemmove(dest, src uintptr, n uint64) uintptr {
+	movemem(dest, src, int(n))
+	return dest
+}
