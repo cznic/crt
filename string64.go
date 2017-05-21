@@ -56,10 +56,10 @@ func Xstrncmp(s1, s2 *int8, n uint64) int32 {
 }
 
 // void *memset(void *s, int c, size_t n)
-func Xmemset(s uintptr, c int32, n uint64) uintptr { return X__builtin_memset(s, c, n) }
+func Xmemset(s unsafe.Pointer, c int32, n uint64) unsafe.Pointer { return X__builtin_memset(s, c, n) }
 
 // void *memset(void *s, int c, size_t n)
-func X__builtin_memset(s uintptr, c int32, n uint64) uintptr {
+func X__builtin_memset(s unsafe.Pointer, c int32, n uint64) unsafe.Pointer {
 	for d := (*int8)(unsafe.Pointer(s)); n > 0; n-- {
 		*d = int8(c)
 		*(*uintptr)(unsafe.Pointer(&d))++
@@ -68,13 +68,13 @@ func X__builtin_memset(s uintptr, c int32, n uint64) uintptr {
 }
 
 // void *memcpy(void *dest, const void *src, size_t n)
-func Xmemcpy(dest, src uintptr, n uint64) uintptr {
+func Xmemcpy(dest, src unsafe.Pointer, n uint64) unsafe.Pointer {
 	movemem(dest, src, int(n))
 	return dest
 }
 
 // int memcmp(const void *s1, const void *s2, size_t n)
-func Xmemcmp(s1, s2 uintptr, n uint64) int32 {
+func Xmemcmp(s1, s2 unsafe.Pointer, n uint64) int32 {
 	var ch1, ch2 byte
 	for n != 0 {
 		ch1 = *(*byte)(unsafe.Pointer(s1))
@@ -95,7 +95,7 @@ func Xmemcmp(s1, s2 uintptr, n uint64) int32 {
 }
 
 // void *memmove(void *dest, const void *src, size_t n);
-func Xmemmove(dest, src uintptr, n uint64) uintptr {
+func Xmemmove(dest, src unsafe.Pointer, n uint64) unsafe.Pointer {
 	movemem(dest, src, int(n))
 	return dest
 }

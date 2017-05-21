@@ -4,10 +4,14 @@
 
 package crt
 
+import (
+	"unsafe"
+)
+
 // void *malloc(size_t size);
-func Xmalloc(size uint64) uintptr { return malloc(int(size)) }
+func Xmalloc(size uint64) unsafe.Pointer { return malloc(int(size)) }
 
 // void *realloc(void *ptr, size_t size);
-func Xrealloc(ptr uintptr, size uint64) uintptr {
+func Xrealloc(ptr unsafe.Pointer, size uint64) unsafe.Pointer {
 	return realloc(ptr, int(size))
 }

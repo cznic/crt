@@ -6,5 +6,9 @@
 
 package crt
 
+import (
+	"unsafe"
+)
+
 // void *sbrk(intptr_t increment);
-func Xsbrk(increment int64) uintptr { return sbrk(increment) }
+func Xsbrk(increment int64) unsafe.Pointer { return sbrk(increment) }

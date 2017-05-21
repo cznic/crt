@@ -22,28 +22,28 @@ import (
 var (
 	_ vaReader = (*argsReader)(nil)
 
-	stdin, stdout, stderr uintptr
+	stdin, stdout, stderr unsafe.Pointer
 )
 
 var (
 	files = &fmap{
-		m: map[uintptr]*os.File{},
+		m: map[unsafe.Pointer]*os.File{},
 	}
 	nullReader = bytes.NewBuffer(nil)
 )
 
 type fmap struct {
-	m  map[uintptr]*os.File
+	m  map[unsafe.Pointer]*os.File
 	mu sync.Mutex
 }
 
-func (m *fmap) add(f *os.File, u uintptr) {
+func (m *fmap) add(f *os.File, u unsafe.Pointer) {
 	m.mu.Lock()
 	m.m[u] = f
 	m.mu.Unlock()
 }
 
-func (m *fmap) reader(u uintptr) io.Reader {
+func (m *fmap) reader(u unsafe.Pointer) io.Reader {
 	switch u {
 	case stdin:
 		return os.Stdin
@@ -57,7 +57,7 @@ func (m *fmap) reader(u uintptr) io.Reader {
 	return f
 }
 
-func (m *fmap) writer(u uintptr) io.Writer {
+func (m *fmap) writer(u unsafe.Pointer) io.Writer {
 	switch u {
 	case stdin:
 		return ioutil.Discard
@@ -73,7 +73,7 @@ func (m *fmap) writer(u uintptr) io.Writer {
 	return f
 }
 
-func (m *fmap) extract(u uintptr) *os.File {
+func (m *fmap) extract(u unsafe.Pointer) *os.File {
 	m.mu.Lock()
 	f := m.m[u]
 	delete(m.m, u)
@@ -148,7 +148,7 @@ func (r *argsReader) readU64() uint64 {
 }
 
 // void __register_stdfiles(void *, void *, void *);
-func X__register_stdfiles(in, out, err uintptr) {
+func X__register_stdfiles(in, out, err unsafe.Pointer) {
 	stdin = in
 	stdout = out
 	stderr = err
@@ -162,7 +162,7 @@ func Xprintf(format *int8, args ...interface{}) int32 {
 
 // int sprintf(char *str, const char *format, ...);
 func Xsprintf(str, format *int8, args ...interface{}) int32 {
-	w := memWriter(uintptr(unsafe.Pointer(str)))
+	w := memWriter(unsafe.Pointer(str))
 	r := argsReader(args)
 	n := goFprintf(&w, format, &r)
 	w.WriteByte(0)
@@ -293,7 +293,7 @@ func goFprintf(w io.Writer, format *int8, ap vaReader) int32 {
 // FILE *fopen64(const char *path, const char *mode);
 func Xfopen64(path, mode *int8) file {
 	p := GoString(path)
-	var u uintptr
+	var u unsafe.Pointer
 	switch p {
 	case os.Stderr.Name():
 		u = stderr
@@ -337,14 +337,14 @@ func Xfopen64(path, mode *int8) file {
 }
 
 // size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-func fwrite(ptr uintptr, size, nmemb uint64, stream file) uint64 {
+func fwrite(ptr unsafe.Pointer, size, nmemb uint64, stream file) uint64 {
 	hi, lo := mathutil.MulUint128_64(size, nmemb)
 	if hi != 0 || lo > math.MaxInt32 {
 		TODO("") // c.setErrno(errno.XE2BIG)
 		return 0
 	}
 
-	n, err := files.writer(uintptr(unsafe.Pointer(stream))).Write((*[math.MaxInt32]byte)(unsafe.Pointer(ptr))[:lo])
+	n, err := files.writer(unsafe.Pointer(stream)).Write((*[math.MaxInt32]byte)(unsafe.Pointer(ptr))[:lo])
 	if err != nil {
 		TODO("") // c.setErrno(errno.XEIO)
 	}
@@ -353,7 +353,7 @@ func fwrite(ptr uintptr, size, nmemb uint64, stream file) uint64 {
 
 // int fclose(FILE *stream);
 func Xfclose(stream file) int32 {
-	u := uintptr(unsafe.Pointer(stream))
+	u := unsafe.Pointer(stream)
 	switch u {
 	case stdin, stdout, stderr:
 		TODO("") // c.setErrno(errno.XEIO)
@@ -376,14 +376,14 @@ func Xfclose(stream file) int32 {
 }
 
 // size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-func fread(ptr uintptr, size, nmemb uint64, stream file) uint64 {
+func fread(ptr unsafe.Pointer, size, nmemb uint64, stream file) uint64 {
 	hi, lo := mathutil.MulUint128_64(size, nmemb)
 	if hi != 0 || lo > math.MaxInt32 {
 		TODO("") // c.setErrno(errno.XE2BIG)
 		return 0
 	}
 
-	n, err := files.reader(uintptr(unsafe.Pointer(stream))).Read((*[math.MaxInt32]byte)(unsafe.Pointer(ptr))[:lo])
+	n, err := files.reader(unsafe.Pointer(stream)).Read((*[math.MaxInt32]byte)(unsafe.Pointer(ptr))[:lo])
 	if err != nil {
 		TODO("") // c.setErrno(errno.XEIO)
 	}
@@ -393,7 +393,7 @@ func fread(ptr uintptr, size, nmemb uint64, stream file) uint64 {
 // int fgetc(FILE *stream);
 func Xfgetc(stream file) int32 {
 	p := buffer.Get(1)
-	if _, err := files.reader(uintptr(unsafe.Pointer(stream))).Read(*p); err != nil {
+	if _, err := files.reader(unsafe.Pointer(stream)).Read(*p); err != nil {
 		buffer.Put(p)
 		return stdio.XEOF
 	}
@@ -405,10 +405,10 @@ func Xfgetc(stream file) int32 {
 
 // char *fgets(char *s, int size, FILE *stream);
 func Xfgets(s *int8, size int32, stream file) *int8 {
-	f := files.reader(uintptr(unsafe.Pointer(stream)))
+	f := files.reader(unsafe.Pointer(stream))
 	p := buffer.Get(1)
 	b := *p
-	w := memWriter(uintptr(unsafe.Pointer(s)))
+	w := memWriter(unsafe.Pointer(s))
 	ok := false
 	for i := int(size) - 1; i > 0; i-- {
 		_, err := f.Read(b)
@@ -434,12 +434,18 @@ func Xfgets(s *int8, size int32, stream file) *int8 {
 }
 
 // int __builtin_fprintf(void* stream, const char *format, ...);
-func X__builtin_fprintf(stream uintptr, format *int8, args ...interface{}) int32 {
+func X__builtin_fprintf(stream unsafe.Pointer, format *int8, args ...interface{}) int32 {
 	r := argsReader(args)
 	return goFprintf(files.writer(stream), format, &r)
 }
 
 // int fprintf(FILE * stream, const char *format, ...);
 func Xfprintf(stream file, format *int8, args ...interface{}) int32 {
-	return X__builtin_fprintf(uintptr(unsafe.Pointer(stream)), format, args...)
+	return X__builtin_fprintf(unsafe.Pointer(stream), format, args...)
+}
+
+// int fflush(FILE *stream);
+func Xfflush(stream file) int32 {
+	TODO("")
+	panic("TODO")
 }

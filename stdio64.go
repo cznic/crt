@@ -7,6 +7,10 @@
 
 package crt
 
+import (
+	"unsafe"
+)
+
 type file *struct {
 	X0  int32
 	X1  *int8
@@ -20,20 +24,20 @@ type file *struct {
 	X9  *int8
 	X10 *int8
 	X11 *int8
-	X12 uintptr
-	X13 uintptr
+	X12 unsafe.Pointer
+	X13 unsafe.Pointer
 	X14 int32
 	X15 int32
 	X16 int64
 	X17 uint16
 	X18 int8
 	X19 [1]int8
-	X20 uintptr
+	X20 unsafe.Pointer
 	X21 int64
-	X22 uintptr
-	X23 uintptr
-	X24 uintptr
-	X25 uintptr
+	X22 unsafe.Pointer
+	X23 unsafe.Pointer
+	X24 unsafe.Pointer
+	X25 unsafe.Pointer
 	X26 uint64
 	X27 int32
 	X28 [20]int8
@@ -54,11 +58,11 @@ func (r *argsReader) readULong() uint64 {
 }
 
 // size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-func Xfwrite(ptr uintptr, size, nmemb uint64, stream file) uint64 {
+func Xfwrite(ptr unsafe.Pointer, size, nmemb uint64, stream file) uint64 {
 	return fwrite(ptr, size, nmemb, stream)
 }
 
 // size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-func Xfread(ptr uintptr, size, nmemb uint64, stream file) uint64 {
+func Xfread(ptr unsafe.Pointer, size, nmemb uint64, stream file) uint64 {
 	return fread(ptr, size, nmemb, stream)
 }

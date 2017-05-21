@@ -6,6 +6,7 @@ package crt
 
 import (
 	"os"
+	"unsafe"
 
 	"github.com/cznic/mathutil"
 )
@@ -19,22 +20,22 @@ func X__builtin_exit(n int32) {
 }
 
 // void *malloc(size_t size);
-func malloc(size int) uintptr {
+func malloc(size int) unsafe.Pointer {
 	if size != 0 && size <= mathutil.MaxInt {
 		if size != 0 {
 			p := sbrk(int64(size))
-			if int64(p) > 0 {
+			if int64(uintptr(p)) > 0 {
 				return p
 			}
 		}
 
 	}
 
-	return 0
+	return nil
 }
 
 // void free(void *ptr);
-func Xfree(ptr uintptr) {
+func Xfree(ptr unsafe.Pointer) {
 	//TODO
 }
 
@@ -45,10 +46,10 @@ func Xabort() { X__builtin_abort() }
 func X__builtin_abort() { os.Exit(1) }
 
 // void *realloc(void *ptr, size_t size);
-func realloc(ptr uintptr, size int) uintptr {
+func realloc(ptr unsafe.Pointer, size int) unsafe.Pointer {
 	q := malloc(size)
-	if q == 0 {
-		return 0
+	if q == nil {
+		return nil
 	}
 
 	movemem(q, ptr, size)

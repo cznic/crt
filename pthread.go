@@ -30,8 +30,8 @@ type pthread_mutex_t *struct {
 			X5 int16
 			X6 int16
 			X7 struct {
-				X0 uintptr
-				X1 uintptr
+				X0 unsafe.Pointer
+				X1 unsafe.Pointer
 			}
 		}
 		X1 [40]int8
@@ -45,15 +45,15 @@ type mu struct {
 	count int
 	inner sync.Mutex
 	outer sync.Mutex
-	owner uintptr
+	owner int
 }
 
 type mutexMap struct {
-	m map[uintptr]*mu
+	m map[unsafe.Pointer]*mu
 	sync.Mutex
 }
 
-func (m *mutexMap) mu(p uintptr) *mu {
+func (m *mutexMap) mu(p unsafe.Pointer) *mu {
 	m.Lock()
 	r := m.m[p]
 	if r == nil {
@@ -65,7 +65,7 @@ func (m *mutexMap) mu(p uintptr) *mu {
 }
 
 var (
-	mutexes = &mutexMap{m: map[uintptr]*mu{}}
+	mutexes = &mutexMap{m: map[unsafe.Pointer]*mu{}}
 )
 
 // extern int pthread_mutexattr_init(pthread_mutexattr_t * __attr);
@@ -85,7 +85,7 @@ func Xpthread_mutex_init(mutex pthread_mutex_t, mutexattr pthread_mutexattr_t) i
 	if mutexattr != nil {
 		attr = *(*int32)(unsafe.Pointer(mutexattr))
 	}
-	mutexes.mu(uintptr(unsafe.Pointer(mutex))).attr = attr
+	mutexes.mu(unsafe.Pointer(mutex)).attr = attr
 	return 0
 }
 
@@ -98,7 +98,7 @@ func Xpthread_mutexattr_destroy(attr pthread_mutexattr_t) int32 {
 // extern int pthread_mutex_destroy(pthread_mutex_t * __mutex);
 func Xpthread_mutex_destroy(mutex pthread_mutex_t) int32 {
 	mutexes.Lock()
-	delete(mutexes.m, uintptr(unsafe.Pointer(mutex)))
+	delete(mutexes.m, unsafe.Pointer(mutex))
 	mutexes.Unlock()
 	return 0
 }

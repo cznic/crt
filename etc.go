@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	heap          uintptr
+	heap          unsafe.Pointer
 	heapAvailable int64
 )
 
@@ -42,7 +42,7 @@ func (m *memWriter) Write(b []byte) (int, error) {
 		return 0, nil
 	}
 
-	*m += memWriter(movemem(uintptr(*m), uintptr((unsafe.Pointer)(&b[0])), len(b)))
+	*m += memWriter(movemem(unsafe.Pointer(*m), unsafe.Pointer(&b[0]), len(b)))
 	return len(b), nil
 }
 
@@ -52,8 +52,8 @@ func (m *memWriter) WriteByte(b byte) error {
 	return nil
 }
 
-func movemem(dst, src uintptr, n int) int {
-	return copy((*[math.MaxInt32]byte)(unsafe.Pointer(dst))[:n], (*[math.MaxInt32]byte)(unsafe.Pointer(src))[:n])
+func movemem(dst, src unsafe.Pointer, n int) int {
+	return copy((*[math.MaxInt32]byte)(dst)[:n], (*[math.MaxInt32]byte)(src)[:n])
 }
 
 // GoString returns a string from a C char* null terminated string s.
@@ -76,7 +76,7 @@ func GoString(s *int8) string {
 	}
 }
 
-func RegisterHeap(h uintptr, n int64) {
+func RegisterHeap(h unsafe.Pointer, n int64) {
 	heap = h
 	heapAvailable = n
 }
