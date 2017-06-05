@@ -11,7 +11,11 @@ import (
 	"unsafe"
 )
 
-type file *struct {
+const (
+	TFILE = "struct{int32,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*struct{},*struct{},int32,int32,int64,uint16,int8,[1]int8,*struct{},int64,*struct{},*struct{},*struct{},*struct{},uint64,int32,[20]int8}"
+)
+
+type XFILE struct {
 	X0  int32
 	X1  *int8
 	X2  *int8
@@ -43,26 +47,12 @@ type file *struct {
 	X28 [20]int8
 }
 
-func (r *argsReader) readLong() int64 {
-	s := *r
-	v := s[0].(int64)
-	*r = s[1:]
-	return v
-}
-
-func (r *argsReader) readULong() uint64 {
-	s := *r
-	v := s[0].(uint64)
-	*r = s[1:]
-	return v
-}
-
 // size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-func Xfwrite(ptr unsafe.Pointer, size, nmemb uint64, stream file) uint64 {
-	return fwrite(ptr, size, nmemb, stream)
+func Xfwrite(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *XFILE) uint64 {
+	return fwrite(tls, ptr, size, nmemb, stream)
 }
 
 // size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-func Xfread(ptr unsafe.Pointer, size, nmemb uint64, stream file) uint64 {
-	return fread(ptr, size, nmemb, stream)
+func Xfread(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *XFILE) uint64 {
+	return fread(tls, ptr, size, nmemb, stream)
 }

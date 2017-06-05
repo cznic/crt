@@ -27,7 +27,7 @@ import (
 // }
 
 // char *strcat(char *dest, const char *src)
-func Xstrcat(dest, src *int8) *int8 {
+func Xstrcat(tls *TLS, dest, src *int8) *int8 {
 	ret := dest
 	for *dest != 0 {
 		*(*uintptr)(unsafe.Pointer(&dest))++
@@ -44,10 +44,10 @@ func Xstrcat(dest, src *int8) *int8 {
 }
 
 // char *index(const char *s, int c)
-func Xindex(s *int8, c int32) *int8 { return Xstrchr(s, c) }
+func Xindex(tls *TLS, s *int8, c int32) *int8 { return Xstrchr(tls, s, c) }
 
 // char *strchr(const char *s, int c)
-func Xstrchr(s *int8, c int32) *int8 {
+func Xstrchr(tls *TLS, s *int8, c int32) *int8 {
 	for {
 		ch2 := byte(*s)
 		if ch2 == byte(c) {
@@ -63,7 +63,7 @@ func Xstrchr(s *int8, c int32) *int8 {
 }
 
 // int strcmp(const char *s1, const char *s2)
-func Xstrcmp(s1, s2 *int8) int32 {
+func X__builtin_strcmp(tls *TLS, s1, s2 *int8) int32 {
 	for {
 		ch1 := byte(*s1)
 		*(*uintptr)(unsafe.Pointer(&s1))++
@@ -75,8 +75,11 @@ func Xstrcmp(s1, s2 *int8) int32 {
 	}
 }
 
+// int strcmp(const char *s1, const char *s2)
+func Xstrcmp(tls *TLS, s1, s2 *int8) int32 { return X__builtin_strcmp(tls, s1, s2) }
+
 // char *strcpy(char *dest, const char *src)
-func Xstrcpy(dest, src *int8) *int8 {
+func X__builtin_strcpy(tls *TLS, dest, src *int8) *int8 {
 	r := dest
 	for {
 		c := *src
@@ -88,6 +91,9 @@ func Xstrcpy(dest, src *int8) *int8 {
 		}
 	}
 }
+
+// char *strcpy(char *dest, const char *src)
+func Xstrcpy(tls *TLS, dest, src *int8) *int8 { return X__builtin_strcpy(tls, dest, src) }
 
 // // char *strncpy(char *dest, const char *src, size_t n)
 // func (c *cpu) strncpy() {
@@ -110,10 +116,10 @@ func Xstrcpy(dest, src *int8) *int8 {
 // }
 
 // char *rindex(const char *s, int c)
-func Xrindex(s *int8, c int32) *int8 { return Xstrrchr(s, c) }
+func Xrindex(tls *TLS, s *int8, c int32) *int8 { return Xstrrchr(tls, s, c) }
 
 // char *strrchr(const char *s, int c)
-func Xstrrchr(s *int8, c int32) *int8 {
+func Xstrrchr(tls *TLS, s *int8, c int32) *int8 {
 	var ret *int8
 	for {
 		ch2 := byte(*s)

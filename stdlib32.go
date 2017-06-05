@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build amd64 amd64p32 arm64 mips64 mips64le mips64p32 mips64p32le ppc64 sparc64
+// +build 386 arm arm64be armbe mips mipsle ppc ppc64le s390 s390x sparc
 
 package crt
 
@@ -15,11 +15,11 @@ import (
 )
 
 // void *calloc(size_t nmemb, size_t size);
-func Xcalloc(tls *TLS, nmemb, size uint64) unsafe.Pointer {
-	hi, lo := mathutil.MulUint128_64(nmemb, size)
+func Xcalloc(tls *TLS, nmemb, size uint32) unsafe.Pointer {
+	n := uint64(nmemb) * uint64(size)
 	var p unsafe.Pointer
-	if hi == 0 && lo <= mathutil.MaxInt {
-		p = calloc(int(lo))
+	if n <= mathutil.MaxInt {
+		p = calloc(int(n))
 	}
 	if strace {
 		fmt.Fprintf(os.Stderr, "calloc(%#x) %#x\n", size, p)
@@ -28,7 +28,7 @@ func Xcalloc(tls *TLS, nmemb, size uint64) unsafe.Pointer {
 }
 
 // void *malloc(size_t size);
-func X__builtin_malloc(tls *TLS, size uint64) unsafe.Pointer {
+func X__builtin_malloc(tls *TLS, size uint32) unsafe.Pointer {
 	if size < mathutil.MaxInt {
 		return malloc(int(size))
 	}
@@ -37,14 +37,14 @@ func X__builtin_malloc(tls *TLS, size uint64) unsafe.Pointer {
 }
 
 // void *malloc(size_t size);
-func Xmalloc(tls *TLS, size uint64) unsafe.Pointer { return X__builtin_malloc(tls, size) }
+func Xmalloc(tls *TLS, size uint32) unsafe.Pointer { return X__builtin_malloc(tls, size) }
 
 // void *realloc(void *ptr, size_t size);
-func Xrealloc(tls *TLS, ptr unsafe.Pointer, size uint64) unsafe.Pointer {
+func Xrealloc(tls *TLS, ptr unsafe.Pointer, size uint32) unsafe.Pointer {
 	return realloc(tls, ptr, int(size))
 }
 
 // void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
-func Xqsort(tls *TLS, base unsafe.Pointer, nmemb, size uint64, compar func(tls *TLS, a, b unsafe.Pointer) int32) {
-	qsort(tls, base, nmemb, size, compar)
+func Xqsort(tls *TLS, base unsafe.Pointer, nmemb, size uint32, compar func(tls *TLS, a, b unsafe.Pointer) int32) {
+	qsort(tls, base, uint64(nmemb), uint64(size), compar)
 }

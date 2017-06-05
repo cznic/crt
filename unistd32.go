@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build amd64 amd64p32 arm64 mips64 mips64le mips64p32 mips64p32le ppc64 sparc64
+// +build 386 arm arm64be armbe mips mipsle ppc ppc64le s390 s390x sparc
 
 package crt
 
@@ -17,10 +17,10 @@ import (
 )
 
 // void *sbrk(intptr_t increment);
-func Xsbrk(tls *TLS, increment int64) unsafe.Pointer { return sbrk(tls, increment) }
+func Xsbrk(tls *TLS, increment int32) unsafe.Pointer { return sbrk(tls, int64(increment)) }
 
 // ssize_t read(int fd, void *buf, size_t count);
-func Xread(tls *TLS, fd int32, buf unsafe.Pointer, count uint64) int64 { //TODO stdin
+func Xread(tls *TLS, fd int32, buf unsafe.Pointer, count uint32) int32 { //TODO stdin
 	r, _, err := syscall.Syscall(syscall.SYS_READ, uintptr(fd), uintptr(buf), uintptr(count))
 	if strace {
 		fmt.Fprintf(os.Stderr, "read(%v, %#x, %v) %v %v\n", fd, buf, count, r, err)
@@ -28,11 +28,11 @@ func Xread(tls *TLS, fd int32, buf unsafe.Pointer, count uint64) int64 { //TODO 
 	if err != 0 {
 		tls.setErrno(err)
 	}
-	return int64(r)
+	return int32(r)
 }
 
 // char *getcwd(char *buf, size_t size);
-func Xgetcwd(tls *TLS, buf *int8, size uint64) *int8 {
+func Xgetcwd(tls *TLS, buf *int8, size uint32) *int8 {
 	r, _, err := syscall.Syscall(syscall.SYS_GETCWD, uintptr(unsafe.Pointer(buf)), uintptr(size), 0)
 	if strace {
 		fmt.Fprintf(os.Stderr, "getcwd(%#x, %#x) %v %v %q\n", buf, size, r, err, GoString(buf))
@@ -40,24 +40,24 @@ func Xgetcwd(tls *TLS, buf *int8, size uint64) *int8 {
 	if err != 0 {
 		tls.setErrno(err)
 	}
-	return (*int8)(unsafe.Pointer(r))
+	return (*int8)(unsafe.Pointer(uintptr(r)))
 }
 
 // ssize_t write(int fd, const void *buf, size_t count);
-func Xwrite(tls *TLS, fd int32, buf unsafe.Pointer, count uint64) int64 {
+func Xwrite(tls *TLS, fd int32, buf unsafe.Pointer, count uint32) int32 {
 	switch fd {
 	case unistd.XSTDOUT_FILENO:
-		n, err := os.Stdout.Write((*[math.MaxInt32]byte)(buf)[:count])
+		n, err := os.Stdout.Write((*[math.MaxInt32]byte)(unsafe.Pointer(buf))[:count])
 		if err != nil {
 			tls.setErrno(err)
 		}
-		return int64(n)
+		return int32(n)
 	case unistd.XSTDERR_FILENO:
-		n, err := os.Stderr.Write((*[math.MaxInt32]byte)(buf)[:count])
+		n, err := os.Stderr.Write((*[math.MaxInt32]byte)(unsafe.Pointer(buf))[:count])
 		if err != nil {
 			tls.setErrno(err)
 		}
-		return int64(n)
+		return int32(n)
 	}
 	r, _, err := syscall.Syscall(syscall.SYS_WRITE, uintptr(fd), uintptr(buf), uintptr(count))
 	if strace {
@@ -66,19 +66,19 @@ func Xwrite(tls *TLS, fd int32, buf unsafe.Pointer, count uint64) int64 {
 	if err != 0 {
 		tls.setErrno(err)
 	}
-	return int64(r)
+	return int32(r)
 }
 
 // ssize_t readlink(const char *pathname, char *buf, size_t bufsiz);
-func Xreadlink(tls *TLS, pathname, buf *int8, bufsiz uint64) int64 {
+func Xreadlink(tls *TLS, pathname, buf *int8, bufsiz uint32) int32 {
 	panic("TODO")
 }
 
 // long sysconf(int name);
-func Xsysconf(tls *TLS, name int32) int64 {
+func Xsysconf(tls *TLS, name int32) int32 {
 	switch name {
 	case unistd.X_SC_PAGESIZE:
-		return int64(os.Getpagesize())
+		return int32(os.Getpagesize())
 	default:
 		panic(fmt.Errorf("%v(%#x)", name, name))
 	}

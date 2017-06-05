@@ -2,6 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// +build !crt.strace
+
 package crt
 
-//TODO remove file
+const strace = false
+
+func cmdString(flag int32) string  { return "" }
+func modeString(flag int32) string { return "" }

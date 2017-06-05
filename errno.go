@@ -4,4 +4,5 @@
 
 package crt
 
-//TODO remove file
+// extern int *__errno_location(void);
+func X__errno_location(tls *TLS) *int32 { return &tls.errno }
