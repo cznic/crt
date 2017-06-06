@@ -6,20 +6,18 @@
 
 package crt
 
+import "unsafe"
+
 const (
 	longBits = 32
 )
 
-func (r *varargReader) readLong() int64 {
-	s := *r
-	v := s[0].(int32)
-	*r = s[1:]
-	return int64(v)
+// size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+func Xfwrite(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Pointer) uint64 {
+	return fwrite(tls, ptr, size, nmemb, stream)
 }
 
-func (r *varargReader) readULong() uint64 {
-	s := *r
-	v := s[0].(uint32)
-	*r = s[1:]
-	return int64(v)
+// size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+func Xfread(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Pointer) uint64 {
+	return fread(tls, ptr, size, nmemb, stream)
 }

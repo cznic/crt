@@ -4,24 +4,20 @@
 
 // +build amd64 amd64p32 arm64 mips64 mips64le mips64p32 mips64p32le ppc64 sparc64
 
-// +build !windows
-
 package crt
 
-const Ttm = "struct{int32,int32,int32,int32,int32,int32,int32,int32,int32,int64,*int8}"
+const Ttm = "struct{int32,int32,int32,int32,int32,int32,int32,int32,int32}"
 
 type Xtm struct {
-	X0  int32
-	X1  int32
-	X2  int32
-	X3  int32
-	X4  int32
-	X5  int32
-	X6  int32
-	X7  int32
-	X8  int32
-	X9  int64
-	X10 *int8
+	X0 int32
+	X1 int32
+	X2 int32
+	X3 int32
+	X4 int32
+	X5 int32
+	X6 int32
+	X7 int32
+	X8 int32
 }
 
 // struct tm *localtime(const time_t *timep);
