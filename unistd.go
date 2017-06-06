@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"syscall"
+	"time"
 	"unsafe"
 
 	"github.com/cznic/ccir/libc/errno"
@@ -105,7 +106,11 @@ func Xgetpid(tls *TLS) int32 {
 
 // unsigned sleep(unsigned seconds);
 func Xsleep(tls *TLS, seconds uint32) uint32 {
-	panic("TODO")
+	time.Sleep(time.Duration(seconds) * time.Second)
+	if strace {
+		fmt.Fprintf(os.Stderr, "sleep(%#x)", seconds)
+	}
+	return 0
 }
 
 // off_t lseek64(int fildes, off_t offset, int whence);
@@ -130,4 +135,13 @@ func Xftruncate64(tls *TLS, fildes int32, length int64) int32 {
 		tls.setErrno(err)
 	}
 	return int32(r)
+}
+
+// int usleep(useconds_t usec);
+func Xusleep(tls *TLS, usec uint32) int32 {
+	time.Sleep(time.Duration(usec) * time.Microsecond)
+	if strace {
+		fmt.Fprintf(os.Stderr, "usleep(%#x)", usec)
+	}
+	return 0
 }
