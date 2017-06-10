@@ -21,6 +21,9 @@ type CallbackFunc func(wr io.Writer, tyMap map[string]Type, comment, ret, name, 
 
 var compiledFuncs []string = []string{}
 
+var farProcGoTy = "func(*TLS) int64"
+var size_tGoTy = "uint64"
+
 func fileHeader(wr io.Writer, tag string, imports []string) error {
 	_, err := fmt.Fprintf(wr, `// Copyright 2017 The CRT Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
@@ -101,7 +104,7 @@ func (t Type) Write(target, val string) string {
 	case TyUint32:
 		return fmt.Sprintf("%s = uint32(%s)", target, val)
 	case TySIZE_T:
-		return fmt.Sprintf("%s = uint64(%s)", target, val)
+		return fmt.Sprintf("%s = %s(%s)", size_tGoTy, target, val)
 	case TyVoid:
 		// void is usually used for a function without a return value
 		// so the write is a NOP
@@ -158,9 +161,9 @@ func (t Type) GoType() string {
 	case TyCRITICAL_SECTIONPtr:
 		ty = "*XCRITICAL_SECTION"
 	case TySIZE_T:
-		ty = "uint64"
+		ty = size_tGoTy
 	case TyFarProc:
-		ty = "func(*TLS) int64"
+		ty = farProcGoTy
 	default:
 		log.Fatal("Cannot get GoType: ", t)
 	}
@@ -290,11 +293,16 @@ func compileWinSyscall(wr io.Writer, tyMap map[string]Type, comment, ret, name, 
 	}
 }
 
-func compileWinFile(wr io.Writer, callback CallbackFunc) {
+func compileWinFile(wr io.Writer, arch string, callback CallbackFunc) {
 	bytes, err := ioutil.ReadFile("windows.go")
 	if err != nil {
 		log.Fatal("Cannot read windows.go: ", err)
 	}
+	bytes2, err := ioutil.ReadFile("windows_" + arch + ".go")
+	if err != nil {
+		log.Fatal("Cannot read architecture specific config: ", arch)
+	}
+	bytes = append(bytes, bytes2...)
 	content := string(bytes)
 
 	reTy := regexp.MustCompile("//ty:(.*?): (.*)")
@@ -384,32 +392,43 @@ func main() {
 
 	flag.Parse()
 
-	if err := fileHeader(&buf, "windows", []string{"fmt", "unsafe", "syscall", "os"}); err != nil {
-		log.Fatal("Cannot write file header: ", err)
-	}
-	compileWinFile(&out, compileWinSyscall)
+	for _, arch := range []string{"amd64", "386"} {
+		compiledFuncs = []string{}
+		buf.Reset()
+		out.Reset()
 
-	// procCreateFileW             = modkernel32.NewProc("CreateFileW")
-	if _, err := fmt.Fprintf(&buf, "var (\n\tmodkernel32           = syscall.NewLazyDLL(\"kernel32.dll\")\n"); err != nil {
-		log.Fatal("cannot begin external proc declaration: ", err)
-	}
-
-	for _, fn := range compiledFuncs {
-		if _, err := fmt.Fprintf(&buf, "\tproc%-30s = modkernel32.NewProc(\"%s\")\n", fn, fn); err != nil {
-			log.Fatal("cannot write sid mapping: ", err)
+		if arch == "386" {
+			farProcGoTy = "func(*TLS) int32"
+			size_tGoTy = "uint32"
 		}
-	}
 
-	if _, err := fmt.Fprintf(&buf, ")\n\n"); err != nil {
-		log.Fatal("cannot terminate external proc declaration: ", err)
-	}
+		if err := fileHeader(&buf, "windows", []string{"fmt", "unsafe", "syscall", "os"}); err != nil {
+			log.Fatal("Cannot write file header: ", err)
+		}
+		compileWinFile(&out, arch, compileWinSyscall)
 
-	// merge headers & compiled code
-	if _, err := buf.Write(out.Bytes()); err != nil {
-		log.Fatal("cannot merge outputs: ", err)
-	}
+		// procCreateFileW             = modkernel32.NewProc("CreateFileW")
+		if _, err := fmt.Fprintf(&buf, "var (\n\tmodkernel32           = syscall.NewLazyDLL(\"kernel32.dll\")\n"); err != nil {
+			log.Fatal("cannot begin external proc declaration: ", err)
+		}
 
-	if err := ioutil.WriteFile("windows_impl.go", buf.Bytes(), 0655); err != nil {
-		log.Fatal("cannot write windows_impl.go: ", err)
+		for _, fn := range compiledFuncs {
+			if _, err := fmt.Fprintf(&buf, "\tproc%-30s = modkernel32.NewProc(\"%s\")\n", fn, fn); err != nil {
+				log.Fatal("cannot write sid mapping: ", err)
+			}
+		}
+
+		if _, err := fmt.Fprintf(&buf, ")\n\n"); err != nil {
+			log.Fatal("cannot terminate external proc declaration: ", err)
+		}
+
+		// merge headers & compiled code
+		if _, err := buf.Write(out.Bytes()); err != nil {
+			log.Fatal("cannot merge outputs: ", err)
+		}
+
+		if err := ioutil.WriteFile(fmt.Sprintf("windows_impl_%s.go", arch), buf.Bytes(), 0655); err != nil {
+			log.Fatal("cannot write windows_impl.go: ", err)
+		}
 	}
 }
