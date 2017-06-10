@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// +build !windows
+
 package crt
 
 import (
@@ -10,23 +12,7 @@ import (
 	"syscall"
 	"time"
 	"unsafe"
-
-	"github.com/cznic/ccir/libc/errno"
 )
-
-// void *sbrk(intptr_t increment);
-func sbrk(tls *TLS, increment int64) unsafe.Pointer {
-	if increment > heapAvailable {
-		tls.setErrno(errno.XENOMEM)
-		return unsafe.Pointer(^uintptr(0))
-	}
-
-	increment = roundupI64(increment, heapAlign)
-	heapAvailable -= increment
-	brk0 := brk
-	brk = unsafe.Pointer(uintptr(brk) + uintptr(increment))
-	return brk0
-}
 
 // int close(int fd);
 func Xclose(tls *TLS, fd int32) int32 {

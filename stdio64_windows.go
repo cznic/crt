@@ -6,20 +6,54 @@
 
 package crt
 
+import (
+	"math"
+	"unsafe"
+
+	"github.com/cznic/ccir/libc/errno"
+	"github.com/cznic/mathutil"
+)
+
 const (
 	longBits = 32
 )
 
-func (r *varargReader) readLong() int64 {
-	s := *r
-	v := s[0].(int32)
-	*r = s[1:]
-	return int64(v)
+// size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+func fread(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Pointer) uint64 {
+	hi, lo := mathutil.MulUint128_64(size, nmemb)
+	if hi != 0 || lo > math.MaxInt32 {
+		tls.setErrno(errno.XE2BIG)
+		return 0
+	}
+
+	n, err := files.reader(unsafe.Pointer(stream)).Read((*[math.MaxInt32]byte)(ptr)[:lo])
+	if err != nil {
+		tls.setErrno(errno.XEIO)
+	}
+	return uint64(n) / size
 }
 
-func (r *varargReader) readULong() uint64 {
-	s := *r
-	v := s[0].(uint32)
-	*r = s[1:]
-	return int64(v)
+// size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+func fwrite(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Pointer) uint64 {
+	hi, lo := mathutil.MulUint128_64(size, nmemb)
+	if hi != 0 || lo > math.MaxInt32 {
+		tls.setErrno(errno.XE2BIG)
+		return 0
+	}
+
+	n, err := files.writer(unsafe.Pointer(stream)).Write((*[math.MaxInt32]byte)(ptr)[:lo])
+	if err != nil {
+		tls.setErrno(errno.XEIO)
+	}
+	return uint64(n) / size
+}
+
+// size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+func Xfwrite(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Pointer) uint64 {
+	return fwrite(tls, ptr, size, nmemb, stream)
+}
+
+// size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+func Xfread(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Pointer) uint64 {
+	return fread(tls, ptr, size, nmemb, stream)
 }
