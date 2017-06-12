@@ -10,13 +10,17 @@ import (
 	"math"
 	"os"
 	"path"
+	"reflect"
 	"runtime"
+	"sync"
 	"sync/atomic"
 	"syscall"
 	"unsafe"
 
+	"github.com/cznic/ccir/libc/errno"
 	"github.com/cznic/internal/buffer"
 	"github.com/cznic/mathutil"
+	"github.com/cznic/memory"
 )
 
 const (
@@ -25,6 +29,8 @@ const (
 )
 
 var (
+	alloc         memory.Allocator
+	allocMu       sync.Mutex
 	brk           unsafe.Pointer
 	heapAvailable int64
 	threadID      uintptr
@@ -52,7 +58,9 @@ func (t *TLS) setErrno(err interface{}) {
 	}
 }
 
-func (t *TLS) Close() { free(unsafe.Pointer(t)) }
+func (t *TLS) Close() {
+	// nop
+}
 
 //TODO remove me.
 func TODO(msg string, more ...interface{}) string { //TODOOK
@@ -126,49 +134,145 @@ func roundupI64(n, m int64) int64 { return (n + m - 1) &^ (m - 1) }
 // CString allocates a C string initialized from s.
 func CString(s string) unsafe.Pointer {
 	n := len(s)
-	p := malloc(n + 1)
+	var tls TLS
+	p := malloc(&tls, n+1)
+	if p == nil {
+		return nil
+	}
+
 	copy((*[math.MaxInt32]byte)(p)[:n], s)
 	(*[math.MaxInt32]byte)(p)[n] = 0
 	return p
 }
 
-func malloc(size int) unsafe.Pointer {
-	if size != 0 {
-		var tls TLS
-		p := sbrk(&tls, int64(size))
-		if int64(uintptr(p)) > 0 {
-			return p
-		}
+// Malloc allocates size bytes and returns a byte slice of the allocated
+// memory. The memory is not initialized. Malloc panics for size < 0 and
+// returns (nil, nil) for zero size. Malloc is safe for concurrent use by
+// multiple goroutines.
+func Malloc(size int) (unsafe.Pointer, error) {
+	allocMu.Lock()
+	b, err := alloc.Malloc(size)
+	allocMu.Unlock()
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	return unsafe.Pointer(&b[0]), nil
 }
 
-func calloc(size int) unsafe.Pointer {
-	p := malloc(size)
-	if p == nil {
+func malloc(tls *TLS, size int) unsafe.Pointer {
+	allocMu.Lock()
+	b, err := alloc.Malloc(size)
+	allocMu.Unlock()
+	if err != nil {
+		tls.setErrno(errno.XENOMEM)
 		return nil
 	}
 
-	q := (*byte)(p)
-	for ; size != 0; size-- {
-		*q = 0
-		*(*uintptr)(unsafe.Pointer(&q))++
+	return unsafe.Pointer(&b[0])
+}
+
+// Calloc is like Malloc except the allocated memory is zeroed. Calloc is safe
+// for concurrent use by multiple goroutines.
+func Calloc(size int) (unsafe.Pointer, error) {
+	allocMu.Lock()
+	b, err := alloc.Calloc(size)
+	allocMu.Unlock()
+	if err != nil {
+		return nil, err
 	}
-	return p
+
+	return unsafe.Pointer(&b[0]), nil
+}
+
+func calloc(tls *TLS, size int) unsafe.Pointer {
+	allocMu.Lock()
+	b, err := alloc.Calloc(size)
+	allocMu.Unlock()
+	if err != nil {
+		tls.setErrno(errno.XENOMEM)
+		return nil
+	}
+
+	return unsafe.Pointer(&b[0])
+}
+
+// Realloc changes the size of the memory allocated at ptr to size bytes or
+// returns an error, if any.  The contents will be unchanged in the range from
+// the start of the region up to the minimum of the old and new  sizes.   If
+// the new size is larger than the old size, the added memory will not be
+// initialized.  If ptr is nil, then the call is equivalent to Malloc(size),
+// for all values of size; if size is equal to zero, and ptr is not nil, then
+// the call is equivalent to Free(ptr).  Unless ptr is nil, it must have been
+// returned by an earlier call to Malloc, Calloc or Realloc.  If the area
+// pointed to was moved, a Free(ptr) is done. Relloc is safe for concurrent use
+// by multiple goroutines.
+func Realloc(tls *TLS, ptr unsafe.Pointer, size int) (unsafe.Pointer, error) {
+	old := memory.UsableSize((*byte)(ptr))
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Data = uintptr(ptr)
+	sh.Len = old
+	sh.Cap = old
+	allocMu.Lock()
+	r, err := alloc.Realloc(b, size)
+	allocMu.Unlock()
+	if err != nil {
+		return nil, err
+	}
+
+	return unsafe.Pointer(&r[0]), nil
 }
 
 func realloc(tls *TLS, ptr unsafe.Pointer, size int) unsafe.Pointer {
-	q := malloc(size)
-	if q == nil {
+	old := memory.UsableSize((*byte)(ptr))
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Data = uintptr(ptr)
+	sh.Len = old
+	sh.Cap = old
+	allocMu.Lock()
+	r, err := alloc.Realloc(b, size)
+	allocMu.Unlock()
+	if err != nil {
+		tls.setErrno(errno.XENOMEM)
 		return nil
 	}
 
-	movemem(q, ptr, size)
-	return q
+	return unsafe.Pointer(&r[0])
 }
 
-func free(ptr unsafe.Pointer) { /*TODO*/ }
+// Free deallocates memory. The argument of Free must have been acquired from
+// Calloc or Malloc or Realloc. Free is safe for concurrent use by multiple
+// goroutines.
+func Free(ptr unsafe.Pointer) error {
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Data = uintptr(ptr)
+	sh.Len = 1
+	sh.Cap = 1
+	allocMu.Lock()
+	err := alloc.Free(b)
+	allocMu.Unlock()
+	return err
+}
+
+func free(ptr unsafe.Pointer) {
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Data = uintptr(ptr)
+	sh.Len = 1
+	sh.Cap = 1
+	allocMu.Lock()
+	alloc.Free(b)
+	allocMu.Unlock()
+}
+
+// UsableSize reports the size of the memory block allocated at p, which must
+// have been acquired from Calloc, Malloc or Realloc.  The allocated memory
+// block size can be larger than the size originally requested from Calloc,
+// Malloc or Realloc.
+func UsableSize(p unsafe.Pointer) int { return memory.UsableSize((*byte)(p)) }
 
 // CopyString copies src to dest, optionally adding a zero byte at the end.
 func CopyString(dst unsafe.Pointer, src string, addNull bool) {

@@ -19,7 +19,7 @@ func Xcalloc(tls *TLS, nmemb, size uint64) unsafe.Pointer {
 	hi, lo := mathutil.MulUint128_64(nmemb, size)
 	var p unsafe.Pointer
 	if hi == 0 && lo <= mathutil.MaxInt {
-		p = calloc(int(lo))
+		p = calloc(tls, int(lo))
 	}
 	if strace {
 		fmt.Fprintf(os.Stderr, "calloc(%#x) %#x\n", size, p)
@@ -30,7 +30,7 @@ func Xcalloc(tls *TLS, nmemb, size uint64) unsafe.Pointer {
 // void *malloc(size_t size);
 func X__builtin_malloc(tls *TLS, size uint64) unsafe.Pointer {
 	if size < mathutil.MaxInt {
-		return malloc(int(size))
+		return malloc(tls, int(size))
 	}
 
 	return nil

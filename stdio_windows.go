@@ -273,7 +273,7 @@ func Xfopen64(tls *TLS, path, mode *int8) *unsafe.Pointer {
 			panic(mode)
 		}
 		if f != nil {
-			u = malloc(ptrSize)
+			u = malloc(tls, ptrSize)
 			files.add(f, u)
 		}
 	}
