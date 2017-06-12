@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 // +build amd64 amd64p32 arm64 mips64 mips64le mips64p32 mips64p32le ppc64 sparc64
-// +build !windows
 
 package crt
 
