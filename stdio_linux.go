@@ -56,6 +56,22 @@ func (m *fmap) reader(u unsafe.Pointer) io.Reader {
 	return f
 }
 
+func (m *fmap) file(u unsafe.Pointer) *os.File {
+	switch u {
+	case stdin:
+		return os.Stdin
+	case stdout:
+		return os.Stdout
+	case stderr:
+		return os.Stderr
+	}
+
+	m.mu.Lock()
+	f := m.m[u]
+	m.mu.Unlock()
+	return f
+}
+
 func (m *fmap) writer(u unsafe.Pointer) io.Writer {
 	switch u {
 	case stdin:
@@ -246,7 +262,7 @@ func Xfopen64(tls *TLS, path, mode *int8) *XFILE {
 		var f *os.File
 		var err error
 		switch mode := GoString(mode); mode {
-		case "r":
+		case "r", "rb":
 			if f, err = os.OpenFile(p, os.O_RDONLY, 0666); err != nil {
 				switch {
 				case os.IsNotExist(err):
@@ -331,6 +347,37 @@ func fread(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *XFILE) uint
 	return uint64(n) / size
 }
 
+func fseek(tls *TLS, stream *XFILE, offset int64, whence int32) int32 {
+	f := files.file(unsafe.Pointer(stream))
+	if f == nil {
+		tls.setErrno(errno.XEBADF)
+		return -1
+	}
+
+	if _, err := f.Seek(offset, int(whence)); err != nil {
+		tls.setErrno(errno.XEINVAL)
+		return -1
+	}
+
+	return 0
+}
+
+func ftell(tls *TLS, stream *XFILE) int64 {
+	f := files.file(unsafe.Pointer(stream))
+	if f == nil {
+		tls.setErrno(errno.XEBADF)
+		return -1
+	}
+
+	n, err := f.Seek(0, os.SEEK_CUR)
+	if err != nil {
+		tls.setErrno(errno.XEBADF)
+		return -1
+	}
+
+	return n
+}
+
 // int fgetc(FILE *stream);
 func Xfgetc(tls *TLS, stream *XFILE) int32 {
 	p := buffer.Get(1)
@@ -386,8 +433,18 @@ func Xfprintf(tls *TLS, stream *XFILE, format *int8, args ...interface{}) int32 
 
 // int fflush(FILE *stream);
 func Xfflush(tls *TLS, stream *XFILE) int32 {
-	TODO("")
-	panic("TODO")
+	f := files.file(unsafe.Pointer(stream))
+	if f == nil {
+		tls.setErrno(stdio.XEOF)
+		return -1
+	}
+
+	if err := f.Sync(); err != nil {
+		tls.setErrno(err)
+		return -1
+	}
+
+	return 0
 }
 
 // int vprintf(const char *format, va_list ap);
@@ -399,3 +456,6 @@ func Xvprintf(tls *TLS, format *int8, ap []interface{}) int32 {
 func Xvfprintf(tls *TLS, stream *XFILE, format *int8, ap []interface{}) int32 {
 	return goFprintf(files.writer(unsafe.Pointer(stream)), format, ap...)
 }
+
+// void rewind(FILE *stream);
+func Xrewind(tls *TLS, stream *XFILE) { fseek(tls, stream, 0, int32(os.SEEK_SET)) }

@@ -9,11 +9,24 @@ import (
 	"unsafe"
 )
 
-func VAPointer(ap *[]interface{}) unsafe.Pointer {
+func VAPointer(ap *[]interface{}) (r unsafe.Pointer) {
 	s := *ap
-	v := s[0].(unsafe.Pointer)
+	switch x := s[0].(type) {
+	case int32:
+		r = unsafe.Pointer(uintptr(x))
+	case uint32:
+		r = unsafe.Pointer(uintptr(x))
+	case int64:
+		r = unsafe.Pointer(uintptr(x))
+	case uint64:
+		r = unsafe.Pointer(uintptr(x))
+	case unsafe.Pointer:
+		r = x
+	default:
+		panic(fmt.Errorf("%T", x))
+	}
 	*ap = s[1:]
-	return v
+	return r
 }
 
 func VAFloat64(ap *[]interface{}) float64 {

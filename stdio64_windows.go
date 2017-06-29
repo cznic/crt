@@ -57,3 +57,11 @@ func Xfwrite(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Po
 func Xfread(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *unsafe.Pointer) uint64 {
 	return fread(tls, ptr, size, nmemb, stream)
 }
+
+// int fseek(FILE *stream, long offset, int whence);
+func Xfseek(tls *TLS, stream *unsafe.Pointer, offset, whence int32) int32 {
+	return fseek(tls, stream, int64(offset), whence)
+}
+
+// long ftell(FILE *stream);
+func Xftell(tls *TLS, stream *unsafe.Pointer) int32 { return int32(ftell(tls, stream)) }

@@ -87,6 +87,12 @@ func (m *memWriter) WriteByte(b byte) error {
 	return nil
 }
 
+// Movemem copies n bytes from memory area src to memory area dest.  The memory
+// areas may overlap: copying takes place as though the bytes in src are first
+// copied into a temporary array that does not overlap src or dest, and the
+// bytes are then copied from the temporary array to dest.
+func Movemem(dest, src unsafe.Pointer, n int) int { return movemem(dest, src, n) }
+
 func movemem(dst, src unsafe.Pointer, n int) int {
 	return copy((*[math.MaxInt32]byte)(dst)[:n], (*[math.MaxInt32]byte)(src)[:n])
 }
