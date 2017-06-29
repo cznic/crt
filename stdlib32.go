@@ -29,7 +29,7 @@ func Xcalloc(tls *TLS, nmemb, size uint32) unsafe.Pointer {
 
 // void *malloc(size_t size);
 func X__builtin_malloc(tls *TLS, size uint32) unsafe.Pointer {
-	if size < mathutil.MaxInt {
+	if int(size) < mathutil.MaxInt {
 		return malloc(tls, int(size))
 	}
 
