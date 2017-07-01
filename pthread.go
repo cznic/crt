@@ -13,7 +13,28 @@ import (
 	"github.com/cznic/ccir/libc/pthread"
 )
 
-const Tpthread_mutexattr_t = "union{[4]int8,int32}"
+const (
+	Tpthread_cond_t      = "union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}"
+	Tpthread_mutexattr_t = "union{[4]int8,int32}"
+)
+
+type Xpthread_cond_t struct {
+	X [0]struct {
+		X0 struct {
+			X0 int32
+			X1 uint32
+			X2 uint64
+			X3 uint64
+			X4 uint64
+			X5 unsafe.Pointer
+			X6 uint32
+			X7 uint32
+		}
+		X1 [48]int8
+		X2 int64
+	}
+	U [48]byte
+} // t2 union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}
 
 type Xpthread_mutexattr_t struct {
 	X [0]struct {

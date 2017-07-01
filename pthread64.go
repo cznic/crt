@@ -14,27 +14,8 @@ import (
 
 const (
 	Tpthread_attr_t  = "union{[56]int8,int64}"
-	Tpthread_cond_t  = "union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}"
 	Tpthread_mutex_t = "union{struct{int32,uint32,int32,uint32,int32,int16,int16,struct{*struct{},*struct{}}},[40]int8,int64}"
 )
-
-type Xpthread_cond_t struct {
-	X [0]struct {
-		X0 struct {
-			X0 int32
-			X1 uint32
-			X2 uint64
-			X3 uint64
-			X4 uint64
-			X5 unsafe.Pointer
-			X6 uint32
-			X7 uint32
-		}
-		X1 [48]int8
-		X2 int64
-	}
-	U [48]byte
-} // t2 union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}
 
 type Xpthread_mutex_t struct {
 	X [0]struct {

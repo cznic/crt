@@ -81,3 +81,8 @@ func Xpthread_join(tls *TLS, thread uint32, value_ptr *unsafe.Pointer) int32 {
 func Xpthread_create(tls *TLS, thread *uint32, attr *Xpthread_attr_t, start_routine func(*TLS, unsafe.Pointer) unsafe.Pointer, arg unsafe.Pointer) int32 {
 	panic("TODO")
 }
+
+// int pthread_detach(pthread_t thread);
+func Xpthread_detach(tls *TLS, thread uint32) int32 {
+	panic("TODO")
+}
