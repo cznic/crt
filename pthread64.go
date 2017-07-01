@@ -14,8 +14,27 @@ import (
 
 const (
 	Tpthread_attr_t  = "union{[56]int8,int64}"
+	Tpthread_cond_t  = "union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}"
 	Tpthread_mutex_t = "union{struct{int32,uint32,int32,uint32,int32,int16,int16,struct{*struct{},*struct{}}},[40]int8,int64}"
 )
+
+type Xpthread_cond_t struct {
+	X [0]struct {
+		X0 struct {
+			X0 int32
+			X1 uint32
+			X2 uint64
+			X3 uint64
+			X4 uint64
+			X5 unsafe.Pointer
+			X6 uint32
+			X7 uint32
+		}
+		X1 [48]int8
+		X2 int64
+	}
+	U [48]byte
+} // t2 union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}
 
 type Xpthread_mutex_t struct {
 	X [0]struct {
@@ -75,5 +94,10 @@ func Xpthread_join(tls *TLS, thread uint64, value_ptr *unsafe.Pointer) int32 {
 
 // int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr, void *(*start_routine)(void*), void *restrict arg);
 func Xpthread_create(tls *TLS, thread *uint64, attr *Xpthread_attr_t, start_routine func(*TLS, unsafe.Pointer) unsafe.Pointer, arg unsafe.Pointer) int32 {
+	panic("TODO")
+}
+
+// int pthread_detach(pthread_t thread);
+func Xpthread_detach(tls *TLS, thread uint64) int32 {
 	panic("TODO")
 }

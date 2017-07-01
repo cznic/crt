@@ -201,3 +201,13 @@ func Xpthread_mutex_unlock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 	mu.outer.Unlock()
 	return r
 }
+
+// int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
+func Xpthread_cond_wait(tls *TLS, cons *Xpthread_cond_t, mutex *Xpthread_mutex_t) int32 {
+	panic("TODO")
+}
+
+// int pthread_cond_signal(pthread_cond_t *cond);
+func Xpthread_cond_signal(tls *TLS, cond *Xpthread_cond_t) int32 {
+	panic("TODO")
+}
