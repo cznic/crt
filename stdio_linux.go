@@ -262,6 +262,15 @@ func Xfopen64(tls *TLS, path, mode *int8) *XFILE {
 		var f *os.File
 		var err error
 		switch mode := GoString(mode); mode {
+		case "a":
+			if f, err = os.OpenFile(p, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666); err != nil {
+				switch {
+				case os.IsPermission(err):
+					tls.setErrno(errno.XEPERM)
+				default:
+					tls.setErrno(errno.XEACCES)
+				}
+			}
 		case "r", "rb":
 			if f, err = os.OpenFile(p, os.O_RDONLY, 0666); err != nil {
 				switch {
