@@ -5,6 +5,7 @@
 package crt
 
 import (
+	"fmt"
 	"os"
 	"sort"
 	"unsafe"
@@ -22,7 +23,12 @@ func X__builtin_exit(tls *TLS, n int32) {
 }
 
 // void free(void *ptr);
-func Xfree(tls *TLS, ptr unsafe.Pointer) { free(ptr) }
+func Xfree(tls *TLS, ptr unsafe.Pointer) {
+	free(ptr)
+	if strace {
+		fmt.Fprintf(os.Stderr, "free(%#x)\n", ptr)
+	}
+}
 
 // void abort();
 func Xabort(tls *TLS) { X__builtin_abort(tls) }

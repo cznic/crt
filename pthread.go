@@ -169,7 +169,6 @@ func Xpthread_mutex_lock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 		if mu.count == 0 {
 			mu.owner = threadID
 			mu.count = 1
-			mu.Unlock()
 			break
 		}
 
@@ -178,18 +177,15 @@ func Xpthread_mutex_lock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 		}
 		mu.owner = threadID
 		mu.count = 1
-		mu.Unlock()
 	case pthread.XPTHREAD_MUTEX_RECURSIVE:
 		if mu.count == 0 {
 			mu.owner = threadID
 			mu.count = 1
-			mu.Unlock()
 			break
 		}
 
 		if mu.owner == threadID {
 			mu.count++
-			mu.Unlock()
 			break
 		}
 
@@ -200,6 +196,7 @@ func Xpthread_mutex_lock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_mutex_lock(%p: %+v [thread id %v]) %v\n", mutex, mu, threadID, r)
 	}
+	mu.Unlock()
 	return r
 }
 
@@ -214,11 +211,9 @@ func Xpthread_mutex_trylock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 		if mu.count == 0 {
 			mu.count = 1
 			mu.owner = threadID
-			mu.Unlock()
 			break
 		}
 
-		mu.Unlock()
 		r = errno.XEBUSY
 	default:
 		panic(fmt.Errorf("attr %#x", mu.attr))
@@ -226,6 +221,7 @@ func Xpthread_mutex_trylock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_mutex_trylock(%p: %+v [thread id %v]) %v\n", mutex, mu, threadID, r)
 	}
+	mu.Unlock()
 	return r
 }
 
@@ -245,7 +241,6 @@ func Xpthread_mutex_unlock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 			mu.owner = 0
 			mu.count = 0
 			mu.Cond.Broadcast()
-			mu.Unlock()
 			break
 		}
 
@@ -258,13 +253,11 @@ func Xpthread_mutex_unlock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 		if mu.owner == threadID {
 			mu.count--
 			if mu.count != 0 {
-				mu.Unlock()
 				break
 			}
 
 			mu.owner = 0
 			mu.Cond.Broadcast()
-			mu.Unlock()
 			break
 		}
 
@@ -275,6 +268,7 @@ func Xpthread_mutex_unlock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_mutex_unlock(%p: %+v [thread id %v]) %v\n", mutex, mu, threadID, r)
 	}
+	mu.Unlock()
 	return r
 }
 
@@ -292,11 +286,11 @@ func Xpthread_cond_wait(tls *TLS, cond *Xpthread_cond_t, mutex *Xpthread_mutex_t
 	}
 
 	conds.cond(unsafe.Pointer(cond), mu).Wait()
-	mu.Unlock()
 	var r int32
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_cond_wait(%p, %p) %v\n", cond, mutex, r)
 	}
+	mu.Unlock()
 	return r
 }
 
