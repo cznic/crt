@@ -120,3 +120,8 @@ func Xmempcpy(tls *TLS, dest, src unsafe.Pointer, n uint64) unsafe.Pointer {
 	movemem(dest, src, int(n))
 	return unsafe.Pointer(uintptr(dest) + uintptr(n))
 }
+
+// int strerror_r(int errnum, char *buf, size_t buflen);
+func Xstrerror_r(tls *TLS, errnum int32, buf *int8, buflen uint64) int32 {
+	panic("TODO")
+}
