@@ -95,8 +95,8 @@ func Xpthread_create(tls *TLS, thread *uint64, attr *Xpthread_attr_t, start_rout
 		panic("TODO")
 	}
 
-	*thread = uint64(tls.threadID)
 	new := NewTLS()
+	*thread = uint64(new.threadID)
 	threads.Lock()
 	t := &threadState{c: make(chan struct{})}
 	threads.m[uintptr(new.threadID)] = t
