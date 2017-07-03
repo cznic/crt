@@ -10,6 +10,7 @@ import (
 	"sync"
 	"unsafe"
 
+	"github.com/cznic/ccir/libc/errno"
 	"github.com/cznic/ccir/libc/pthread"
 )
 
@@ -45,11 +46,11 @@ type Xpthread_mutexattr_t struct {
 }
 
 type mu struct {
+	*sync.Cond
 	attr  int32
 	count int
-	inner sync.Mutex
-	outer sync.Mutex
 	owner uintptr
+	sync.Mutex
 }
 
 type mutexMap struct {
@@ -62,14 +63,44 @@ func (m *mutexMap) mu(p unsafe.Pointer) *mu {
 	r := m.m[p]
 	if r == nil {
 		r = &mu{}
+		r.Cond = sync.NewCond(&r.Mutex)
 		m.m[p] = r
 	}
 	m.Unlock()
 	return r
 }
 
+type condMap struct {
+	m map[unsafe.Pointer]*sync.Cond
+	sync.Mutex
+}
+
+func (m *condMap) cond(p unsafe.Pointer, mu *mu) *sync.Cond {
+	m.Lock()
+	r := m.m[p]
+	if r == nil {
+		r = sync.NewCond(&mu.Mutex)
+		m.m[p] = r
+	}
+	m.Unlock()
+	return r
+}
+
+type threadState struct {
+	c        chan struct{}
+	detached bool
+	retval   unsafe.Pointer
+}
+
+type threadMap struct {
+	m map[uintptr]*threadState
+	sync.Mutex
+}
+
 var (
+	conds   = &condMap{m: map[unsafe.Pointer]*sync.Cond{}}
 	mutexes = &mutexMap{m: map[unsafe.Pointer]*mu{}}
+	threads = &threadMap{m: map[uintptr]*threadState{}}
 )
 
 // extern int pthread_mutexattr_init(pthread_mutexattr_t * __attr);
@@ -102,7 +133,7 @@ func Xpthread_mutex_init(tls *TLS, mutex *Xpthread_mutex_t, mutexattr *Xpthread_
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_mutex_init(%p, %#x) %v\n", mutex, mutexattr, r)
 	}
-	return 0
+	return r
 }
 
 // extern int pthread_mutexattr_destroy(pthread_mutexattr_t * __attr);
@@ -132,30 +163,43 @@ func Xpthread_mutex_lock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 	threadID := tls.threadID
 	mu := mutexes.mu(unsafe.Pointer(mutex))
 	var r int32
-	mu.outer.Lock()
+	mu.Lock()
 	switch mu.attr {
 	case pthread.XPTHREAD_MUTEX_NORMAL:
-		mu.owner = threadID
-		mu.count = 1
-		mu.inner.Lock()
-	case pthread.XPTHREAD_MUTEX_RECURSIVE:
-		switch mu.owner {
-		case 0:
+		if mu.count == 0 {
 			mu.owner = threadID
 			mu.count = 1
-			mu.inner.Lock()
-		case threadID:
-			mu.count++
-		default:
-			panic("TODO105")
+			mu.Unlock()
+			break
 		}
+
+		for mu.count != 0 {
+			mu.Cond.Wait()
+		}
+		mu.owner = threadID
+		mu.count = 1
+		mu.Unlock()
+	case pthread.XPTHREAD_MUTEX_RECURSIVE:
+		if mu.count == 0 {
+			mu.owner = threadID
+			mu.count = 1
+			mu.Unlock()
+			break
+		}
+
+		if mu.owner == threadID {
+			mu.count++
+			mu.Unlock()
+			break
+		}
+
+		panic("TODO")
 	default:
 		panic(fmt.Errorf("attr %#x", mu.attr))
 	}
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_mutex_lock(%p: %+v [thread id %v]) %v\n", mutex, mu, threadID, r)
 	}
-	mu.outer.Unlock()
 	return r
 }
 
@@ -164,26 +208,24 @@ func Xpthread_mutex_trylock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 	threadID := tls.threadID
 	mu := mutexes.mu(unsafe.Pointer(mutex))
 	var r int32
-	mu.outer.Lock()
+	mu.Lock()
 	switch mu.attr {
 	case pthread.XPTHREAD_MUTEX_NORMAL:
-		switch mu.owner {
-		case 0:
-			mu.owner = threadID
+		if mu.count == 0 {
 			mu.count = 1
-			mu.inner.Lock()
-		case threadID:
-			panic("TODO127")
-		default:
-			panic("TODO129")
+			mu.owner = threadID
+			mu.Unlock()
+			break
 		}
+
+		mu.Unlock()
+		r = errno.XEBUSY
 	default:
 		panic(fmt.Errorf("attr %#x", mu.attr))
 	}
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_mutex_trylock(%p: %+v [thread id %v]) %v\n", mutex, mu, threadID, r)
 	}
-	mu.outer.Unlock()
 	return r
 }
 
@@ -192,43 +234,78 @@ func Xpthread_mutex_unlock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 	threadID := tls.threadID
 	mu := mutexes.mu(unsafe.Pointer(mutex))
 	var r int32
-	mu.outer.Lock()
+	mu.Lock()
 	switch mu.attr {
 	case pthread.XPTHREAD_MUTEX_NORMAL:
-		mu.owner = 0
-		mu.count = 0
-		mu.inner.Unlock()
+		if mu.count == 0 {
+			panic("TODO")
+		}
+
+		if mu.owner == threadID {
+			mu.owner = 0
+			mu.count = 0
+			mu.Cond.Broadcast()
+			mu.Unlock()
+			break
+		}
+
+		panic("TODO")
 	case pthread.XPTHREAD_MUTEX_RECURSIVE:
-		switch mu.owner {
-		case 0:
-			panic("TODO140")
-		case threadID:
+		if mu.count == 0 {
+			panic("TODO")
+		}
+
+		if mu.owner == threadID {
 			mu.count--
 			if mu.count != 0 {
+				mu.Unlock()
 				break
 			}
 
 			mu.owner = 0
-			mu.inner.Unlock()
-		default:
-			panic("TODO144")
+			mu.Cond.Broadcast()
+			mu.Unlock()
+			break
 		}
+
+		panic("TODO")
 	default:
 		panic(fmt.Errorf("TODO %#x", mu.attr))
 	}
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_mutex_unlock(%p: %+v [thread id %v]) %v\n", mutex, mu, threadID, r)
 	}
-	mu.outer.Unlock()
 	return r
 }
 
 // int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
-func Xpthread_cond_wait(tls *TLS, cons *Xpthread_cond_t, mutex *Xpthread_mutex_t) int32 {
-	panic("TODO")
+func Xpthread_cond_wait(tls *TLS, cond *Xpthread_cond_t, mutex *Xpthread_mutex_t) int32 {
+	threadID := tls.threadID
+	mu := mutexes.mu(unsafe.Pointer(mutex))
+	mu.Lock()
+	if mu.count == 0 {
+		panic("TODO")
+	}
+
+	if mu.owner != threadID {
+		panic("TODO")
+	}
+
+	conds.cond(unsafe.Pointer(cond), mu).Wait()
+	mu.Unlock()
+	var r int32
+	if ptrace {
+		fmt.Fprintf(os.Stderr, "pthread_cond_wait(%p, %p) %v\n", cond, mutex, r)
+	}
+	return r
 }
 
 // int pthread_cond_signal(pthread_cond_t *cond);
 func Xpthread_cond_signal(tls *TLS, cond *Xpthread_cond_t) int32 {
-	panic("TODO")
+	conds.cond(unsafe.Pointer(cond), nil).Signal()
+	var r int32
+	if ptrace {
+		fmt.Fprintf(os.Stderr, "pthread_cond_signal(%p) %v\n", cond, r)
+	}
+	return r
 }

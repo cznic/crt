@@ -4,7 +4,12 @@
 
 package crt
 
+import (
+	"runtime"
+)
+
 // int sched_yield(void);
 func Xsched_yield(tls *TLS) int32 {
-	panic("TODO")
+	runtime.Gosched()
+	return 0
 }

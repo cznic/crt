@@ -70,15 +70,63 @@ func Xpthread_equal(tls *TLS, thread1, thread2 uint64) int32 {
 
 // int pthread_join(pthread_t thread, void **value_ptr);
 func Xpthread_join(tls *TLS, thread uint64, value_ptr *unsafe.Pointer) int32 {
-	panic("TODO")
+	threads.Lock()
+	t := threads.m[uintptr(thread)]
+	threads.Unlock()
+	if t != nil {
+		<-t.c
+		if value_ptr != nil {
+			*value_ptr = t.retval
+		}
+		threads.Lock()
+		delete(threads.m, uintptr(thread))
+		threads.Unlock()
+	}
+	var r int32
+	if ptrace {
+		fmt.Fprintf(os.Stderr, "pthread_join(%v, %p) %v\n", thread, value_ptr, r)
+	}
+	return r
 }
 
 // int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr, void *(*start_routine)(void*), void *restrict arg);
 func Xpthread_create(tls *TLS, thread *uint64, attr *Xpthread_attr_t, start_routine func(*TLS, unsafe.Pointer) unsafe.Pointer, arg unsafe.Pointer) int32 {
-	panic("TODO")
+	if attr != nil {
+		panic("TODO")
+	}
+
+	*thread = uint64(tls.threadID)
+	new := NewTLS()
+	threads.Lock()
+	t := &threadState{c: make(chan struct{})}
+	threads.m[uintptr(new.threadID)] = t
+	threads.Unlock()
+	go func() {
+		t.retval = start_routine(new, arg)
+		close(t.c)
+		if t.detached {
+			threads.Lock()
+			delete(threads.m, uintptr(new.threadID))
+			threads.Unlock()
+		}
+	}()
+	var r int32
+	if ptrace {
+		fmt.Fprintf(os.Stderr, "pthread_create(%p, %p, fn, %p) %v\n", thread, attr, arg, r)
+	}
+	return r
 }
 
 // int pthread_detach(pthread_t thread);
 func Xpthread_detach(tls *TLS, thread uint64) int32 {
-	panic("TODO")
+	threads.Lock()
+	if t := threads.m[uintptr(thread)]; t != nil {
+		t.detached = true
+	}
+	threads.Unlock()
+	var r int32
+	if ptrace {
+		fmt.Fprintf(os.Stderr, "pthread_detach(%v) %v\n", thread, r)
+	}
+	return r
 }
