@@ -33,7 +33,10 @@ var (
 	allocMu       sync.Mutex
 	brk           unsafe.Pointer
 	heapAvailable int64
+	ptr2u         = map[*uintptr]struct{}{}
+	ptrMu         sync.Mutex
 	threadID      uintptr
+	u2ptr         = map[uintptr]*uintptr{}
 )
 
 func writeU8(p uintptr, v uint8) { *(*uint8)(unsafe.Pointer(p)) = v }
@@ -304,4 +307,46 @@ func GoBytesLen(s *int8, len int) []byte {
 		*(*uintptr)(unsafe.Pointer(&s))++
 	}
 	return b.Bytes()
+}
+
+// U2P returns unsafe.Pointer(&u).
+//
+// The function is safe for concurrent use by multiple goroutines.
+func U2P(u uintptr) unsafe.Pointer {
+	ptrMu.Lock()
+	if p := u2ptr[u]; p != nil {
+		ptrMu.Unlock()
+		return unsafe.Pointer(p)
+	}
+
+	allocMu.Lock()
+	b, err := alloc.Malloc(ptrSize)
+	allocMu.Unlock()
+	if err != nil {
+		panic("OOM")
+	}
+
+	p := (*uintptr)(unsafe.Pointer(&b[0]))
+	*p = u
+	u2ptr[u] = p
+	ptr2u[p] = struct{}{}
+	ptrMu.Unlock()
+	return unsafe.Pointer(p)
+}
+
+// P2U returns the uintptr value represented by p. If p was obtained by U2P
+// then the uintptr value originally passed to U2P is returned. Otherwise the
+// return value is uintptr(p).
+//
+// The function is safe for concurrent use by multiple goroutines.
+func P2U(p unsafe.Pointer) uintptr {
+	q := (*uintptr)(p)
+	ptrMu.Lock()
+	if _, ok := ptr2u[q]; ok {
+		ptrMu.Unlock()
+		return *q
+	}
+
+	ptrMu.Unlock()
+	return uintptr(p)
 }
