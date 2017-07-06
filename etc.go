@@ -313,6 +313,10 @@ func GoBytesLen(s *int8, len int) []byte {
 //
 // The function is safe for concurrent use by multiple goroutines.
 func U2P(u uintptr) unsafe.Pointer {
+	if u == 0 {
+		return nil
+	}
+
 	ptrMu.Lock()
 	if p := u2ptr[u]; p != nil {
 		ptrMu.Unlock()

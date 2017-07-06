@@ -237,14 +237,9 @@ func Xpthread_mutex_unlock(tls *TLS, mutex *Xpthread_mutex_t) int32 {
 			panic("TODO")
 		}
 
-		if mu.owner == threadID {
-			mu.owner = 0
-			mu.count = 0
-			mu.Cond.Broadcast()
-			break
-		}
-
-		panic("TODO")
+		mu.owner = 0
+		mu.count = 0
+		mu.Cond.Broadcast()
 	case pthread.XPTHREAD_MUTEX_RECURSIVE:
 		if mu.count == 0 {
 			panic("TODO")
@@ -285,7 +280,10 @@ func Xpthread_cond_wait(tls *TLS, cond *Xpthread_cond_t, mutex *Xpthread_mutex_t
 		panic("TODO")
 	}
 
+	count := mu.count
+	mu.count = 0
 	conds.cond(unsafe.Pointer(cond), mu).Wait()
+	mu.count = count
 	var r int32
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_cond_wait(%p, %p) %v\n", cond, mutex, r)
