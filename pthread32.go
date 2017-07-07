@@ -105,19 +105,28 @@ func Xpthread_create(tls *TLS, thread *uint32, attr *Xpthread_attr_t, start_rout
 	t := &threadState{c: make(chan struct{})}
 	threads.m[uintptr(new.threadID)] = t
 	threads.Unlock()
+	ch := make(chan struct{})
 	go func() {
+		close(ch)
 		t.retval = start_routine(new, arg)
+		if ptrace {
+			fmt.Fprintf(os.Stderr, "thread #%#x finished: %#p\n", new.threadID, t.retval)
+		}
 		close(t.c)
 		if t.detached {
 			threads.Lock()
 			delete(threads.m, uintptr(new.threadID))
 			threads.Unlock()
+			if ptrace {
+				fmt.Fprintf(os.Stderr, "thread #%#x was detached", new.threadID)
+			}
 		}
 	}()
 	var r int32
 	if ptrace {
 		fmt.Fprintf(os.Stderr, "pthread_create(%p, %p, fn, %p) %v\n", thread, attr, arg, r)
 	}
+	<-ch
 	return r
 }
 
