@@ -22,6 +22,8 @@ func VAPointer(ap *[]interface{}) (r unsafe.Pointer) {
 		r = unsafe.Pointer(uintptr(x))
 	case unsafe.Pointer:
 		r = x
+	case nil:
+		// nop
 	default:
 		panic(fmt.Errorf("%T", x))
 	}
