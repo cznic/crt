@@ -13,29 +13,29 @@ import (
 	"unsafe"
 )
 
-const Tstruct_stat64 = "struct{uint64,uint32,uint32,uint32,uint32,uint32,uint32,uint64,uint32,int64,int32,int64,int32,uint32,int32,uint32,int32,uint32,uint64}"
+const Tstruct_stat64 = "struct{st_dev uint64,__pad1 uint32,__st_ino uint32,st_mode uint32,st_nlink uint32,st_uid uint32,st_gid uint32,st_rdev uint64,__pad2 uint32,st_size int64,st_blksize int32,st_blocks int64,st_atime int32,st_atimensec uint32,st_mtime int32,st_mtimensec uint32,st_ctime int32,st_ctimensec uint32,st_ino uint64}"
 
 type Xstruct_stat64 struct {
-	X0  uint64
-	X1  uint32
-	X2  uint32
-	X3  uint32
-	X4  uint32
-	X5  uint32
-	X6  uint32
-	X7  uint64
-	X8  uint32
-	X9  int64
-	X10 int32
-	X11 int64
-	X12 int32
-	X13 uint32
-	X14 int32
-	X15 uint32
-	X16 int32
-	X17 uint32
-	X18 uint64
-}
+	Xst_dev       uint64
+	X__pad1       uint32
+	X__st_ino     uint32
+	Xst_mode      uint32
+	Xst_nlink     uint32
+	Xst_uid       uint32
+	Xst_gid       uint32
+	Xst_rdev      uint64
+	X__pad2       uint32
+	Xst_size      int64
+	Xst_blksize   int32
+	Xst_blocks    int64
+	Xst_atime     int32
+	Xst_atimensec uint32
+	Xst_mtime     int32
+	Xst_mtimensec uint32
+	Xst_ctime     int32
+	Xst_ctimensec uint32
+	Xst_ino       uint64
+} // t195 struct{st_dev uint64,__pad1 uint32,__st_ino uint32,st_mode uint32,st_nlink uint32,st_uid uint32,st_gid uint32,st_rdev uint64,__pad2 uint32,st_size int64,st_blksize int32,st_blocks int64,st_atime int32,st_atimensec uint32,st_mtime int32,st_mtimensec uint32,st_ctime int32,st_ctimensec uint32,st_ino uint64}
 
 // extern int stat64(char *__file, struct stat64 *__buf);
 func Xstat64(tls *TLS, file *int8, buf *Xstruct_stat64) int32 {

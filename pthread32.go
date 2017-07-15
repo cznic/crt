@@ -14,33 +14,17 @@ import (
 
 const (
 	Tpthread_attr_t  = "union{[36]int8,int32}"
-	Tpthread_mutex_t = "union{struct{int32,uint32,int32,int32,uint32,union{struct{int16,int16},struct{*struct{}}}},[24]int8,int32}"
+	Tpthread_mutex_t = "union{__data struct{__lock int32,__count uint32,__owner int32,__kind int32,__nusers uint32, union{__elision_data struct{__espins int16,__elision int16},__list struct{__next *struct{}}}},__size [24]int8,__align int32}"
 )
 
 type Xpthread_mutex_t struct {
 	X [0]struct {
-		X0 struct {
-			X0 int32
-			X1 uint32
-			X2 int32
-			X3 int32
-			X4 uint32
-			X5 struct {
-				X [0]struct {
-					X0 struct {
-						X0 int16
-						X1 int16
-					}
-					X1 struct{ X0 unsafe.Pointer }
-				}
-				U [4]byte
-			}
-		}
-		X1 [24]int8
-		X2 int32
+		_        *byte
+		X__size  [24]int8
+		X__align int32
 	}
 	U [24]byte
-}
+} // union{__data struct{__lock int32,__count uint32,__owner int32,__kind int32,__nusers uint32, union{__elision_data struct{__espins int16,__elision int16},__list struct{__next *struct{}}}},__size [24]int8,__align int32}
 
 type Xpthread_attr_t struct {
 	X [0]struct {

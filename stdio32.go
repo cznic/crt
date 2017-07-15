@@ -13,40 +13,40 @@ import (
 )
 
 const (
-	TFILE = "struct{int32,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*int8,*struct{},*struct{},int32,int32,int32,uint16,int8,[1]int8,*struct{},int64,*struct{},*struct{},*struct{},*struct{},uint32,int32,[40]int8}"
+	TFILE = "struct{_flags int32,_IO_read_ptr *int8,_IO_read_end *int8,_IO_read_base *int8,_IO_write_base *int8,_IO_write_ptr *int8,_IO_write_end *int8,_IO_buf_base *int8,_IO_buf_end *int8,_IO_save_base *int8,_IO_backup_base *int8,_IO_save_end *int8,_markers *struct{},_chain *struct{},_fileno int32,_flags2 int32,_old_offset int32,_cur_column uint16,_vtable_offset int8,_shortbuf [1]int8,_lock *struct{},_offset int64,__pad1 *struct{},__pad2 *struct{},__pad3 *struct{},__pad4 *struct{},__pad5 uint32,_mode int32,_unused2 [40]int8}"
 )
 
 type XFILE struct {
-	X0  int32
-	X1  *int8
-	X2  *int8
-	X3  *int8
-	X4  *int8
-	X5  *int8
-	X6  *int8
-	X7  *int8
-	X8  *int8
-	X9  *int8
-	X10 *int8
-	X11 *int8
-	X12 unsafe.Pointer
-	X13 unsafe.Pointer
-	X14 int32
-	X15 int32
-	X16 int32
-	X17 uint16
-	X18 int8
-	X19 [1]int8
-	X20 unsafe.Pointer
-	X21 int64
-	X22 unsafe.Pointer
-	X23 unsafe.Pointer
-	X24 unsafe.Pointer
-	X25 unsafe.Pointer
-	X26 uint32
-	X27 int32
-	X28 [40]int8
-}
+	X_flags          int32
+	X_IO_read_ptr    *int8
+	X_IO_read_end    *int8
+	X_IO_read_base   *int8
+	X_IO_write_base  *int8
+	X_IO_write_ptr   *int8
+	X_IO_write_end   *int8
+	X_IO_buf_base    *int8
+	X_IO_buf_end     *int8
+	X_IO_save_base   *int8
+	X_IO_backup_base *int8
+	X_IO_save_end    *int8
+	X_markers        unsafe.Pointer
+	X_chain          unsafe.Pointer
+	X_fileno         int32
+	X_flags2         int32
+	X_old_offset     int32
+	X_cur_column     uint16
+	X_vtable_offset  int8
+	X_shortbuf       [1]int8
+	X_lock           unsafe.Pointer
+	X_offset         int64
+	X__pad1          unsafe.Pointer
+	X__pad2          unsafe.Pointer
+	X__pad3          unsafe.Pointer
+	X__pad4          unsafe.Pointer
+	X__pad5          uint32
+	X_mode           int32
+	X_unused2        [40]int8
+} // t136 struct{_flags int32,_IO_read_ptr *int8,_IO_read_end *int8,_IO_read_base *int8,_IO_write_base *int8,_IO_write_ptr *int8,_IO_write_end *int8,_IO_buf_base *int8,_IO_buf_end *int8,_IO_save_base *int8,_IO_backup_base *int8,_IO_save_end *int8,_markers *struct{},_chain *struct{},_fileno int32,_flags2 int32,_old_offset int32,_cur_column uint16,_vtable_offset int8,_shortbuf [1]int8,_lock *struct{},_offset int64,__pad1 *struct{},__pad2 *struct{},__pad3 *struct{},__pad4 *struct{},__pad5 uint32,_mode int32,_unused2 [40]int8}
 
 // size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
 func Xfwrite(tls *TLS, ptr unsafe.Pointer, size, nmemb uint32, stream *XFILE) uint32 {
