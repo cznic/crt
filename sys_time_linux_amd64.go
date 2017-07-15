@@ -16,8 +16,8 @@ import (
 const Tstruct_timeval = "struct{int64,int64}"
 
 type Xstruct_timeval struct {
-	X0 int64
-	X1 int64
+	Xtv_sec  int64
+	Xtv_usec int64
 }
 
 // int gettimeofday(struct timeval *restrict tp, void *restrict tzp);

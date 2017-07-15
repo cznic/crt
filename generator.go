@@ -432,3 +432,19 @@ func main() {
 		}
 	}
 }
+
+func goArch() string {
+	if s := os.Getenv("GOARCH"); s != "" {
+		return s
+	}
+
+	return runtime.GOARCH
+}
+
+func goOs() string {
+	if s := os.Getenv("GOOS"); s != "" {
+		return s
+	}
+
+	return runtime.GOOS
+}

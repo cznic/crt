@@ -16,24 +16,24 @@ import (
 const Tstruct_stat64 = "struct{uint64,uint64,uint64,uint32,uint32,uint32,int32,uint64,int64,int64,int64,int64,uint64,int64,uint64,int64,uint64,[3]int64}"
 
 type Xstruct_stat64 struct {
-	X0  uint64
-	X1  uint64
-	X2  uint64
-	X3  uint32
-	X4  uint32
-	X5  uint32
-	X6  int32
-	X7  uint64
-	X8  int64
-	X9  int64
-	X10 int64
-	X11 int64
-	X12 uint64
-	X13 int64
-	X14 uint64
-	X15 int64
-	X16 uint64
-	X17 [3]int64
+	Xst_dev           uint64
+	Xst_ino           uint64
+	Xst_nlink         uint64
+	Xst_mode          uint32
+	Xst_uid           uint32
+	Xst_gid           uint32
+	X__pad0           int32
+	Xst_rdev          uint64
+	Xst_size          int64
+	Xst_blksize       int64
+	Xst_blocks        int64
+	Xst_atime         int64
+	Xst_atimensec     uint64
+	Xst_mtime         int64
+	Xst_mtimensec     uint64
+	Xst_ctime         int64
+	Xst_ctimensec     uint64
+	X__glibc_reserved [3]int64
 }
 
 // extern int stat64(char *__file, struct stat64 *__buf);
