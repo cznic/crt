@@ -14,7 +14,7 @@ import (
 
 const (
 	Tpthread_attr_t  = "union{[56]int8,int64}"
-	Tpthread_mutex_t = "union{struct{int32,uint32,int32,uint32,int32,int16,int16,struct{*struct{},*struct{}}},[40]int8,int64}"
+	Tpthread_mutex_t = "union{__data struct{__lock int32,__count uint32,__owner int32,__nusers uint32,__kind int32,__spins int16,__elision int16,__list struct{__prev *struct{},__next *struct{}}},__size [40]int8,__align int64}"
 )
 
 type Xpthread_mutex_t struct {
@@ -32,11 +32,11 @@ type Xpthread_mutex_t struct {
 				X1 unsafe.Pointer
 			}
 		}
-		X1 [40]int8
-		X2 int64
+		X__size  [40]int8
+		X__align int64
 	}
 	U [40]byte
-}
+} // union{__data struct{__lock int32,__count uint32,__owner int32,__nusers uint32,__kind int32,__spins int16,__elision int16,__list struct{__prev *struct{},__next *struct{}}},__size [40]int8,__align int64}
 
 type Xpthread_attr_t struct {
 	X [0]struct {

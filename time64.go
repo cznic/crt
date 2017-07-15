@@ -8,7 +8,7 @@
 
 package crt
 
-const Ttm = "struct{int32,int32,int32,int32,int32,int32,int32,int32,int32,int64,*int8}"
+const Ttm = "struct{tm_sec int32,tm_min int32,tm_hour int32,tm_mday int32,tm_mon int32,tm_year int32,tm_wday int32,tm_yday int32,tm_isdst int32,__tm_gmtoff int64,__tm_zone *int8}"
 
 type Xtm struct {
 	Xtm_sec      int32
@@ -22,7 +22,7 @@ type Xtm struct {
 	Xtm_isdst    int32
 	X__tm_gmtoff int64
 	X__tm_zone   *int8
-}
+} // t162 struct{tm_sec int32,tm_min int32,tm_hour int32,tm_mday int32,tm_mon int32,tm_year int32,tm_wday int32,tm_yday int32,tm_isdst int32,__tm_gmtoff int64,__tm_zone *int8}
 
 // struct tm *localtime(const time_t *timep);
 func Xlocaltime(tls *TLS, timep *int64) *Xtm {

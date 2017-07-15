@@ -13,7 +13,7 @@ import (
 	"unsafe"
 )
 
-const Tstruct_stat64 = "struct{uint64,uint64,uint64,uint32,uint32,uint32,int32,uint64,int64,int64,int64,int64,uint64,int64,uint64,int64,uint64,[3]int64}"
+const Tstruct_stat64 = "struct{st_dev uint64,st_ino uint64,st_nlink uint64,st_mode uint32,st_uid uint32,st_gid uint32,__pad0 int32,st_rdev uint64,st_size int64,st_blksize int64,st_blocks int64,st_atime int64,st_atimensec uint64,st_mtime int64,st_mtimensec uint64,st_ctime int64,st_ctimensec uint64,__glibc_reserved [3]int64}"
 
 type Xstruct_stat64 struct {
 	Xst_dev           uint64
@@ -34,7 +34,7 @@ type Xstruct_stat64 struct {
 	Xst_ctime         int64
 	Xst_ctimensec     uint64
 	X__glibc_reserved [3]int64
-}
+} // t196 struct{st_dev uint64,st_ino uint64,st_nlink uint64,st_mode uint32,st_uid uint32,st_gid uint32,__pad0 int32,st_rdev uint64,st_size int64,st_blksize int64,st_blocks int64,st_atime int64,st_atimensec uint64,st_mtime int64,st_mtimensec uint64,st_ctime int64,st_ctimensec uint64,__glibc_reserved [3]int64}
 
 // extern int stat64(char *__file, struct stat64 *__buf);
 func Xstat64(tls *TLS, file *int8, buf *Xstruct_stat64) int32 {

@@ -13,12 +13,12 @@ import (
 	"unsafe"
 )
 
-const Tstruct_timeval = "struct{int64,int64}"
+const Tstruct_timeval = "struct{tv_sec int64,tv_usec int64}"
 
 type Xstruct_timeval struct {
 	Xtv_sec  int64
 	Xtv_usec int64
-}
+} // t196 struct{tv_sec int64,tv_usec int64}
 
 // int gettimeofday(struct timeval *restrict tp, void *restrict tzp);
 func Xgettimeofday(tls *TLS, tp *Xstruct_timeval, tzp unsafe.Pointer) int32 {

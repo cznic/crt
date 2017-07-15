@@ -15,35 +15,26 @@ import (
 )
 
 const (
-	Tpthread_cond_t      = "union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}"
-	Tpthread_mutexattr_t = "union{[4]int8,int32}"
+	Tpthread_cond_t      = "union{__data struct{__lock int32,__futex uint32,__total_seq uint64,__wakeup_seq uint64,__woken_seq uint64,__mutex *struct{},__nwaiters uint32,__broadcast_seq uint32},__size [48]int8,__align int64}"
+	Tpthread_mutexattr_t = "union{__size [4]int8,__align int32}"
 )
 
 type Xpthread_cond_t struct {
 	X [0]struct {
-		X0 struct {
-			X0 int32
-			X1 uint32
-			X2 uint64
-			X3 uint64
-			X4 uint64
-			X5 unsafe.Pointer
-			X6 uint32
-			X7 uint32
-		}
-		X1 [48]int8
-		X2 int64
+		_        *byte
+		X__size  [48]int8
+		X__align int64
 	}
 	U [48]byte
-} // t2 union{struct{int32,uint32,uint64,uint64,uint64,*struct{},uint32,uint32},[48]int8,int64}
+} // t4 union{__data struct{__lock int32,__futex uint32,__total_seq uint64,__wakeup_seq uint64,__woken_seq uint64,__mutex *struct{},__nwaiters uint32,__broadcast_seq uint32},__size [48]int8,__align int64}
 
 type Xpthread_mutexattr_t struct {
 	X [0]struct {
-		X0 [4]int8
-		X1 int32
+		X__size  [4]int8
+		X__align int32
 	}
 	U [4]byte
-}
+} // t175 union{__size [4]int8,__align int32}
 
 type mu struct {
 	*sync.Cond
