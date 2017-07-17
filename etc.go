@@ -47,7 +47,7 @@ type TLS struct {
 	errno    int32
 }
 
-// NewTLS returns a newly create TLS.
+// NewTLS returns a newly created TLS.
 func NewTLS() *TLS { return &TLS{threadID: atomic.AddUintptr(&threadID, 1)} }
 
 func (t *TLS) setErrno(err interface{}) {
@@ -135,7 +135,7 @@ func GoStringLen(s *int8, len int) string {
 	return r
 }
 
-// RegisterHeap registers the sbkr-stlye heap.
+// RegisterHeap registers the sbrk-style heap.
 func RegisterHeap(h unsafe.Pointer, n int64) {
 	brk = h
 	heapAvailable = n
