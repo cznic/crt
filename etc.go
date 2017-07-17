@@ -41,11 +41,13 @@ var (
 
 func writeU8(p uintptr, v uint8) { *(*uint8)(unsafe.Pointer(p)) = v }
 
+// TLS represents the C-thread local storage.
 type TLS struct {
 	threadID uintptr
 	errno    int32
 }
 
+// NewTLS returns a newly create TLS.
 func NewTLS() *TLS { return &TLS{threadID: atomic.AddUintptr(&threadID, 1)} }
 
 func (t *TLS) setErrno(err interface{}) {
@@ -61,6 +63,7 @@ func (t *TLS) setErrno(err interface{}) {
 	}
 }
 
+// TLS frees any resources used by t.
 func (t *TLS) Close() {
 	// nop
 }
@@ -132,6 +135,7 @@ func GoStringLen(s *int8, len int) string {
 	return r
 }
 
+// RegisterHeap registers the sbkr-stlye heap.
 func RegisterHeap(h unsafe.Pointer, n int64) {
 	brk = h
 	heapAvailable = n
