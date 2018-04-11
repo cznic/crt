@@ -38,6 +38,11 @@ func dbg(s string, va ...interface{}) {
 	os.Stderr.Sync()
 }
 
+func TODO(...interface{}) string { //TODOOK
+	_, fn, fl, _ := runtime.Caller(1)
+	return fmt.Sprintf("# TODO: %s:%d:\n", path.Base(fn), fl) //TODOOK
+}
+
 func use(...interface{}) {}
 
 func init() {

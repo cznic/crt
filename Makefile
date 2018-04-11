@@ -15,7 +15,7 @@ all: editor
 	misspell *.go
 	gosimple || true
 	maligned || true
-	unconvert -apply
+	#unconvert -apply
 
 clean:
 	go clean
@@ -29,13 +29,17 @@ cpu: clean
 	go tool pprof -lines *.test cpu.out
 
 edit:
-	@ 1>/dev/null 2>/dev/null gvim -p Makefile all_test.go etc.go
+	@ 1>/dev/null 2>/dev/null gvim -p Makefile all_test.go builtin*.go crt*.go
 
 editor:
 	gofmt -l -s -w *.go
+	#TODO GOOS=linux GOARCH=386 go build
+	GOOS=linux GOARCH=amd64 go build
+	#TODO GOOS=windows GOARCH=386 go build
+	#TODO GOOS=windows GOARCH=amd64 go build
 	go test -i
 	go test 2>&1 | tee log
-	go build
+	go install
 
 internalError:
 	egrep -ho '"internal error.*"' *.go | sort | cat -n

@@ -9,40 +9,37 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"math"
 	"os"
 	"sync"
 	"unsafe"
 
-	"github.com/cznic/ccir/libc/errno"
-	"github.com/cznic/ccir/libc/stdio"
+	"github.com/cznic/crt/errno"
+	"github.com/cznic/crt/stdio"
 	"github.com/cznic/internal/buffer"
 	"github.com/cznic/mathutil"
 )
 
 var (
-	stdin, stdout, stderr unsafe.Pointer
-)
+	stdin, stdout, stderr, penviron uintptr
 
-var (
 	files = &fmap{
-		m: map[unsafe.Pointer]*os.File{},
+		m: map[uintptr]*os.File{},
 	}
 	nullReader = bytes.NewBuffer(nil)
 )
 
 type fmap struct {
-	m  map[unsafe.Pointer]*os.File
+	m  map[uintptr]*os.File
 	mu sync.Mutex
 }
 
-func (m *fmap) add(f *os.File, u unsafe.Pointer) {
+func (m *fmap) add(f *os.File, u uintptr) {
 	m.mu.Lock()
 	m.m[u] = f
 	m.mu.Unlock()
 }
 
-func (m *fmap) reader(u unsafe.Pointer) io.Reader {
+func (m *fmap) reader(u uintptr) io.Reader {
 	switch u {
 	case stdin:
 		return os.Stdin
@@ -56,7 +53,7 @@ func (m *fmap) reader(u unsafe.Pointer) io.Reader {
 	return f
 }
 
-func (m *fmap) file(u unsafe.Pointer) *os.File {
+func (m *fmap) file(u uintptr) *os.File {
 	switch u {
 	case stdin:
 		return os.Stdin
@@ -72,7 +69,7 @@ func (m *fmap) file(u unsafe.Pointer) *os.File {
 	return f
 }
 
-func (m *fmap) writer(u unsafe.Pointer) io.Writer {
+func (m *fmap) writer(u uintptr) io.Writer {
 	switch u {
 	case stdin:
 		return ioutil.Discard
@@ -88,7 +85,7 @@ func (m *fmap) writer(u unsafe.Pointer) io.Writer {
 	return f
 }
 
-func (m *fmap) extract(u unsafe.Pointer) *os.File {
+func (m *fmap) extract(u uintptr) *os.File {
 	m.mu.Lock()
 	f := m.m[u]
 	delete(m.m, u)
@@ -96,42 +93,22 @@ func (m *fmap) extract(u unsafe.Pointer) *os.File {
 	return f
 }
 
-// void __register_stdfiles(void *, void *, void *);
-func X__register_stdfiles(tls *TLS, in, out, err unsafe.Pointer) {
-	stdin = in
-	stdout = out
-	stderr = err
-}
-
 // int printf(const char *format, ...);
-func X__builtin_printf(tls *TLS, format *int8, args ...interface{}) int32 {
-	return goFprintf(os.Stdout, format, args...)
-}
-
-// int printf(const char *format, ...);
-func Xprintf(tls *TLS, format *int8, args ...interface{}) int32 {
+func Xprintf(tls TLS, format uintptr /* *int8 */, args ...interface{}) int32 {
 	return X__builtin_printf(tls, format, args...)
 }
 
-// int sprintf(char *str, const char *format, ...);
-func X__builtin_sprintf(tls *TLS, str, format *int8, args ...interface{}) int32 {
-	w := memWriter(unsafe.Pointer(str))
-	n := goFprintf(&w, format, args...)
-	w.WriteByte(0)
-	return n
+// int printf(const char *format, ...);
+func X__builtin_printf(tls TLS, format uintptr /* *int8 */, args ...interface{}) int32 {
+	return goFprintf(os.Stdout, format, &args)
 }
 
-// int sprintf(char *str, const char *format, ...);
-func Xsprintf(tls *TLS, str, format *int8, args ...interface{}) int32 {
-	return X__builtin_sprintf(tls, str, format, args...)
-}
-
-func goFprintf(w io.Writer, format *int8, ap ...interface{}) int32 {
+func goFprintf(w io.Writer, format uintptr /* *int8 */, ap *[]interface{}) int32 {
 	var b buffer.Bytes
 	written := 0
 	for {
-		c := *format
-		*(*uintptr)(unsafe.Pointer(&format))++
+		c := *(*int8)(unsafe.Pointer(format))
+		format++
 		switch c {
 		case 0:
 			_, err := b.WriteTo(w)
@@ -144,83 +121,99 @@ func goFprintf(w io.Writer, format *int8, ap ...interface{}) int32 {
 		case '%':
 			modifiers := ""
 			long := 0
+			short := 0
+			hash := false
 			var w []interface{}
 		more:
-			c := *format
-			*(*uintptr)(unsafe.Pointer(&format))++
+			c := *(*int8)(unsafe.Pointer(format))
+			format++
 			switch c {
-			case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.':
+			case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+':
 				modifiers += string(c)
 				goto more
+			case '#':
+				hash = true
+				goto more
 			case '*':
-				w = append(w, VAInt32(&ap))
+				w = append(w, VAint32(ap))
 				modifiers += string(c)
 				goto more
 			case 'c':
-				arg := VAInt32(&ap)
+				arg := VAint32(ap)
 				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sc", modifiers), append(w, arg)...)
 				written += n
 			case 'd', 'i':
 				var arg interface{}
 				switch long {
 				case 0:
-					arg = VAInt32(&ap)
+					arg = VAint32(ap)
 				case 1:
-					arg = VALong(&ap)
+					arg = vaLong(ap)
 				default:
-					arg = VAInt64(&ap)
+					arg = VAint64(ap)
 				}
 				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sd", modifiers), append(w, arg)...)
-				written += n
-			case 'u':
-				var arg interface{}
-				switch long {
-				case 0:
-					arg = VAUint32(&ap)
-				case 1:
-					arg = VAULong(&ap)
-				default:
-					arg = VAUint64(&ap)
-				}
-				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sd", modifiers), append(w, arg)...)
-				written += n
-			case 'x':
-				var arg interface{}
-				switch long {
-				case 0:
-					arg = VAUint32(&ap)
-				case 1:
-					arg = VAULong(&ap)
-				default:
-					arg = VAUint64(&ap)
-				}
-				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sx", modifiers), append(w, arg)...)
 				written += n
 			case 'l':
 				long++
 				goto more
 			case 'f':
-				arg := VAFloat64(&ap)
+				if hash {
+					panic(fmt.Errorf("TODO #f"))
+				}
+
+				arg := VAfloat64(ap)
 				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sf", modifiers), append(w, arg)...)
 				written += n
+			case 'h':
+				short++
+				goto more
+			case 'o':
+				nz := false
+				var arg interface{}
+				switch long {
+				case 0:
+					v := VAuint32(ap)
+					nz = v != 0
+					arg = v
+				case 1:
+					v := vaULong(ap)
+					nz = v != 0
+					arg = v
+				default:
+					v := VAuint64(ap)
+					nz = v != 0
+					arg = v
+				}
+				if hash && nz {
+					b.WriteByte('0')
+					written++
+				}
+
+				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%so", modifiers), append(w, arg)...)
+				written += n
 			case 'p':
-				arg := VAPointer(&ap)
-				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sp", modifiers), append(w, arg)...)
+				arg := VAuintptr(ap)
+				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sx", modifiers), append(w, arg)...)
 				written += n
 			case 'g':
-				arg := VAFloat64(&ap)
+				if hash {
+					panic(fmt.Errorf("TODO #g"))
+				}
+
+				arg := VAfloat64(ap)
 				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sg", modifiers), append(w, arg)...)
 				written += n
 			case 's':
-				arg := (*int8)(VAPointer(&ap))
-				if arg == nil {
+				arg := VAuintptr(ap)
+				if arg == 0 {
 					break
 				}
 
 				var b2 buffer.Bytes
 				for {
-					c := *arg
-					*(*uintptr)(unsafe.Pointer(&arg))++
+					c := *(*int8)(unsafe.Pointer(arg))
+					arg++
 					if c == 0 {
 						n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%ss", modifiers), append(w, b2.Bytes())...)
 						b2.Close()
@@ -230,6 +223,66 @@ func goFprintf(w io.Writer, format *int8, ap ...interface{}) int32 {
 
 					b2.WriteByte(byte(c))
 				}
+			case 'u':
+				var arg interface{}
+				switch long {
+				case 0:
+					arg = VAuint32(ap)
+				case 1:
+					arg = vaULong(ap)
+				default:
+					arg = VAuint64(ap)
+				}
+				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sd", modifiers), append(w, arg)...)
+				written += n
+			case 'x':
+				nz := false
+				var arg interface{}
+				switch long {
+				case 0:
+					v := VAuint32(ap)
+					nz = v != 0
+					arg = v
+				case 1:
+					v := vaULong(ap)
+					nz = v != 0
+					arg = v
+				default:
+					v := VAuint64(ap)
+					nz = v != 0
+					arg = v
+				}
+				if hash && nz {
+					b.WriteString("0x")
+					written += 2
+				}
+
+				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sx", modifiers), append(w, arg)...)
+				written += n
+			case 'X':
+				nz := false
+				var arg interface{}
+				switch long {
+				case 0:
+					v := VAuint32(ap)
+					nz = v != 0
+					arg = v
+				case 1:
+					v := vaULong(ap)
+					nz = v != 0
+					arg = v
+				default:
+					v := VAuint64(ap)
+					nz = v != 0
+					arg = v
+				}
+				if hash && nz {
+					b.WriteString("0X")
+					written += 2
+				}
+
+				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sX", modifiers), append(w, arg)...)
+				written += n
 			default:
 				panic(fmt.Errorf("TODO %q", "%"+string(c)))
 			}
@@ -247,10 +300,41 @@ func goFprintf(w io.Writer, format *int8, ap ...interface{}) int32 {
 	}
 }
 
-// FILE *fopen64(const char *path, const char *mode);
-func Xfopen64(tls *TLS, path, mode *int8) *XFILE {
+// int sprintf(char *str, const char *format, ...);
+func X__builtin_sprintf(tls TLS, str, format uintptr, args ...interface{}) int32 {
+	w := memWriter(str)
+	n := goFprintf(&w, format, &args)
+	w.WriteByte(0)
+	return n
+}
+
+// int sprintf(char *str, const char *format, ...);
+func Xsprintf(tls TLS, str, format uintptr, args ...interface{}) int32 {
+	return X__builtin_sprintf(tls, str, format, args...)
+}
+
+// int fputc(int c, FILE *stream);
+func Xfputc(tls TLS, c int32, stream uintptr) int32 {
+	w := files.writer(stream)
+	if _, err := w.Write([]byte{byte(c)}); err != nil {
+		return stdio.XEOF
+	}
+
+	return int32(byte(c))
+}
+
+// int putc(int c, FILE *stream);
+func Xputc(tls TLS, c int32, stream uintptr) int32 {
+	panic("TODO putc")
+}
+
+// int putc(int c, FILE *stream);
+func X_IO_putc(tls TLS, c int32, stream uintptr) int32 { return Xputc(tls, c, stream) }
+
+// FILE *fopen(const char *path, const char *mode);
+func Xfopen(tls TLS, path, mode uintptr) uintptr {
 	p := GoString(path)
-	var u unsafe.Pointer
+	var u uintptr
 	switch p {
 	case os.Stderr.Name():
 		u = stderr
@@ -282,7 +366,18 @@ func Xfopen64(tls *TLS, path, mode *int8) *XFILE {
 					tls.setErrno(errno.XEACCES)
 				}
 			}
-		case "w":
+		case "r+b":
+			if f, err = os.OpenFile(p, os.O_RDWR, 0666); err != nil {
+				switch {
+				case os.IsNotExist(err):
+					tls.setErrno(errno.XENOENT)
+				case os.IsPermission(err):
+					tls.setErrno(errno.XEPERM)
+				default:
+					tls.setErrno(errno.XEACCES)
+				}
+			}
+		case "w", "wb":
 			if f, err = os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666); err != nil {
 				switch {
 				case os.IsPermission(err):
@@ -295,44 +390,45 @@ func Xfopen64(tls *TLS, path, mode *int8) *XFILE {
 			panic(mode)
 		}
 		if f != nil {
-			u = malloc(tls, ptrSize)
+			u = Xmalloc(tls, ptrSize)
 			files.add(f, u)
 		}
 	}
-	return (*XFILE)(u)
+	return u
 }
 
+func Xfopen64(tls TLS, path, mode uintptr) uintptr { return Xfopen(tls, path, mode) }
+
 // size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
-func fwrite(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *XFILE) uint64 {
-	hi, lo := mathutil.MulUint128_64(size, nmemb)
-	if hi != 0 || lo > math.MaxInt32 {
+func fwrite(tls TLS, ptr uintptr, size, nmemb size_t, stream uintptr) size_t {
+	hi, lo := mathutil.MulUint128_64(uint64(size), uint64(nmemb))
+	if hi != 0 || lo > uint64(len(rawmem{})) {
 		tls.setErrno(errno.XE2BIG)
 		return 0
 	}
 
-	n, err := files.writer(unsafe.Pointer(stream)).Write((*[math.MaxInt32]byte)(ptr)[:lo])
+	n, err := files.writer(stream).Write((*rawmem)(unsafe.Pointer(ptr))[:lo])
 	if err != nil {
 		tls.setErrno(errno.XEIO)
 	}
-	return uint64(n) / size
+	return size_t(n) / size
 }
 
 // int fclose(FILE *stream);
-func Xfclose(tls *TLS, stream *XFILE) int32 {
-	u := unsafe.Pointer(stream)
-	switch u {
+func Xfclose(tls TLS, stream uintptr) int32 {
+	switch stream {
 	case stdin, stdout, stderr:
 		tls.setErrno(errno.XEIO)
 		return stdio.XEOF
 	}
 
-	f := files.extract(u)
+	f := files.extract(stream)
 	if f == nil {
 		tls.setErrno(errno.XEBADF)
 		return stdio.XEOF
 	}
 
-	Xfree(tls, u)
+	Xfree(tls, stream)
 	if err := f.Close(); err != nil {
 		tls.setErrno(errno.XEIO)
 		return stdio.XEOF
@@ -342,28 +438,28 @@ func Xfclose(tls *TLS, stream *XFILE) int32 {
 }
 
 // size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
-func fread(tls *TLS, ptr unsafe.Pointer, size, nmemb uint64, stream *XFILE) uint64 {
-	hi, lo := mathutil.MulUint128_64(size, nmemb)
-	if hi != 0 || lo > math.MaxInt32 {
+func fread(tls TLS, ptr uintptr, size, nmemb size_t, stream uintptr) size_t {
+	hi, lo := mathutil.MulUint128_64(uint64(size), uint64(nmemb))
+	if hi != 0 || lo > uint64(len(rawmem{})) {
 		tls.setErrno(errno.XE2BIG)
 		return 0
 	}
 
-	n, err := files.reader(unsafe.Pointer(stream)).Read((*[math.MaxInt32]byte)(ptr)[:lo])
+	n, err := files.reader(stream).Read((*rawmem)(unsafe.Pointer(ptr))[:lo])
 	if err != nil {
 		tls.setErrno(errno.XEIO)
 	}
-	return uint64(n) / size
+	return size_t(n) / size
 }
 
-func fseek(tls *TLS, stream *XFILE, offset int64, whence int32) int32 {
-	f := files.file(unsafe.Pointer(stream))
+func fseek(tls TLS, stream uintptr, offset long_t, whence int32) int32 {
+	f := files.file(stream)
 	if f == nil {
 		tls.setErrno(errno.XEBADF)
 		return -1
 	}
 
-	if _, err := f.Seek(offset, int(whence)); err != nil {
+	if _, err := f.Seek(int64(offset), int(whence)); err != nil {
 		tls.setErrno(errno.XEINVAL)
 		return -1
 	}
@@ -371,8 +467,8 @@ func fseek(tls *TLS, stream *XFILE, offset int64, whence int32) int32 {
 	return 0
 }
 
-func ftell(tls *TLS, stream *XFILE) int64 {
-	f := files.file(unsafe.Pointer(stream))
+func ftell(tls TLS, stream uintptr) long_t {
+	f := files.file(stream)
 	if f == nil {
 		tls.setErrno(errno.XEBADF)
 		return -1
@@ -384,13 +480,18 @@ func ftell(tls *TLS, stream *XFILE) int64 {
 		return -1
 	}
 
-	return n
+	return long_t(n)
 }
 
+// int getc(FILE *stream);
+func Xgetc(tls TLS, stream uintptr) int32 { return Xfgetc(tls, stream) }
+
+func X_IO_getc(tls TLS, stream uintptr) int32 { return Xfgetc(tls, stream) }
+
 // int fgetc(FILE *stream);
-func Xfgetc(tls *TLS, stream *XFILE) int32 {
+func Xfgetc(tls TLS, stream uintptr) int32 {
 	p := buffer.Get(1)
-	if _, err := files.reader(unsafe.Pointer(stream)).Read(*p); err != nil {
+	if _, err := files.reader(stream).Read(*p); err != nil {
 		buffer.Put(p)
 		return stdio.XEOF
 	}
@@ -401,18 +502,18 @@ func Xfgetc(tls *TLS, stream *XFILE) int32 {
 }
 
 // char *fgets(char *s, int size, FILE *stream);
-func Xfgets(tls *TLS, s *int8, size int32, stream *XFILE) *int8 {
-	f := files.reader(unsafe.Pointer(stream))
+func Xfgets(tls TLS, s uintptr, size int32, stream uintptr) uintptr {
+	f := files.reader(stream)
 	p := buffer.Get(1)
 	b := *p
-	w := memWriter(unsafe.Pointer(s))
+	w := memWriter(s)
 	ok := false
 	for i := int(size) - 1; i > 0; i-- {
 		_, err := f.Read(b)
 		if err != nil {
 			if !ok {
 				buffer.Put(p)
-				return nil
+				return 0
 			}
 
 			break
@@ -431,18 +532,18 @@ func Xfgets(tls *TLS, s *int8, size int32, stream *XFILE) *int8 {
 }
 
 // int __builtin_fprintf(void* stream, const char *format, ...);
-func X__builtin_fprintf(tls *TLS, stream unsafe.Pointer, format *int8, args ...interface{}) int32 {
-	return goFprintf(files.writer(stream), format, args...)
+func X__builtin_fprintf(tls TLS, stream, format uintptr, args ...interface{}) int32 {
+	return goFprintf(files.writer(stream), format, &args)
 }
 
 // int fprintf(FILE * stream, const char *format, ...);
-func Xfprintf(tls *TLS, stream *XFILE, format *int8, args ...interface{}) int32 {
-	return X__builtin_fprintf(tls, unsafe.Pointer(stream), format, args...)
+func Xfprintf(tls TLS, stream, format uintptr, args ...interface{}) int32 {
+	return X__builtin_fprintf(tls, stream, format, args...)
 }
 
 // int fflush(FILE *stream);
-func Xfflush(tls *TLS, stream *XFILE) int32 {
-	f := files.file(unsafe.Pointer(stream))
+func Xfflush(tls TLS, stream uintptr) int32 {
+	f := files.file(stream)
 	if f == nil {
 		tls.setErrno(stdio.XEOF)
 		return -1
@@ -457,14 +558,81 @@ func Xfflush(tls *TLS, stream *XFILE) int32 {
 }
 
 // int vprintf(const char *format, va_list ap);
-func Xvprintf(tls *TLS, format *int8, ap []interface{}) int32 {
-	return goFprintf(os.Stdout, format, ap...)
+func Xvprintf(tls TLS, format uintptr, ap *[]interface{}) int32 {
+	return goFprintf(os.Stdout, format, ap)
 }
 
 // int vfprintf(FILE *stream, const char *format, va_list ap);
-func Xvfprintf(tls *TLS, stream *XFILE, format *int8, ap []interface{}) int32 {
-	return goFprintf(files.writer(unsafe.Pointer(stream)), format, ap...)
+func Xvfprintf(tls TLS, stream, format uintptr, ap *[]interface{}) int32 {
+	return goFprintf(files.writer(stream), format, ap)
 }
 
 // void rewind(FILE *stream);
-func Xrewind(tls *TLS, stream *XFILE) { fseek(tls, stream, 0, int32(os.SEEK_SET)) }
+func Xrewind(tls TLS, stream uintptr) { fseek(tls, stream, 0, int32(os.SEEK_SET)) }
+
+// FILE *popen(const char *command, const char *type);
+func Xpopen(tls TLS, command, typ uintptr) uintptr {
+	panic("TODO popen")
+}
+
+// int pclose(FILE *stream);
+func Xpclose(tls TLS, stream uintptr) int32 {
+	panic("TODO pclose")
+}
+
+// size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+func Xfwrite(tls TLS, ptr uintptr, size, nmemb size_t, stream uintptr) size_t {
+	return fwrite(tls, ptr, size, nmemb, stream)
+}
+
+// size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+func Xfread(tls TLS, ptr uintptr, size, nmemb size_t, stream uintptr) size_t {
+	return fread(tls, ptr, size, nmemb, stream)
+}
+
+// int fseek(FILE *stream, long offset, int whence);
+func Xfseek(tls TLS, stream uintptr, offset long_t, whence int32) int32 {
+	return fseek(tls, stream, offset, whence)
+}
+
+// long ftell(FILE *stream);
+func Xftell(tls TLS, stream uintptr) long_t { return ftell(tls, stream) }
+
+// int setvbuf(FILE *stream, char *buf, int mode, size_t size);
+func Xsetvbuf(tls TLS, stream, buf uintptr, mode int32, size size_t) int32 {
+	return 0 //TODO setvbuf
+}
+
+// FILE *fdopen(int fd, const char *mode);
+func Xfdopen(tls TLS, fd int32, mode uintptr) uintptr {
+	panic("TODO")
+}
+
+// int sscanf(const char *str, const char *format, ...);
+func Xsscanf(tls TLS, str, format uintptr, args ...interface{}) int32 {
+	panic("TOD")
+}
+
+func X__isoc99_sscanf(tls TLS, str, format uintptr, args ...interface{}) int32 {
+	return Xsscanf(tls, str, format, args...)
+}
+
+// int rename(const char *oldpath, const char *newpath);
+func Xrename(tls TLS, oldpath, newpath uintptr) int32 {
+	panic("TOD")
+}
+
+// int fileno(FILE *stream);
+func Xfileno(tls TLS, stream uintptr) int32 {
+	panic("TOD")
+}
+
+// int ferror(FILE *stream);
+func Xferror(tls TLS, stream uintptr) int32 {
+	panic("TOD")
+}
+
+// int feof(FILE *stream);
+func Xfeof(tls TLS, stream uintptr) int32 {
+	panic("TOD")
+}

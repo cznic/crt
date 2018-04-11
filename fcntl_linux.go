@@ -8,16 +8,25 @@ import (
 	"fmt"
 	"os"
 	"syscall"
-	"unsafe"
 )
 
-// int open64(const char *pathname, int flags, ...);
-func Xopen64(tls *TLS, pathname *int8, flags int32, args ...interface{}) int32 {
-	var mode int32
+// int open(const char *pathname, int flags, ...);
+func Xopen(tls TLS, pathname uintptr, flags int32, args ...interface{}) int32 {
+	return Xopen64(tls, pathname, flags)
+}
+
+// int open(const char *pathname, int flags, ...);
+func Xopen64(tls TLS, pathname uintptr, flags int32, args ...interface{}) int32 {
+	var mode uintptr
 	if len(args) != 0 {
-		mode = args[0].(int32)
+		switch x := args[0].(type) {
+		case int32:
+			mode = uintptr(x)
+		default:
+			panic(fmt.Errorf("crt.Xopen64 %T", x))
+		}
 	}
-	r, _, err := syscall.Syscall(syscall.SYS_OPEN, uintptr(unsafe.Pointer(pathname)), uintptr(flags), uintptr(mode))
+	r, _, err := syscall.Syscall(syscall.SYS_OPEN, pathname, uintptr(flags), mode)
 	if strace {
 		fmt.Fprintf(os.Stderr, "open(%q, %v, %#o) %v %v\n", GoString(pathname), modeString(flags), mode, r, err)
 	}

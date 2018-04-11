@@ -10,8 +10,10 @@ import (
 	"fmt"
 	"strings"
 
-	fcntl2 "github.com/cznic/ccir/libc/fcntl"
+	fcntl2 "github.com/cznic/crt/fcntl"
 )
+
+const strace = true
 
 func cmdString(cmd int32) string {
 	switch cmd {
