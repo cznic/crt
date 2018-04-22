@@ -514,9 +514,11 @@ func Xfork(tls TLS) int32 {
 	return -1
 }
 
-// int dup2(int oldfd, int newfd);
-func Xdup2(tls TLS, oldfd, newfd int32) int32 {
-	panic("TODO")
+// Note: Go programs cannot fork safely. The function sets errno to
+// errno.XENOMEM and returns -1.
+func Xvfork(tls TLS) int32 {
+	tls.setErrno(errno.XENOMEM)
+	return -1
 }
 
 // void _exit(int status);
@@ -527,4 +529,50 @@ func X_exit(tls TLS, status int32) {
 // int execvp(const char *file, char *const argv[]);
 func Xexecvp(tls TLS, file, argv uintptr) int32 {
 	panic("TODO")
+}
+
+// int dup2(int fildes, int fildes2);
+//
+// The dup2() function shall cause the file descriptor fildes2 to refer to the
+// same open file description as the file descriptor fildes and to share any
+// locks, and shall return fildes2. If fildes2 is already a valid open file
+// descriptor, it shall be closed first, unless fildes is equal to fildes2 in
+// which case dup2() shall return fildes2 without closing it. If the close
+// operation fails to close fildes2, dup2() shall return -1 without changing
+// the open file description to which fildes2 refers. If fildes is not a valid
+// file descriptor, dup2() shall return -1 and shall not close fildes2. If
+// fildes2 is less than 0 or greater than or equal to {OPEN_MAX}, dup2() shall
+// return -1 with errno set to [EBADF].
+//
+// Upon successful completion, if fildes is not equal to fildes2, the
+// FD_CLOEXEC flag associated with fildes2 shall be cleared. If fildes is equal
+// to fildes2, the FD_CLOEXEC flag associated with fildes2 shall not be
+// changed.
+//
+// If fildes refers to a typed memory object, the result of the dup2() function
+// is unspecified.
+//
+// Upon successful completion a non-negative integer, namely the file
+// descriptor, shall be returned; otherwise, -1 shall be returned and errno set
+// to indicate the error.
+//
+// The dup2() function shall fail if:
+//
+// [EBADF] The fildes argument is not a valid open file descriptor or the
+// argument fildes2 is negative or greater than or equal to {OPEN_MAX}.
+//
+// [EINTR] The dup2() function was interrupted by a signal.
+//
+// The dup2() function may fail if:
+//
+// [EIO] An I/O error occurred while attempting to close fildes2.
+func Xdup2(tls TLS, fildes, fildes2 int32) int32 {
+	r, _, err := syscall.Syscall(syscall.SYS_DUP2, uintptr(fildes), uintptr(fildes2), 0)
+	if strace {
+		fmt.Fprintf(os.Stderr, "dup2(%v, %v) %v %v\n", fildes, fildes2, r, err)
+	}
+	if err != 0 {
+		tls.setErrno(err)
+	}
+	return int32(r)
 }

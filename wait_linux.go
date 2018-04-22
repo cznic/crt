@@ -4,7 +4,11 @@
 
 package crt
 
+import (
+	"fmt"
+)
+
 // pid_t waitpid(pid_t pid, int *status, int options);
 func Xwaitpid(tls TLS, pid int32, status uintptr, options int32) int32 {
-	panic("TODO")
+	panic(fmt.Sprintf("%v %#x %#x", pid, status, options))
 }

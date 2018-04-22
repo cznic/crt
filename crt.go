@@ -60,6 +60,13 @@ func (t TLS) setErrno(err interface{}) {
 		(*tls)(unsafe.Pointer(t)).errno = int32(x)
 	case *os.PathError:
 		t.setErrno(x.Err)
+	case *os.SyscallError:
+		switch y := x.Err.(type) {
+		case syscall.Errno:
+			(*tls)(unsafe.Pointer(t)).errno = int32(y)
+		default:
+			panic(fmt.Errorf("crt.setErrno %T(%#v)", y, y))
+		}
 	case syscall.Errno:
 		(*tls)(unsafe.Pointer(t)).errno = int32(x)
 	default:
