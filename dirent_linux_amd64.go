@@ -31,7 +31,7 @@ func Xopendir(tls TLS, name uintptr) (r uintptr) {
 		return 0
 	}
 
-	sz := unsafe.Sizeof(Sdirent{})
+	sz := unsafe.Sizeof(dirent{})
 	buf, err := Malloc((len(s) + 1) * int(sz))
 	if err != nil {
 		tls.setErrno(err)
@@ -52,7 +52,7 @@ func Xopendir(tls TLS, name uintptr) (r uintptr) {
 
 	p := buf
 	for _, v := range s {
-		var d Sdirent
+		var d dirent
 		nm := v.Name()
 		for i := 0; i < len(nm); i++ {
 			if i == len(d.Xd_name)-1 {
@@ -62,7 +62,7 @@ func Xopendir(tls TLS, name uintptr) (r uintptr) {
 			d.Xd_name[i] = int8(nm[i])
 			d.Xd_ino = v.Sys().(*syscall.Stat_t).Ino
 		}
-		*(*Sdirent)(unsafe.Pointer(p)) = d
+		*(*dirent)(unsafe.Pointer(p)) = d
 		p += sz
 	}
 	return r
@@ -136,7 +136,7 @@ func Xreaddir(tls TLS, dirp uintptr) uintptr {
 
 	*(*int)(unsafe.Pointer(dirp + unsafe.Offsetof(S__dirstream{}.n)))--
 	r := *(*uintptr)(unsafe.Pointer(dirp + unsafe.Offsetof(S__dirstream{}.next)))
-	*(*uintptr)(unsafe.Pointer(dirp + unsafe.Offsetof(S__dirstream{}.next))) += unsafe.Sizeof(Sdirent{})
+	*(*uintptr)(unsafe.Pointer(dirp + unsafe.Offsetof(S__dirstream{}.next))) += unsafe.Sizeof(dirent{})
 	return r
 }
 

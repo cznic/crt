@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	localtime = MustCalloc(int(unsafe.Sizeof(Stm{})))
+	localtime = MustCalloc(int(unsafe.Sizeof(tm{})))
 )
 
 // struct tm *localtime(const time_t *timep);
@@ -24,10 +24,10 @@ func Xtime(tls TLS, tloc uintptr) int64 {
 }
 
 // struct tm *localtime_r(const time_t *timep, struct tm *result);
-func Xlocaltime_r(tls TLS, timep, tm uintptr) uintptr {
+func Xlocaltime_r(tls TLS, timep, stm uintptr) uintptr {
 	ut := *(*int64)(unsafe.Pointer(timep))
 	t := time.Unix(ut, 0)
-	p := (*Stm)(unsafe.Pointer(tm))
+	p := (*tm)(unsafe.Pointer(stm))
 	p.Xtm_sec = int32(t.Second())
 	p.Xtm_min = int32(t.Minute())
 	p.Xtm_hour = int32(t.Hour())
@@ -38,9 +38,9 @@ func Xlocaltime_r(tls TLS, timep, tm uintptr) uintptr {
 	p.Xtm_yday = int32(t.YearDay())
 	p.Xtm_isdst = -1 //TODO
 	if strace {
-		fmt.Fprintf(os.Stderr, "localtime_r(%v, %#x) %+v\n", ut, tm, p)
+		fmt.Fprintf(os.Stderr, "localtime_r(%v, %#x) %+v\n", ut, stm, p)
 	}
-	return tm
+	return stm
 }
 
 // void tzset(void);

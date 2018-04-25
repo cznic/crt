@@ -14,7 +14,9 @@ type (
 	ulong_t       = uint64
 )
 
-type Sdirent struct {
+//TODO export types as aliases.
+
+type dirent struct {
 	Xd_ino    uint64
 	Xd_off    int64
 	Xd_reclen uint16
@@ -22,7 +24,7 @@ type Sdirent struct {
 	Xd_name   [256]int8
 }
 
-type Spasswd struct {
+type passwd struct {
 	Xpw_name   uintptr // *int8
 	Xpw_passwd uintptr // *int8
 	Xpw_uid    uint32
@@ -32,19 +34,66 @@ type Spasswd struct {
 	Xpw_shell  uintptr // *int8
 }
 
-type Spthread_cond_t struct {
-	X int64
-	_ [40]byte
+// type Tpthread_cond_t = struct {
+// 	X__data [0]struct {
+// 		X__lock          int32
+// 		X__futex         uint32
+// 		X__total_seq     uint64
+// 		X__wakeup_seq    uint64
+// 		X__woken_seq     uint64
+// 		X__mutex         uintptr
+// 		X__nwaiters      uint32
+// 		X__broadcast_seq uint32
+// 	}
+// 	X__size  [0][48]int8
+// 	X__align [0]int64
+// 	X        int64
+// 	_        [40]byte
+// }
+
+// type Tpthread_mutexattr_t = struct {
+// 	X__size  [0][4]int8
+// 	X__align [0]int32
+// 	X        int32
+// }
+
+type pthread_mutexattr_t struct{ X int32 }
+
+// type Tpthread_mutex_t = struct {
+// 	X__data [0]struct {
+// 		X__lock    int32
+// 		X__count   uint32
+// 		X__owner   int32
+// 		X__nusers  uint32
+// 		X__kind    int32
+// 		X__spins   int16
+// 		X__elision int16
+// 		X__list    struct {
+// 			X__prev uintptr
+// 			X__next uintptr
+// 		}
+// 	}
+// 	X__size  [0][40]int8
+// 	X__align [0]int64
+// 	X        int64
+// 	_        [32]byte
+// }
+
+type pthread_mutex_t struct {
+	X__lock    int32
+	X__count   uint32
+	X__owner   int32
+	X__nusers  uint32
+	X__kind    int32 // pthread.CPTHREAD_MUTEX_NORMAL, ...
+	X__spins   int16
+	X__elision int16
+	X__list    struct {
+		X__prev uintptr
+		X__next uintptr
+	}
 }
 
-type Spthread_mutexattr_t struct{ X int32 }
-
-type Spthread_mutex_t struct {
-	X int64
-	_ [32]byte
-}
-
-type Sstat struct {
+type stat struct {
 	Xst_dev           uint64
 	Xst_ino           uint64
 	Xst_nlink         uint64
@@ -62,7 +111,7 @@ type Sstat struct {
 	X__glibc_reserved [3]int64
 }
 
-type Sstat64 struct {
+type stat64 struct {
 	Xst_dev           uint64
 	Xst_ino           uint64
 	Xst_nlink         uint64
@@ -85,7 +134,7 @@ type Stimespec struct {
 	Xtv_nsec int64
 }
 
-type Stm struct {
+type tm struct {
 	Xtm_sec      int32
 	Xtm_min      int32
 	Xtm_hour     int32
@@ -99,12 +148,19 @@ type Stm struct {
 	X__tm_zone   uintptr // *int8
 }
 
-type Sutimbuf struct {
+// type Upthread_attr_t struct {
+// 	X__size  [0][56]int8
+// 	X__align [0]int64
+// 	X        int64
+// 	_        [48]byte
+// }
+
+type utimbuf struct {
 	Xactime  int64
 	Xmodtime int64
 }
 
-type Sutsname struct {
+type utsname struct {
 	Xsysname      [65]int8
 	Xnodename     [65]int8
 	Xrelease      [65]int8

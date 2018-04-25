@@ -26,13 +26,13 @@ func Xgetpwuid(tls TLS, uid uint32) uintptr {
 		return 0
 	}
 
-	p, err := Malloc(int(unsafe.Sizeof(Spasswd{})))
+	p, err := Malloc(int(unsafe.Sizeof(passwd{})))
 	if err != nil {
 		tls.setErrno(err) //TODO Exxx
 		return 0
 	}
 
-	*(*Spasswd)(unsafe.Pointer(p)) = Spasswd{
+	*(*passwd)(unsafe.Pointer(p)) = passwd{
 		Xpw_name:   CString(u.Username),
 		Xpw_passwd: CString("x"),
 		Xpw_uid:    uid,
@@ -78,7 +78,7 @@ func Xgetpwuid_r(tls TLS, uid uint32, pwd, buf uintptr, buflen size_t, result ui
 		return tls.err()
 	}
 
-	*(*Spasswd)(unsafe.Pointer(pwd)) = Spasswd{
+	*(*passwd)(unsafe.Pointer(pwd)) = passwd{
 		Xpw_name:   CString(u.Username),
 		Xpw_passwd: CString("x"),
 		Xpw_uid:    uid,

@@ -378,11 +378,6 @@ func Xpipe(tls TLS, fildes uintptr) int32 {
 	return int32(r)
 }
 
-// int pthread_cond_timedwait(pthread_cond_t *restrict cond, pthread_mutex_t *restrict mutex, const struct timespec *restrict abstime);
-func Xpthread_cond_timedwait(tls TLS, cond, mutex, abstime uintptr) int32 {
-	panic("TODO")
-}
-
 // pid_t fork(void);
 //
 // The fork() function shall create a new process. The new process (child
