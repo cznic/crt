@@ -331,6 +331,34 @@ func Xputc(tls TLS, c int32, stream uintptr) int32 {
 // int putc(int c, FILE *stream);
 func X_IO_putc(tls TLS, c int32, stream uintptr) int32 { return Xputc(tls, c, stream) }
 
+func parseMode(mode uintptr) int {
+	switch mode := GoString(mode); mode {
+	case "a":
+		return os.O_RDWR | os.O_CREATE | os.O_APPEND
+	case "r", "rb":
+		return os.O_RDONLY
+	case "w":
+		return os.O_WRONLY | os.O_CREATE | os.O_TRUNC
+	default:
+		panic(mode)
+	}
+}
+
+func openFile(tls TLS, path string, mode int) *os.File {
+	f, err := os.OpenFile(path, mode, 0666)
+	if err != nil {
+		switch {
+		case os.IsNotExist(err):
+			tls.setErrno(errno.XENOENT)
+		case os.IsPermission(err):
+			tls.setErrno(errno.XEPERM)
+		default:
+			tls.setErrno(errno.XEACCES)
+		}
+	}
+	return f
+}
+
 // FILE *fopen(const char *path, const char *mode);
 func Xfopen(tls TLS, path, mode uintptr) uintptr {
 	p := GoString(path)
@@ -343,52 +371,7 @@ func Xfopen(tls TLS, path, mode uintptr) uintptr {
 	case os.Stdout.Name():
 		u = stdout
 	default:
-		var f *os.File
-		var err error
-		switch mode := GoString(mode); mode {
-		case "a":
-			if f, err = os.OpenFile(p, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666); err != nil {
-				switch {
-				case os.IsPermission(err):
-					tls.setErrno(errno.XEPERM)
-				default:
-					tls.setErrno(errno.XEACCES)
-				}
-			}
-		case "r", "rb":
-			if f, err = os.OpenFile(p, os.O_RDONLY, 0666); err != nil {
-				switch {
-				case os.IsNotExist(err):
-					tls.setErrno(errno.XENOENT)
-				case os.IsPermission(err):
-					tls.setErrno(errno.XEPERM)
-				default:
-					tls.setErrno(errno.XEACCES)
-				}
-			}
-		case "r+b":
-			if f, err = os.OpenFile(p, os.O_RDWR, 0666); err != nil {
-				switch {
-				case os.IsNotExist(err):
-					tls.setErrno(errno.XENOENT)
-				case os.IsPermission(err):
-					tls.setErrno(errno.XEPERM)
-				default:
-					tls.setErrno(errno.XEACCES)
-				}
-			}
-		case "w", "wb":
-			if f, err = os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666); err != nil {
-				switch {
-				case os.IsPermission(err):
-					tls.setErrno(errno.XEPERM)
-				default:
-					tls.setErrno(errno.XEACCES)
-				}
-			}
-		default:
-			panic(mode)
-		}
+		f := openFile(tls, p, parseMode(mode))
 		if f != nil {
 			u = Xmalloc(tls, ptrSize)
 			files.add(f, u)
@@ -575,9 +558,17 @@ func Xpopen(tls TLS, command, typ uintptr) uintptr {
 	panic("TODO popen")
 }
 
+func X_popen(tls TLS, command, typ uintptr) uintptr {
+	return Xpopen(tls, command, typ)
+}
+
 // int pclose(FILE *stream);
 func Xpclose(tls TLS, stream uintptr) int32 {
 	panic("TODO pclose")
+}
+
+func X_pclose(tls TLS, stream uintptr) int32 {
+	return Xpclose(tls, stream)
 }
 
 // size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
@@ -627,6 +618,11 @@ func Xfileno(tls TLS, stream uintptr) int32 {
 	panic("TOD")
 }
 
+// required on windows for shell
+func X_fileno(tls TLS, fd uintptr) int32 {
+	return int32(fd)
+}
+
 // int ferror(FILE *stream);
 func Xferror(tls TLS, stream uintptr) int32 {
 	panic("TOD")
@@ -634,5 +630,10 @@ func Xferror(tls TLS, stream uintptr) int32 {
 
 // int feof(FILE *stream);
 func Xfeof(tls TLS, stream uintptr) int32 {
+	panic("TOD")
+}
+
+// fputs(const char * __restrict__ _Str,FILE * __restrict__ _File);
+func Xfputs(tls TLS, chr uintptr, file uintptr) {
 	panic("TOD")
 }
