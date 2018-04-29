@@ -9,6 +9,7 @@ import (
 	"unsafe"
 
 	"github.com/cznic/crt/errno"
+	"github.com/cznic/crt/limits"
 )
 
 // char *realpath(const char *path, char *resolved_path);

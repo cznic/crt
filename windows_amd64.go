@@ -6,19 +6,6 @@
 
 package crt
 
-const (
-	TCRITICAL_SECTION    = "struct{*struct{},int32,int32,*struct{},*struct{},uint64}"
-	TFILETIME            = "struct{uint32,uint32}"
-	TLARGE_INTEGER       = "union{struct{uint32,int32},struct{uint32,int32},int64}"
-	TSECURITY_ATTRIBUTES = "struct{uint32,*struct{},int32}"
-	TSYSTEM_INFO         = "struct{union{uint32,struct{uint16,uint16}},uint32,*struct{},*struct{},uint64,uint32,uint32,uint32,uint16,uint16}"
-	TSYSTEMTIME          = "struct{uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16}"
-	THMODULE             = "struct{int32}"
-	TOSVERSIONINFOA      = "struct{uint32,uint32,uint32,uint32,uint32,[128]int8}"
-	TOSVERSIONINFOW      = "struct{uint32,uint32,uint32,uint32,uint32,[128]uint16}"
-	TOVERLAPPED          = "struct{uint64,uint64,union{struct{uint32,uint32},*struct{}},*struct{}}"
-)
-
 type XOSVERSIONINFOA struct {
 	X0 uint32
 	X1 uint32

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:generate go run generator.go
+//go:generate go run generator_windows.go
 
 // +build windows
 
@@ -36,6 +36,7 @@ func XGetCurrentThreadId(tls TLS) uint32 {
 	return uint32(tls.getThreadID())
 }
 
+// size_t _msize(void *memblock);
 func X_msize(tls TLS, ptr uintptr) uint32 {
 	return uint32(memory.UintptrUsableSize(ptr))
 }

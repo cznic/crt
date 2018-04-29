@@ -335,7 +335,7 @@ func parseMode(mode uintptr) int {
 	switch mode := GoString(mode); mode {
 	case "a":
 		return os.O_RDWR | os.O_CREATE | os.O_APPEND
-	case "r", "rb":
+	case "r", "rb", "r+b":
 		return os.O_RDONLY
 	case "w":
 		return os.O_WRONLY | os.O_CREATE | os.O_TRUNC

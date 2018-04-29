@@ -12,7 +12,7 @@ func Xsystem(tls TLS, command uintptr) int32 {
 		return 1
 	}
 
-	cmd := exec.Command("sh", "-c", GoString(command))
+	cmd := exec.Command("cmd.exe", "/c", GoString(command))
 	if err := cmd.Run(); err != nil {
 		return int32(cmd.ProcessState.Sys().(syscall.WaitStatus).ExitCode)
 	}
