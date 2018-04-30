@@ -32,8 +32,8 @@ func Xlocaltime_r(tls TLS, timep, stm uintptr) uintptr {
 	p.Xtm_min = int32(t.Minute())
 	p.Xtm_hour = int32(t.Hour())
 	p.Xtm_mday = int32(t.Day())
-	p.Xtm_mon = int32(t.Month())
-	p.Xtm_year = int32(t.Year())
+	p.Xtm_mon = int32(t.Month() - 1)
+	p.Xtm_year = int32(t.Year() - 1900)
 	p.Xtm_wday = int32(t.Weekday())
 	p.Xtm_yday = int32(t.YearDay())
 	p.Xtm_isdst = -1 //TODO

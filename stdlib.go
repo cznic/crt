@@ -154,6 +154,10 @@ func Xstrtol(tls TLS, nptr, endptr uintptr, base int32) (r long_t) {
 			switch c := int32(ch); {
 			case Xisspace(tls, c) != 0:
 				p++
+			case c == '+':
+				panic("TODO")
+			case c == '-':
+				panic("TODO")
 			case c >= '0' && c <= '9':
 				for {
 					p++
@@ -163,7 +167,58 @@ func Xstrtol(tls TLS, nptr, endptr uintptr, base int32) (r long_t) {
 						ovf = true
 					}
 					switch c = int32(*(*byte)(unsafe.Pointer(p))); {
+					case c == '+':
+						panic("TODO")
+					case c == '-':
+						panic("TODO")
 					case c >= '0' && c <= '9':
+						// ok
+					default:
+						if endptr != 0 {
+							*(*uintptr)(unsafe.Pointer(endptr)) = p
+						}
+						if ovf {
+							tls.setErrno(errno.XERANGE)
+							r = limits.XLONG_MAX
+						}
+						return r
+					}
+				}
+			default:
+				if endptr != 0 {
+					*(*uintptr)(unsafe.Pointer(endptr)) = nptr
+					tls.setErrno(errno.XEINVAL)
+					return 0
+				}
+			}
+		}
+	case 16:
+		ovf := false
+		p := nptr
+		var num long_t
+		for {
+			ch := *(*byte)(unsafe.Pointer(p))
+			switch c := int32(ch); {
+			case Xisspace(tls, c) != 0:
+				p++
+			case c == '+':
+				panic("TODO")
+			case c == '-':
+				panic("TODO")
+			case isHex(c, &num):
+				for {
+					p++
+					r0 := r
+					r := 10*r + num
+					if r < r0 {
+						ovf = true
+					}
+					switch c = int32(*(*byte)(unsafe.Pointer(p))); {
+					case c == '+':
+						panic("TODO")
+					case c == '-':
+						panic("TODO")
+					case isHex(c, &num):
 						// ok
 					default:
 						if endptr != 0 {
@@ -187,6 +242,25 @@ func Xstrtol(tls TLS, nptr, endptr uintptr, base int32) (r long_t) {
 	default:
 		panic(fmt.Errorf("%q %#x %v", GoString(nptr), endptr, base))
 	}
+}
+
+func isHex(c int32, out *long_t) bool {
+	if c >= '0' && c <= '0' {
+		*out = long_t(c - '0')
+		return true
+	}
+
+	if c >= 'a' && c <= 'f' {
+		*out = long_t(c - 'a' + 10)
+		return true
+	}
+
+	if c >= 'A' && c <= 'F' {
+		*out = long_t(c - 'A' + 10)
+		return true
+	}
+
+	return false
 }
 
 // unsigned long int strtoul(const char *str, char **endptr, int base);

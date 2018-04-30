@@ -10,93 +10,93 @@ package crt
 
 import (
 	"fmt"
-	"syscall"
 	"os"
+	"syscall"
 )
 
 var (
-	modkernel32           = syscall.NewLazyDLL("kernel32.dll")
-	procAreFileApisANSI                = modkernel32.NewProc("AreFileApisANSI")
-	procCreateFileA                    = modkernel32.NewProc("CreateFileA")
-	procCreateFileW                    = modkernel32.NewProc("CreateFileW")
-	procCreateFileMappingA             = modkernel32.NewProc("CreateFileMappingA")
-	procCreateFileMappingW             = modkernel32.NewProc("CreateFileMappingW")
-	procCreateMutexW                   = modkernel32.NewProc("CreateMutexW")
-	procCloseHandle                    = modkernel32.NewProc("CloseHandle")
-	procDeleteCriticalSection          = modkernel32.NewProc("DeleteCriticalSection")
-	procDeleteFileA                    = modkernel32.NewProc("DeleteFileA")
-	procDeleteFileW                    = modkernel32.NewProc("DeleteFileW")
-	procEnterCriticalSection           = modkernel32.NewProc("EnterCriticalSection")
-	procTryEnterCriticalSection        = modkernel32.NewProc("TryEnterCriticalSection")
-	procFlushFileBuffers               = modkernel32.NewProc("FlushFileBuffers")
-	procFlushViewOfFile                = modkernel32.NewProc("FlushViewOfFile")
-	procFormatMessageA                 = modkernel32.NewProc("FormatMessageA")
-	procFormatMessageW                 = modkernel32.NewProc("FormatMessageW")
-	procFreeLibrary                    = modkernel32.NewProc("FreeLibrary")
-	procGetCurrentProcess              = modkernel32.NewProc("GetCurrentProcess")
-	procGetCurrentProcessId            = modkernel32.NewProc("GetCurrentProcessId")
-	procGetConsoleScreenBufferInfo     = modkernel32.NewProc("GetConsoleScreenBufferInfo")
-	procGetDiskFreeSpaceA              = modkernel32.NewProc("GetDiskFreeSpaceA")
-	procGetDiskFreeSpaceW              = modkernel32.NewProc("GetDiskFreeSpaceW")
-	procGetFileAttributesExW           = modkernel32.NewProc("GetFileAttributesExW")
-	procGetFileAttributesA             = modkernel32.NewProc("GetFileAttributesA")
-	procGetFileAttributesW             = modkernel32.NewProc("GetFileAttributesW")
-	procGetFileSize                    = modkernel32.NewProc("GetFileSize")
-	procGetFullPathNameA               = modkernel32.NewProc("GetFullPathNameA")
-	procGetFullPathNameW               = modkernel32.NewProc("GetFullPathNameW")
-	procGetProcAddress                 = modkernel32.NewProc("GetProcAddress")
-	procGetProcessHeap                 = modkernel32.NewProc("GetProcessHeap")
-	procGetStdHandle                   = modkernel32.NewProc("GetStdHandle")
-	procGetSystemInfo                  = modkernel32.NewProc("GetSystemInfo")
-	procGetSystemTime                  = modkernel32.NewProc("GetSystemTime")
-	procGetSystemTimeAsFileTime        = modkernel32.NewProc("GetSystemTimeAsFileTime")
-	procGetTempPathA                   = modkernel32.NewProc("GetTempPathA")
-	procGetTempPathW                   = modkernel32.NewProc("GetTempPathW")
-	procGetTickCount                   = modkernel32.NewProc("GetTickCount")
-	procGetVersionExA                  = modkernel32.NewProc("GetVersionExA")
-	procGetVersionExW                  = modkernel32.NewProc("GetVersionExW")
-	procHeapAlloc                      = modkernel32.NewProc("HeapAlloc")
-	procHeapCompact                    = modkernel32.NewProc("HeapCompact")
-	procHeapCreate                     = modkernel32.NewProc("HeapCreate")
-	procHeapDestroy                    = modkernel32.NewProc("HeapDestroy")
-	procHeapFree                       = modkernel32.NewProc("HeapFree")
-	procHeapReAlloc                    = modkernel32.NewProc("HeapReAlloc")
-	procHeapSize                       = modkernel32.NewProc("HeapSize")
-	procHeapValidate                   = modkernel32.NewProc("HeapValidate")
-	procInitializeCriticalSection      = modkernel32.NewProc("InitializeCriticalSection")
-	procLeaveCriticalSection           = modkernel32.NewProc("LeaveCriticalSection")
-	procLoadLibraryA                   = modkernel32.NewProc("LoadLibraryA")
-	procLoadLibraryW                   = modkernel32.NewProc("LoadLibraryW")
-	procLocalFree                      = modkernel32.NewProc("LocalFree")
-	procLockFile                       = modkernel32.NewProc("LockFile")
-	procLockFileEx                     = modkernel32.NewProc("LockFileEx")
-	procMapViewOfFile                  = modkernel32.NewProc("MapViewOfFile")
-	procMultiByteToWideChar            = modkernel32.NewProc("MultiByteToWideChar")
-	procOutputDebugStringA             = modkernel32.NewProc("OutputDebugStringA")
-	procOutputDebugStringW             = modkernel32.NewProc("OutputDebugStringW")
-	procQueryPerformanceCounter        = modkernel32.NewProc("QueryPerformanceCounter")
-	procReadFile                       = modkernel32.NewProc("ReadFile")
-	procSetCurrentDirectoryW           = modkernel32.NewProc("SetCurrentDirectoryW")
-	procSetConsoleTextAttribute        = modkernel32.NewProc("SetConsoleTextAttribute")
-	procSetEndOfFile                   = modkernel32.NewProc("SetEndOfFile")
-	procSetFilePointer                 = modkernel32.NewProc("SetFilePointer")
-	procSleep                          = modkernel32.NewProc("Sleep")
-	procSystemTimeToFileTime           = modkernel32.NewProc("SystemTimeToFileTime")
-	procUnlockFile                     = modkernel32.NewProc("UnlockFile")
-	procUnlockFileEx                   = modkernel32.NewProc("UnlockFileEx")
-	procUnmapViewOfFile                = modkernel32.NewProc("UnmapViewOfFile")
-	procWaitForSingleObject            = modkernel32.NewProc("WaitForSingleObject")
-	procWaitForSingleObjectEx          = modkernel32.NewProc("WaitForSingleObjectEx")
-	procWideCharToMultiByte            = modkernel32.NewProc("WideCharToMultiByte")
-	procWriteFile                      = modkernel32.NewProc("WriteFile")
+	modkernel32                    = syscall.NewLazyDLL("kernel32.dll")
+	procAreFileApisANSI            = modkernel32.NewProc("AreFileApisANSI")
+	procCreateFileA                = modkernel32.NewProc("CreateFileA")
+	procCreateFileW                = modkernel32.NewProc("CreateFileW")
+	procCreateFileMappingA         = modkernel32.NewProc("CreateFileMappingA")
+	procCreateFileMappingW         = modkernel32.NewProc("CreateFileMappingW")
+	procCreateMutexW               = modkernel32.NewProc("CreateMutexW")
+	procCloseHandle                = modkernel32.NewProc("CloseHandle")
+	procDeleteCriticalSection      = modkernel32.NewProc("DeleteCriticalSection")
+	procDeleteFileA                = modkernel32.NewProc("DeleteFileA")
+	procDeleteFileW                = modkernel32.NewProc("DeleteFileW")
+	procEnterCriticalSection       = modkernel32.NewProc("EnterCriticalSection")
+	procTryEnterCriticalSection    = modkernel32.NewProc("TryEnterCriticalSection")
+	procFlushFileBuffers           = modkernel32.NewProc("FlushFileBuffers")
+	procFlushViewOfFile            = modkernel32.NewProc("FlushViewOfFile")
+	procFormatMessageA             = modkernel32.NewProc("FormatMessageA")
+	procFormatMessageW             = modkernel32.NewProc("FormatMessageW")
+	procFreeLibrary                = modkernel32.NewProc("FreeLibrary")
+	procGetCurrentProcess          = modkernel32.NewProc("GetCurrentProcess")
+	procGetCurrentProcessId        = modkernel32.NewProc("GetCurrentProcessId")
+	procGetConsoleScreenBufferInfo = modkernel32.NewProc("GetConsoleScreenBufferInfo")
+	procGetDiskFreeSpaceA          = modkernel32.NewProc("GetDiskFreeSpaceA")
+	procGetDiskFreeSpaceW          = modkernel32.NewProc("GetDiskFreeSpaceW")
+	procGetFileAttributesExW       = modkernel32.NewProc("GetFileAttributesExW")
+	procGetFileAttributesA         = modkernel32.NewProc("GetFileAttributesA")
+	procGetFileAttributesW         = modkernel32.NewProc("GetFileAttributesW")
+	procGetFileSize                = modkernel32.NewProc("GetFileSize")
+	procGetFullPathNameA           = modkernel32.NewProc("GetFullPathNameA")
+	procGetFullPathNameW           = modkernel32.NewProc("GetFullPathNameW")
+	procGetProcAddress             = modkernel32.NewProc("GetProcAddress")
+	procGetProcessHeap             = modkernel32.NewProc("GetProcessHeap")
+	procGetStdHandle               = modkernel32.NewProc("GetStdHandle")
+	procGetSystemInfo              = modkernel32.NewProc("GetSystemInfo")
+	procGetSystemTime              = modkernel32.NewProc("GetSystemTime")
+	procGetSystemTimeAsFileTime    = modkernel32.NewProc("GetSystemTimeAsFileTime")
+	procGetTempPathA               = modkernel32.NewProc("GetTempPathA")
+	procGetTempPathW               = modkernel32.NewProc("GetTempPathW")
+	procGetTickCount               = modkernel32.NewProc("GetTickCount")
+	procGetVersionExA              = modkernel32.NewProc("GetVersionExA")
+	procGetVersionExW              = modkernel32.NewProc("GetVersionExW")
+	procHeapAlloc                  = modkernel32.NewProc("HeapAlloc")
+	procHeapCompact                = modkernel32.NewProc("HeapCompact")
+	procHeapCreate                 = modkernel32.NewProc("HeapCreate")
+	procHeapDestroy                = modkernel32.NewProc("HeapDestroy")
+	procHeapFree                   = modkernel32.NewProc("HeapFree")
+	procHeapReAlloc                = modkernel32.NewProc("HeapReAlloc")
+	procHeapSize                   = modkernel32.NewProc("HeapSize")
+	procHeapValidate               = modkernel32.NewProc("HeapValidate")
+	procInitializeCriticalSection  = modkernel32.NewProc("InitializeCriticalSection")
+	procLeaveCriticalSection       = modkernel32.NewProc("LeaveCriticalSection")
+	procLoadLibraryA               = modkernel32.NewProc("LoadLibraryA")
+	procLoadLibraryW               = modkernel32.NewProc("LoadLibraryW")
+	procLocalFree                  = modkernel32.NewProc("LocalFree")
+	procLockFile                   = modkernel32.NewProc("LockFile")
+	procLockFileEx                 = modkernel32.NewProc("LockFileEx")
+	procMapViewOfFile              = modkernel32.NewProc("MapViewOfFile")
+	procMultiByteToWideChar        = modkernel32.NewProc("MultiByteToWideChar")
+	procOutputDebugStringA         = modkernel32.NewProc("OutputDebugStringA")
+	procOutputDebugStringW         = modkernel32.NewProc("OutputDebugStringW")
+	procQueryPerformanceCounter    = modkernel32.NewProc("QueryPerformanceCounter")
+	procReadFile                   = modkernel32.NewProc("ReadFile")
+	procSetCurrentDirectoryW       = modkernel32.NewProc("SetCurrentDirectoryW")
+	procSetConsoleTextAttribute    = modkernel32.NewProc("SetConsoleTextAttribute")
+	procSetEndOfFile               = modkernel32.NewProc("SetEndOfFile")
+	procSetFilePointer             = modkernel32.NewProc("SetFilePointer")
+	procSleep                      = modkernel32.NewProc("Sleep")
+	procSystemTimeToFileTime       = modkernel32.NewProc("SystemTimeToFileTime")
+	procUnlockFile                 = modkernel32.NewProc("UnlockFile")
+	procUnlockFileEx               = modkernel32.NewProc("UnlockFileEx")
+	procUnmapViewOfFile            = modkernel32.NewProc("UnmapViewOfFile")
+	procWaitForSingleObject        = modkernel32.NewProc("WaitForSingleObject")
+	procWaitForSingleObjectEx      = modkernel32.NewProc("WaitForSingleObjectEx")
+	procWideCharToMultiByte        = modkernel32.NewProc("WideCharToMultiByte")
+	procWriteFile                  = modkernel32.NewProc("WriteFile")
 )
 
-// //sys: BOOL   	AreFileApisANSI(); 
+// //sys: BOOL   	AreFileApisANSI();
 func XAreFileApisANSI(tls TLS) int32 {
 
-	ret, _, err := syscall.Syscall(procAreFileApisANSI.Addr(), 0, 0, 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procAreFileApisANSI.Addr(), 0, 0,
+		0,
+		0)
 	if strace {
 		fmt.Fprintf(os.Stderr, "AreFileApisANSI() %#x %v\n", ret, err)
 	}
@@ -106,26 +106,26 @@ func XAreFileApisANSI(tls TLS) int32 {
 	return (int32)(ret)
 }
 
-// //sys: HANDLE 	CreateFileA(LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile); 
+// //sys: HANDLE 	CreateFileA(LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 func XCreateFileA(tls TLS, lpFileName uintptr, dwDesiredAccess uint32, dwShareMode uint32, lpSecurityAttributes uintptr, dwCreationDisposition uint32, dwFlagsAndAttributes uint32, hTemplateFile uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall9(procCreateFileA.Addr(), 7, uintptr(lpFileName), 
-		uintptr(dwDesiredAccess), 
-		uintptr(dwShareMode), 
-		uintptr(lpSecurityAttributes), 
-		uintptr(dwCreationDisposition), 
-		uintptr(dwFlagsAndAttributes), 
-		uintptr(hTemplateFile), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall9(procCreateFileA.Addr(), 7, uintptr(lpFileName),
+		uintptr(dwDesiredAccess),
+		uintptr(dwShareMode),
+		uintptr(lpSecurityAttributes),
+		uintptr(dwCreationDisposition),
+		uintptr(dwFlagsAndAttributes),
+		uintptr(hTemplateFile),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "CreateFileA(%s, %#x, %#x, %#x, %#x, %#x, %#x) %#x %v\n", GoUTF16String(uintptr(lpFileName)), 
-			dwDesiredAccess, 
-			dwShareMode, 
-			lpSecurityAttributes, 
-			dwCreationDisposition, 
-			dwFlagsAndAttributes, 
-			hTemplateFile, 
+		fmt.Fprintf(os.Stderr, "CreateFileA(%s, %#x, %#x, %#x, %#x, %#x, %#x) %#x %v\n", GoUTF16String(uintptr(lpFileName)),
+			dwDesiredAccess,
+			dwShareMode,
+			lpSecurityAttributes,
+			dwCreationDisposition,
+			dwFlagsAndAttributes,
+			hTemplateFile,
 			ret, err)
 	}
 	if err != 0 {
@@ -134,26 +134,26 @@ func XCreateFileA(tls TLS, lpFileName uintptr, dwDesiredAccess uint32, dwShareMo
 	return (uintptr)(ret)
 }
 
-// //sys: HANDLE 	CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile); 
+// //sys: HANDLE 	CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 func XCreateFileW(tls TLS, lpFileName uintptr, dwDesiredAccess uint32, dwShareMode uint32, lpSecurityAttributes uintptr, dwCreationDisposition uint32, dwFlagsAndAttributes uint32, hTemplateFile uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall9(procCreateFileW.Addr(), 7, uintptr(lpFileName), 
-		uintptr(dwDesiredAccess), 
-		uintptr(dwShareMode), 
-		uintptr(lpSecurityAttributes), 
-		uintptr(dwCreationDisposition), 
-		uintptr(dwFlagsAndAttributes), 
-		uintptr(hTemplateFile), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall9(procCreateFileW.Addr(), 7, uintptr(lpFileName),
+		uintptr(dwDesiredAccess),
+		uintptr(dwShareMode),
+		uintptr(lpSecurityAttributes),
+		uintptr(dwCreationDisposition),
+		uintptr(dwFlagsAndAttributes),
+		uintptr(hTemplateFile),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "CreateFileW(%s, %#x, %#x, %#x, %#x, %#x, %#x) %#x %v\n", lpFileName, 
-			dwDesiredAccess, 
-			dwShareMode, 
-			lpSecurityAttributes, 
-			dwCreationDisposition, 
-			dwFlagsAndAttributes, 
-			hTemplateFile, 
+		fmt.Fprintf(os.Stderr, "CreateFileW(%s, %#x, %#x, %#x, %#x, %#x, %#x) %#x %v\n", lpFileName,
+			dwDesiredAccess,
+			dwShareMode,
+			lpSecurityAttributes,
+			dwCreationDisposition,
+			dwFlagsAndAttributes,
+			hTemplateFile,
 			ret, err)
 	}
 	if err != 0 {
@@ -162,22 +162,22 @@ func XCreateFileW(tls TLS, lpFileName uintptr, dwDesiredAccess uint32, dwShareMo
 	return (uintptr)(ret)
 }
 
-// //sys: HANDLE 	CreateFileMappingA(HANDLE hFile, LPSECURITY_ATTRIBUTES lpAttributes, DWORD flProtect, DWORD dwMaximumSizeHigh, DWORD dwMaximumSizeLow, LPCTSTR lpName); 
+// //sys: HANDLE 	CreateFileMappingA(HANDLE hFile, LPSECURITY_ATTRIBUTES lpAttributes, DWORD flProtect, DWORD dwMaximumSizeHigh, DWORD dwMaximumSizeLow, LPCTSTR lpName);
 func XCreateFileMappingA(tls TLS, hFile uintptr, lpAttributes uintptr, flProtect uint32, dwMaximumSizeHigh uint32, dwMaximumSizeLow uint32, lpName uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall6(procCreateFileMappingA.Addr(), 6, uintptr(hFile), 
-		uintptr(lpAttributes), 
-		uintptr(flProtect), 
-		uintptr(dwMaximumSizeHigh), 
-		uintptr(dwMaximumSizeLow), 
-		uintptr(lpName));
+	ret, _, err := syscall.Syscall6(procCreateFileMappingA.Addr(), 6, uintptr(hFile),
+		uintptr(lpAttributes),
+		uintptr(flProtect),
+		uintptr(dwMaximumSizeHigh),
+		uintptr(dwMaximumSizeLow),
+		uintptr(lpName))
 	if strace {
-		fmt.Fprintf(os.Stderr, "CreateFileMappingA(%#x, %#x, %#x, %#x, %#x, %s) %#x %v\n", hFile, 
-			lpAttributes, 
-			flProtect, 
-			dwMaximumSizeHigh, 
-			dwMaximumSizeLow, 
-			GoUTF16String(uintptr(lpName)), 
+		fmt.Fprintf(os.Stderr, "CreateFileMappingA(%#x, %#x, %#x, %#x, %#x, %s) %#x %v\n", hFile,
+			lpAttributes,
+			flProtect,
+			dwMaximumSizeHigh,
+			dwMaximumSizeLow,
+			GoUTF16String(uintptr(lpName)),
 			ret, err)
 	}
 	if err != 0 {
@@ -186,22 +186,22 @@ func XCreateFileMappingA(tls TLS, hFile uintptr, lpAttributes uintptr, flProtect
 	return (uintptr)(ret)
 }
 
-// //sys: HANDLE 	CreateFileMappingW(HANDLE hFile, LPSECURITY_ATTRIBUTES lpAttributes, DWORD flProtect, DWORD dwMaximumSizeHigh, DWORD dwMaximumSizeLow, LPCWSTR lpName); 
+// //sys: HANDLE 	CreateFileMappingW(HANDLE hFile, LPSECURITY_ATTRIBUTES lpAttributes, DWORD flProtect, DWORD dwMaximumSizeHigh, DWORD dwMaximumSizeLow, LPCWSTR lpName);
 func XCreateFileMappingW(tls TLS, hFile uintptr, lpAttributes uintptr, flProtect uint32, dwMaximumSizeHigh uint32, dwMaximumSizeLow uint32, lpName uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall6(procCreateFileMappingW.Addr(), 6, uintptr(hFile), 
-		uintptr(lpAttributes), 
-		uintptr(flProtect), 
-		uintptr(dwMaximumSizeHigh), 
-		uintptr(dwMaximumSizeLow), 
-		uintptr(lpName));
+	ret, _, err := syscall.Syscall6(procCreateFileMappingW.Addr(), 6, uintptr(hFile),
+		uintptr(lpAttributes),
+		uintptr(flProtect),
+		uintptr(dwMaximumSizeHigh),
+		uintptr(dwMaximumSizeLow),
+		uintptr(lpName))
 	if strace {
-		fmt.Fprintf(os.Stderr, "CreateFileMappingW(%#x, %#x, %#x, %#x, %#x, %s) %#x %v\n", hFile, 
-			lpAttributes, 
-			flProtect, 
-			dwMaximumSizeHigh, 
-			dwMaximumSizeLow, 
-			lpName, 
+		fmt.Fprintf(os.Stderr, "CreateFileMappingW(%#x, %#x, %#x, %#x, %#x, %s) %#x %v\n", hFile,
+			lpAttributes,
+			flProtect,
+			dwMaximumSizeHigh,
+			dwMaximumSizeLow,
+			lpName,
 			ret, err)
 	}
 	if err != 0 {
@@ -210,16 +210,16 @@ func XCreateFileMappingW(tls TLS, hFile uintptr, lpAttributes uintptr, flProtect
 	return (uintptr)(ret)
 }
 
-// //sys: HANDLE 	CreateMutexW(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCWSTR lpName); 
+// //sys: HANDLE 	CreateMutexW(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCWSTR lpName);
 func XCreateMutexW(tls TLS, lpMutexAttributes uintptr, bInitialOwner int32, lpName uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall(procCreateMutexW.Addr(), 3, uintptr(lpMutexAttributes), 
-		uintptr(bInitialOwner), 
-		uintptr(lpName));
+	ret, _, err := syscall.Syscall(procCreateMutexW.Addr(), 3, uintptr(lpMutexAttributes),
+		uintptr(bInitialOwner),
+		uintptr(lpName))
 	if strace {
-		fmt.Fprintf(os.Stderr, "CreateMutexW(%#x, %#x, %s) %#x %v\n", lpMutexAttributes, 
-			bInitialOwner, 
-			lpName, 
+		fmt.Fprintf(os.Stderr, "CreateMutexW(%#x, %#x, %s) %#x %v\n", lpMutexAttributes,
+			bInitialOwner,
+			lpName,
 			ret, err)
 	}
 	if err != 0 {
@@ -228,14 +228,14 @@ func XCreateMutexW(tls TLS, lpMutexAttributes uintptr, bInitialOwner int32, lpNa
 	return (uintptr)(ret)
 }
 
-// //sys: BOOL   	CloseHandle(HANDLE hObject); 
+// //sys: BOOL   	CloseHandle(HANDLE hObject);
 func XCloseHandle(tls TLS, hObject uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procCloseHandle.Addr(), 1, uintptr(hObject), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procCloseHandle.Addr(), 1, uintptr(hObject),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "CloseHandle(%#x) %#x %v\n", hObject, 
+		fmt.Fprintf(os.Stderr, "CloseHandle(%#x) %#x %v\n", hObject,
 			ret, err)
 	}
 	if err != 0 {
@@ -244,14 +244,14 @@ func XCloseHandle(tls TLS, hObject uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: void   	DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection); 
-func XDeleteCriticalSection(tls TLS, lpCriticalSection uintptr)  {
+// //sys: void   	DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+func XDeleteCriticalSection(tls TLS, lpCriticalSection uintptr) {
 
-	ret, _, err := syscall.Syscall(procDeleteCriticalSection.Addr(), 1, uintptr(lpCriticalSection), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procDeleteCriticalSection.Addr(), 1, uintptr(lpCriticalSection),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "DeleteCriticalSection(%#x) %d %v\n", lpCriticalSection, 
+		fmt.Fprintf(os.Stderr, "DeleteCriticalSection(%#x) %d %v\n", lpCriticalSection,
 			ret, err)
 	}
 	if err != 0 {
@@ -259,14 +259,14 @@ func XDeleteCriticalSection(tls TLS, lpCriticalSection uintptr)  {
 	}
 }
 
-// //sys: BOOL   	DeleteFileA(LPCTSTR lpFileName); 
+// //sys: BOOL   	DeleteFileA(LPCTSTR lpFileName);
 func XDeleteFileA(tls TLS, lpFileName uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procDeleteFileA.Addr(), 1, uintptr(lpFileName), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procDeleteFileA.Addr(), 1, uintptr(lpFileName),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "DeleteFileA(%s) %#x %v\n", GoUTF16String(uintptr(lpFileName)), 
+		fmt.Fprintf(os.Stderr, "DeleteFileA(%s) %#x %v\n", GoUTF16String(uintptr(lpFileName)),
 			ret, err)
 	}
 	if err != 0 {
@@ -275,14 +275,14 @@ func XDeleteFileA(tls TLS, lpFileName uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	DeleteFileW(LPCWSTR lpFileName); 
+// //sys: BOOL   	DeleteFileW(LPCWSTR lpFileName);
 func XDeleteFileW(tls TLS, lpFileName uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procDeleteFileW.Addr(), 1, uintptr(lpFileName), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procDeleteFileW.Addr(), 1, uintptr(lpFileName),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "DeleteFileW(%s) %#x %v\n", lpFileName, 
+		fmt.Fprintf(os.Stderr, "DeleteFileW(%s) %#x %v\n", lpFileName,
 			ret, err)
 	}
 	if err != 0 {
@@ -291,14 +291,14 @@ func XDeleteFileW(tls TLS, lpFileName uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: void   	EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection); 
-func XEnterCriticalSection(tls TLS, lpCriticalSection uintptr)  {
+// //sys: void   	EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+func XEnterCriticalSection(tls TLS, lpCriticalSection uintptr) {
 
-	ret, _, err := syscall.Syscall(procEnterCriticalSection.Addr(), 1, uintptr(lpCriticalSection), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procEnterCriticalSection.Addr(), 1, uintptr(lpCriticalSection),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "EnterCriticalSection(%#x) %d %v\n", lpCriticalSection, 
+		fmt.Fprintf(os.Stderr, "EnterCriticalSection(%#x) %d %v\n", lpCriticalSection,
 			ret, err)
 	}
 	if err != 0 {
@@ -306,14 +306,14 @@ func XEnterCriticalSection(tls TLS, lpCriticalSection uintptr)  {
 	}
 }
 
-// //sys: BOOL   	TryEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection); 
+// //sys: BOOL   	TryEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 func XTryEnterCriticalSection(tls TLS, lpCriticalSection uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procTryEnterCriticalSection.Addr(), 1, uintptr(lpCriticalSection), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procTryEnterCriticalSection.Addr(), 1, uintptr(lpCriticalSection),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "TryEnterCriticalSection(%#x) %#x %v\n", lpCriticalSection, 
+		fmt.Fprintf(os.Stderr, "TryEnterCriticalSection(%#x) %#x %v\n", lpCriticalSection,
 			ret, err)
 	}
 	if err != 0 {
@@ -322,14 +322,14 @@ func XTryEnterCriticalSection(tls TLS, lpCriticalSection uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	FlushFileBuffers(HANDLE hFile); 
+// //sys: BOOL   	FlushFileBuffers(HANDLE hFile);
 func XFlushFileBuffers(tls TLS, hFile uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procFlushFileBuffers.Addr(), 1, uintptr(hFile), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procFlushFileBuffers.Addr(), 1, uintptr(hFile),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "FlushFileBuffers(%#x) %#x %v\n", hFile, 
+		fmt.Fprintf(os.Stderr, "FlushFileBuffers(%#x) %#x %v\n", hFile,
 			ret, err)
 	}
 	if err != 0 {
@@ -338,15 +338,15 @@ func XFlushFileBuffers(tls TLS, hFile uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: BOOL     FlushViewOfFile(LPCVOID lpBaseAddress, SIZE_T dwNumberOfBytesToFlush); 
+// //sys: BOOL     FlushViewOfFile(LPCVOID lpBaseAddress, SIZE_T dwNumberOfBytesToFlush);
 func XFlushViewOfFile(tls TLS, lpBaseAddress uintptr, dwNumberOfBytesToFlush uint64) int32 {
 
-	ret, _, err := syscall.Syscall(procFlushViewOfFile.Addr(), 2, uintptr(lpBaseAddress), 
-		uintptr(dwNumberOfBytesToFlush), 
-		0);
+	ret, _, err := syscall.Syscall(procFlushViewOfFile.Addr(), 2, uintptr(lpBaseAddress),
+		uintptr(dwNumberOfBytesToFlush),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "FlushViewOfFile(%#x, %#x) %#x %v\n", lpBaseAddress, 
-			dwNumberOfBytesToFlush, 
+		fmt.Fprintf(os.Stderr, "FlushViewOfFile(%#x, %#x) %#x %v\n", lpBaseAddress,
+			dwNumberOfBytesToFlush,
 			ret, err)
 	}
 	if err != 0 {
@@ -355,26 +355,26 @@ func XFlushViewOfFile(tls TLS, lpBaseAddress uintptr, dwNumberOfBytesToFlush uin
 	return (int32)(ret)
 }
 
-// //sys: DWORD  	FormatMessageA(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId, DWORD dwLanguageId, LPTSTR lpBuffer, DWORD nSize, va_list* Arguments); 
+// //sys: DWORD  	FormatMessageA(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId, DWORD dwLanguageId, LPTSTR lpBuffer, DWORD nSize, va_list* Arguments);
 func XFormatMessageA(tls TLS, dwFlags uint32, lpSource uintptr, dwMessageId uint32, dwLanguageId uint32, lpBuffer uintptr, nSize uint32, Arguments uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall9(procFormatMessageA.Addr(), 7, uintptr(dwFlags), 
-		uintptr(lpSource), 
-		uintptr(dwMessageId), 
-		uintptr(dwLanguageId), 
-		uintptr(lpBuffer), 
-		uintptr(nSize), 
-		uintptr(Arguments), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall9(procFormatMessageA.Addr(), 7, uintptr(dwFlags),
+		uintptr(lpSource),
+		uintptr(dwMessageId),
+		uintptr(dwLanguageId),
+		uintptr(lpBuffer),
+		uintptr(nSize),
+		uintptr(Arguments),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "FormatMessageA(%#x, %#x, %#x, %#x, %s, %#x, %#x) %#x %v\n", dwFlags, 
-			lpSource, 
-			dwMessageId, 
-			dwLanguageId, 
-			GoUTF16String(uintptr(lpBuffer)), 
-			nSize, 
-			Arguments, 
+		fmt.Fprintf(os.Stderr, "FormatMessageA(%#x, %#x, %#x, %#x, %s, %#x, %#x) %#x %v\n", dwFlags,
+			lpSource,
+			dwMessageId,
+			dwLanguageId,
+			GoUTF16String(uintptr(lpBuffer)),
+			nSize,
+			Arguments,
 			ret, err)
 	}
 	if err != 0 {
@@ -383,26 +383,26 @@ func XFormatMessageA(tls TLS, dwFlags uint32, lpSource uintptr, dwMessageId uint
 	return (uint32)(ret)
 }
 
-// //sys: DWORD  	FormatMessageW(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId, DWORD dwLanguageId, LPCWSTR lpBuffer, DWORD nSize, va_list* Arguments); 
+// //sys: DWORD  	FormatMessageW(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId, DWORD dwLanguageId, LPCWSTR lpBuffer, DWORD nSize, va_list* Arguments);
 func XFormatMessageW(tls TLS, dwFlags uint32, lpSource uintptr, dwMessageId uint32, dwLanguageId uint32, lpBuffer uintptr, nSize uint32, Arguments uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall9(procFormatMessageW.Addr(), 7, uintptr(dwFlags), 
-		uintptr(lpSource), 
-		uintptr(dwMessageId), 
-		uintptr(dwLanguageId), 
-		uintptr(lpBuffer), 
-		uintptr(nSize), 
-		uintptr(Arguments), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall9(procFormatMessageW.Addr(), 7, uintptr(dwFlags),
+		uintptr(lpSource),
+		uintptr(dwMessageId),
+		uintptr(dwLanguageId),
+		uintptr(lpBuffer),
+		uintptr(nSize),
+		uintptr(Arguments),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "FormatMessageW(%#x, %#x, %#x, %#x, %s, %#x, %#x) %#x %v\n", dwFlags, 
-			lpSource, 
-			dwMessageId, 
-			dwLanguageId, 
-			lpBuffer, 
-			nSize, 
-			Arguments, 
+		fmt.Fprintf(os.Stderr, "FormatMessageW(%#x, %#x, %#x, %#x, %s, %#x, %#x) %#x %v\n", dwFlags,
+			lpSource,
+			dwMessageId,
+			dwLanguageId,
+			lpBuffer,
+			nSize,
+			Arguments,
 			ret, err)
 	}
 	if err != 0 {
@@ -411,14 +411,14 @@ func XFormatMessageW(tls TLS, dwFlags uint32, lpSource uintptr, dwMessageId uint
 	return (uint32)(ret)
 }
 
-// //sys: BOOL   	FreeLibrary(HMODULE hModule); 
+// //sys: BOOL   	FreeLibrary(HMODULE hModule);
 func XFreeLibrary(tls TLS, hModule uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procFreeLibrary.Addr(), 1, uintptr(hModule), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procFreeLibrary.Addr(), 1, uintptr(hModule),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "FreeLibrary(%#x) %#x %v\n", hModule, 
+		fmt.Fprintf(os.Stderr, "FreeLibrary(%#x) %#x %v\n", hModule,
 			ret, err)
 	}
 	if err != 0 {
@@ -427,12 +427,12 @@ func XFreeLibrary(tls TLS, hModule uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: HANDLE   GetCurrentProcess(); 
+// //sys: HANDLE   GetCurrentProcess();
 func XGetCurrentProcess(tls TLS) uintptr {
 
-	ret, _, err := syscall.Syscall(procGetCurrentProcess.Addr(), 0, 0, 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetCurrentProcess.Addr(), 0, 0,
+		0,
+		0)
 	if strace {
 		fmt.Fprintf(os.Stderr, "GetCurrentProcess() %#x %v\n", ret, err)
 	}
@@ -442,12 +442,12 @@ func XGetCurrentProcess(tls TLS) uintptr {
 	return (uintptr)(ret)
 }
 
-// //sys: DWORD  	GetCurrentProcessId(); 
+// //sys: DWORD  	GetCurrentProcessId();
 func XGetCurrentProcessId(tls TLS) uint32 {
 
-	ret, _, err := syscall.Syscall(procGetCurrentProcessId.Addr(), 0, 0, 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetCurrentProcessId.Addr(), 0, 0,
+		0,
+		0)
 	if strace {
 		fmt.Fprintf(os.Stderr, "GetCurrentProcessId() %#x %v\n", ret, err)
 	}
@@ -457,15 +457,15 @@ func XGetCurrentProcessId(tls TLS) uint32 {
 	return (uint32)(ret)
 }
 
-// //sys: BOOL     GetConsoleScreenBufferInfo(HANDLE hConsoleOutput, PCONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo); 
+// //sys: BOOL     GetConsoleScreenBufferInfo(HANDLE hConsoleOutput, PCONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo);
 func XGetConsoleScreenBufferInfo(tls TLS, hConsoleOutput uintptr, lpConsoleScreenBufferInfo uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procGetConsoleScreenBufferInfo.Addr(), 2, uintptr(hConsoleOutput), 
-		uintptr(lpConsoleScreenBufferInfo), 
-		0);
+	ret, _, err := syscall.Syscall(procGetConsoleScreenBufferInfo.Addr(), 2, uintptr(hConsoleOutput),
+		uintptr(lpConsoleScreenBufferInfo),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetConsoleScreenBufferInfo(%#x, %#x) %#x %v\n", hConsoleOutput, 
-			lpConsoleScreenBufferInfo, 
+		fmt.Fprintf(os.Stderr, "GetConsoleScreenBufferInfo(%#x, %#x) %#x %v\n", hConsoleOutput,
+			lpConsoleScreenBufferInfo,
 			ret, err)
 	}
 	if err != 0 {
@@ -474,21 +474,21 @@ func XGetConsoleScreenBufferInfo(tls TLS, hConsoleOutput uintptr, lpConsoleScree
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	GetDiskFreeSpaceA(LPCTSTR lpRootPathName, LPDWORD lpSectorsPerCluster, LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters); 
+// //sys: BOOL   	GetDiskFreeSpaceA(LPCTSTR lpRootPathName, LPDWORD lpSectorsPerCluster, LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters);
 func XGetDiskFreeSpaceA(tls TLS, lpRootPathName uintptr, lpSectorsPerCluster uintptr, lpBytesPerSector uintptr, lpNumberOfFreeClusters uintptr, lpTotalNumberOfClusters uintptr) int32 {
 
-	ret, _, err := syscall.Syscall6(procGetDiskFreeSpaceA.Addr(), 5, uintptr(lpRootPathName), 
-		uintptr(lpSectorsPerCluster), 
-		uintptr(lpBytesPerSector), 
-		uintptr(lpNumberOfFreeClusters), 
-		uintptr(lpTotalNumberOfClusters), 
-		0);
+	ret, _, err := syscall.Syscall6(procGetDiskFreeSpaceA.Addr(), 5, uintptr(lpRootPathName),
+		uintptr(lpSectorsPerCluster),
+		uintptr(lpBytesPerSector),
+		uintptr(lpNumberOfFreeClusters),
+		uintptr(lpTotalNumberOfClusters),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetDiskFreeSpaceA(%s, %#x, %#x, %#x, %#x) %#x %v\n", GoUTF16String(uintptr(lpRootPathName)), 
-			lpSectorsPerCluster, 
-			lpBytesPerSector, 
-			lpNumberOfFreeClusters, 
-			lpTotalNumberOfClusters, 
+		fmt.Fprintf(os.Stderr, "GetDiskFreeSpaceA(%s, %#x, %#x, %#x, %#x) %#x %v\n", GoUTF16String(uintptr(lpRootPathName)),
+			lpSectorsPerCluster,
+			lpBytesPerSector,
+			lpNumberOfFreeClusters,
+			lpTotalNumberOfClusters,
 			ret, err)
 	}
 	if err != 0 {
@@ -497,21 +497,21 @@ func XGetDiskFreeSpaceA(tls TLS, lpRootPathName uintptr, lpSectorsPerCluster uin
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	GetDiskFreeSpaceW(LPCWSTR lpRootPathName, LPDWORD lpSectorsPerCluster, LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters); 
+// //sys: BOOL   	GetDiskFreeSpaceW(LPCWSTR lpRootPathName, LPDWORD lpSectorsPerCluster, LPDWORD lpBytesPerSector, LPDWORD lpNumberOfFreeClusters, LPDWORD lpTotalNumberOfClusters);
 func XGetDiskFreeSpaceW(tls TLS, lpRootPathName uintptr, lpSectorsPerCluster uintptr, lpBytesPerSector uintptr, lpNumberOfFreeClusters uintptr, lpTotalNumberOfClusters uintptr) int32 {
 
-	ret, _, err := syscall.Syscall6(procGetDiskFreeSpaceW.Addr(), 5, uintptr(lpRootPathName), 
-		uintptr(lpSectorsPerCluster), 
-		uintptr(lpBytesPerSector), 
-		uintptr(lpNumberOfFreeClusters), 
-		uintptr(lpTotalNumberOfClusters), 
-		0);
+	ret, _, err := syscall.Syscall6(procGetDiskFreeSpaceW.Addr(), 5, uintptr(lpRootPathName),
+		uintptr(lpSectorsPerCluster),
+		uintptr(lpBytesPerSector),
+		uintptr(lpNumberOfFreeClusters),
+		uintptr(lpTotalNumberOfClusters),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetDiskFreeSpaceW(%s, %#x, %#x, %#x, %#x) %#x %v\n", lpRootPathName, 
-			lpSectorsPerCluster, 
-			lpBytesPerSector, 
-			lpNumberOfFreeClusters, 
-			lpTotalNumberOfClusters, 
+		fmt.Fprintf(os.Stderr, "GetDiskFreeSpaceW(%s, %#x, %#x, %#x, %#x) %#x %v\n", lpRootPathName,
+			lpSectorsPerCluster,
+			lpBytesPerSector,
+			lpNumberOfFreeClusters,
+			lpTotalNumberOfClusters,
 			ret, err)
 	}
 	if err != 0 {
@@ -520,16 +520,16 @@ func XGetDiskFreeSpaceW(tls TLS, lpRootPathName uintptr, lpSectorsPerCluster uin
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	GetFileAttributesExW(LPCWSTR lpFileName, GET_FILEEX_INFO_LEVELS fInfoLevelId, LPVOID lpFileInformation); 
+// //sys: BOOL   	GetFileAttributesExW(LPCWSTR lpFileName, GET_FILEEX_INFO_LEVELS fInfoLevelId, LPVOID lpFileInformation);
 func XGetFileAttributesExW(tls TLS, lpFileName uintptr, fInfoLevelId uint8, lpFileInformation uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procGetFileAttributesExW.Addr(), 3, uintptr(lpFileName), 
-		uintptr(fInfoLevelId), 
-		uintptr(lpFileInformation));
+	ret, _, err := syscall.Syscall(procGetFileAttributesExW.Addr(), 3, uintptr(lpFileName),
+		uintptr(fInfoLevelId),
+		uintptr(lpFileInformation))
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetFileAttributesExW(%s, %#x, %#x) %#x %v\n", lpFileName, 
-			fInfoLevelId, 
-			lpFileInformation, 
+		fmt.Fprintf(os.Stderr, "GetFileAttributesExW(%s, %#x, %#x) %#x %v\n", lpFileName,
+			fInfoLevelId,
+			lpFileInformation,
 			ret, err)
 	}
 	if err != 0 {
@@ -538,14 +538,14 @@ func XGetFileAttributesExW(tls TLS, lpFileName uintptr, fInfoLevelId uint8, lpFi
 	return (int32)(ret)
 }
 
-// //sys: DWORD  	GetFileAttributesA(LPCTSTR lpFileName); 
+// //sys: DWORD  	GetFileAttributesA(LPCTSTR lpFileName);
 func XGetFileAttributesA(tls TLS, lpFileName uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall(procGetFileAttributesA.Addr(), 1, uintptr(lpFileName), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetFileAttributesA.Addr(), 1, uintptr(lpFileName),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetFileAttributesA(%s) %#x %v\n", GoUTF16String(uintptr(lpFileName)), 
+		fmt.Fprintf(os.Stderr, "GetFileAttributesA(%s) %#x %v\n", GoUTF16String(uintptr(lpFileName)),
 			ret, err)
 	}
 	if err != 0 {
@@ -554,14 +554,14 @@ func XGetFileAttributesA(tls TLS, lpFileName uintptr) uint32 {
 	return (uint32)(ret)
 }
 
-// //sys: DWORD  	GetFileAttributesW(LPCWSTR lpFileName); 
+// //sys: DWORD  	GetFileAttributesW(LPCWSTR lpFileName);
 func XGetFileAttributesW(tls TLS, lpFileName uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall(procGetFileAttributesW.Addr(), 1, uintptr(lpFileName), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetFileAttributesW.Addr(), 1, uintptr(lpFileName),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetFileAttributesW(%s) %#x %v\n", lpFileName, 
+		fmt.Fprintf(os.Stderr, "GetFileAttributesW(%s) %#x %v\n", lpFileName,
 			ret, err)
 	}
 	if err != 0 {
@@ -570,15 +570,15 @@ func XGetFileAttributesW(tls TLS, lpFileName uintptr) uint32 {
 	return (uint32)(ret)
 }
 
-// //sys: DWORD  	GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh); 
+// //sys: DWORD  	GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);
 func XGetFileSize(tls TLS, hFile uintptr, lpFileSizeHigh uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall(procGetFileSize.Addr(), 2, uintptr(hFile), 
-		uintptr(lpFileSizeHigh), 
-		0);
+	ret, _, err := syscall.Syscall(procGetFileSize.Addr(), 2, uintptr(hFile),
+		uintptr(lpFileSizeHigh),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetFileSize(%#x, %#x) %#x %v\n", hFile, 
-			lpFileSizeHigh, 
+		fmt.Fprintf(os.Stderr, "GetFileSize(%#x, %#x) %#x %v\n", hFile,
+			lpFileSizeHigh,
 			ret, err)
 	}
 	if err != 0 {
@@ -587,20 +587,20 @@ func XGetFileSize(tls TLS, hFile uintptr, lpFileSizeHigh uintptr) uint32 {
 	return (uint32)(ret)
 }
 
-// //sys: DWORD  	GetFullPathNameA( LPCTSTR lpFileName, DWORD nBufferLength, LPTSTR lpBuffer, LPTSTR* lpFilePart); 
+// //sys: DWORD  	GetFullPathNameA( LPCTSTR lpFileName, DWORD nBufferLength, LPTSTR lpBuffer, LPTSTR* lpFilePart);
 func XGetFullPathNameA(tls TLS, lpFileName uintptr, nBufferLength uint32, lpBuffer uintptr, lpFilePart uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall6(procGetFullPathNameA.Addr(), 4, uintptr(lpFileName), 
-		uintptr(nBufferLength), 
-		uintptr(lpBuffer), 
-		uintptr(lpFilePart), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall6(procGetFullPathNameA.Addr(), 4, uintptr(lpFileName),
+		uintptr(nBufferLength),
+		uintptr(lpBuffer),
+		uintptr(lpFilePart),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetFullPathNameA(%s, %#x, %s, %#x) %#x %v\n", GoUTF16String(uintptr(lpFileName)), 
-			nBufferLength, 
-			GoUTF16String(uintptr(lpBuffer)), 
-			lpFilePart, 
+		fmt.Fprintf(os.Stderr, "GetFullPathNameA(%s, %#x, %s, %#x) %#x %v\n", GoUTF16String(uintptr(lpFileName)),
+			nBufferLength,
+			GoUTF16String(uintptr(lpBuffer)),
+			lpFilePart,
 			ret, err)
 	}
 	if err != 0 {
@@ -609,20 +609,20 @@ func XGetFullPathNameA(tls TLS, lpFileName uintptr, nBufferLength uint32, lpBuff
 	return (uint32)(ret)
 }
 
-// //sys: DWORD  	GetFullPathNameW( LPCWSTR lpFileName, DWORD nBufferLength, LPCWSTR lpBuffer, LPCWSTR* lpFilePart); 
+// //sys: DWORD  	GetFullPathNameW( LPCWSTR lpFileName, DWORD nBufferLength, LPCWSTR lpBuffer, LPCWSTR* lpFilePart);
 func XGetFullPathNameW(tls TLS, lpFileName uintptr, nBufferLength uint32, lpBuffer uintptr, lpFilePart uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall6(procGetFullPathNameW.Addr(), 4, uintptr(lpFileName), 
-		uintptr(nBufferLength), 
-		uintptr(lpBuffer), 
-		uintptr(lpFilePart), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall6(procGetFullPathNameW.Addr(), 4, uintptr(lpFileName),
+		uintptr(nBufferLength),
+		uintptr(lpBuffer),
+		uintptr(lpFilePart),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetFullPathNameW(%s, %#x, %s, %#x) %#x %v\n", lpFileName, 
-			nBufferLength, 
-			lpBuffer, 
-			lpFilePart, 
+		fmt.Fprintf(os.Stderr, "GetFullPathNameW(%s, %#x, %s, %#x) %#x %v\n", lpFileName,
+			nBufferLength,
+			lpBuffer,
+			lpFilePart,
 			ret, err)
 	}
 	if err != 0 {
@@ -631,15 +631,15 @@ func XGetFullPathNameW(tls TLS, lpFileName uintptr, nBufferLength uint32, lpBuff
 	return (uint32)(ret)
 }
 
-// //sys: FARPROC 	GetProcAddress(HMODULE hModule, LPCSTR lpProcName); 
+// //sys: FARPROC 	GetProcAddress(HMODULE hModule, LPCSTR lpProcName);
 func XGetProcAddress(tls TLS, hModule uintptr, lpProcName uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall(procGetProcAddress.Addr(), 2, uintptr(hModule), 
-		uintptr(lpProcName), 
-		0);
+	ret, _, err := syscall.Syscall(procGetProcAddress.Addr(), 2, uintptr(hModule),
+		uintptr(lpProcName),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetProcAddress(%#x, %s) %#x %v\n", hModule, 
-			GoUTF16String(uintptr(lpProcName)), 
+		fmt.Fprintf(os.Stderr, "GetProcAddress(%#x, %s) %#x %v\n", hModule,
+			GoUTF16String(uintptr(lpProcName)),
 			ret, err)
 	}
 	if err != 0 {
@@ -648,12 +648,12 @@ func XGetProcAddress(tls TLS, hModule uintptr, lpProcName uintptr) uintptr {
 	return (uintptr)(ret)
 }
 
-// //sys: HANDLE   GetProcessHeap(); 
+// //sys: HANDLE   GetProcessHeap();
 func XGetProcessHeap(tls TLS) uintptr {
 
-	ret, _, err := syscall.Syscall(procGetProcessHeap.Addr(), 0, 0, 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetProcessHeap.Addr(), 0, 0,
+		0,
+		0)
 	if strace {
 		fmt.Fprintf(os.Stderr, "GetProcessHeap() %#x %v\n", ret, err)
 	}
@@ -663,14 +663,14 @@ func XGetProcessHeap(tls TLS) uintptr {
 	return (uintptr)(ret)
 }
 
-// //sys: HANDLE   GetStdHandle(DWORD nStdHandle); 
+// //sys: HANDLE   GetStdHandle(DWORD nStdHandle);
 func XGetStdHandle(tls TLS, nStdHandle uint32) uintptr {
 
-	ret, _, err := syscall.Syscall(procGetStdHandle.Addr(), 1, uintptr(nStdHandle), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetStdHandle.Addr(), 1, uintptr(nStdHandle),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetStdHandle(%#x) %#x %v\n", nStdHandle, 
+		fmt.Fprintf(os.Stderr, "GetStdHandle(%#x) %#x %v\n", nStdHandle,
 			ret, err)
 	}
 	if err != 0 {
@@ -679,14 +679,14 @@ func XGetStdHandle(tls TLS, nStdHandle uint32) uintptr {
 	return (uintptr)(ret)
 }
 
-// //sys: void   	GetSystemInfo(LPSYSTEM_INFO lpSystemInfo); 
-func XGetSystemInfo(tls TLS, lpSystemInfo uintptr)  {
+// //sys: void   	GetSystemInfo(LPSYSTEM_INFO lpSystemInfo);
+func XGetSystemInfo(tls TLS, lpSystemInfo uintptr) {
 
-	ret, _, err := syscall.Syscall(procGetSystemInfo.Addr(), 1, uintptr(lpSystemInfo), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetSystemInfo.Addr(), 1, uintptr(lpSystemInfo),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetSystemInfo(%#x) %d %v\n", lpSystemInfo, 
+		fmt.Fprintf(os.Stderr, "GetSystemInfo(%#x) %d %v\n", lpSystemInfo,
 			ret, err)
 	}
 	if err != 0 {
@@ -694,14 +694,14 @@ func XGetSystemInfo(tls TLS, lpSystemInfo uintptr)  {
 	}
 }
 
-// //sys: void   	GetSystemTime(LPSYSTEMTIME lpSystemTime); 
-func XGetSystemTime(tls TLS, lpSystemTime uintptr)  {
+// //sys: void   	GetSystemTime(LPSYSTEMTIME lpSystemTime);
+func XGetSystemTime(tls TLS, lpSystemTime uintptr) {
 
-	ret, _, err := syscall.Syscall(procGetSystemTime.Addr(), 1, uintptr(lpSystemTime), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetSystemTime.Addr(), 1, uintptr(lpSystemTime),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetSystemTime(%#x) %d %v\n", lpSystemTime, 
+		fmt.Fprintf(os.Stderr, "GetSystemTime(%#x) %d %v\n", lpSystemTime,
 			ret, err)
 	}
 	if err != 0 {
@@ -709,14 +709,14 @@ func XGetSystemTime(tls TLS, lpSystemTime uintptr)  {
 	}
 }
 
-// //sys: void     GetSystemTimeAsFileTime(LPFILETIME lpSystemTimeAsFileTime); 
-func XGetSystemTimeAsFileTime(tls TLS, lpSystemTimeAsFileTime uintptr)  {
+// //sys: void     GetSystemTimeAsFileTime(LPFILETIME lpSystemTimeAsFileTime);
+func XGetSystemTimeAsFileTime(tls TLS, lpSystemTimeAsFileTime uintptr) {
 
-	ret, _, err := syscall.Syscall(procGetSystemTimeAsFileTime.Addr(), 1, uintptr(lpSystemTimeAsFileTime), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetSystemTimeAsFileTime.Addr(), 1, uintptr(lpSystemTimeAsFileTime),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetSystemTimeAsFileTime(%#x) %d %v\n", lpSystemTimeAsFileTime, 
+		fmt.Fprintf(os.Stderr, "GetSystemTimeAsFileTime(%#x) %d %v\n", lpSystemTimeAsFileTime,
 			ret, err)
 	}
 	if err != 0 {
@@ -724,15 +724,15 @@ func XGetSystemTimeAsFileTime(tls TLS, lpSystemTimeAsFileTime uintptr)  {
 	}
 }
 
-// //sys: DWORD    GetTempPathA(DWORD nBufferLength, LPTSTR lpBuffer); 
+// //sys: DWORD    GetTempPathA(DWORD nBufferLength, LPTSTR lpBuffer);
 func XGetTempPathA(tls TLS, nBufferLength uint32, lpBuffer uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall(procGetTempPathA.Addr(), 2, uintptr(nBufferLength), 
-		uintptr(lpBuffer), 
-		0);
+	ret, _, err := syscall.Syscall(procGetTempPathA.Addr(), 2, uintptr(nBufferLength),
+		uintptr(lpBuffer),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetTempPathA(%#x, %s) %#x %v\n", nBufferLength, 
-			GoUTF16String(uintptr(lpBuffer)), 
+		fmt.Fprintf(os.Stderr, "GetTempPathA(%#x, %s) %#x %v\n", nBufferLength,
+			GoUTF16String(uintptr(lpBuffer)),
 			ret, err)
 	}
 	if err != 0 {
@@ -741,15 +741,15 @@ func XGetTempPathA(tls TLS, nBufferLength uint32, lpBuffer uintptr) uint32 {
 	return (uint32)(ret)
 }
 
-// //sys: DWORD    GetTempPathW(DWORD nBufferLength, LPCWSTR lpBuffer); 
+// //sys: DWORD    GetTempPathW(DWORD nBufferLength, LPCWSTR lpBuffer);
 func XGetTempPathW(tls TLS, nBufferLength uint32, lpBuffer uintptr) uint32 {
 
-	ret, _, err := syscall.Syscall(procGetTempPathW.Addr(), 2, uintptr(nBufferLength), 
-		uintptr(lpBuffer), 
-		0);
+	ret, _, err := syscall.Syscall(procGetTempPathW.Addr(), 2, uintptr(nBufferLength),
+		uintptr(lpBuffer),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetTempPathW(%#x, %s) %#x %v\n", nBufferLength, 
-			lpBuffer, 
+		fmt.Fprintf(os.Stderr, "GetTempPathW(%#x, %s) %#x %v\n", nBufferLength,
+			lpBuffer,
 			ret, err)
 	}
 	if err != 0 {
@@ -758,12 +758,12 @@ func XGetTempPathW(tls TLS, nBufferLength uint32, lpBuffer uintptr) uint32 {
 	return (uint32)(ret)
 }
 
-// //sys: DWORD  	GetTickCount(); 
+// //sys: DWORD  	GetTickCount();
 func XGetTickCount(tls TLS) uint32 {
 
-	ret, _, err := syscall.Syscall(procGetTickCount.Addr(), 0, 0, 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetTickCount.Addr(), 0, 0,
+		0,
+		0)
 	if strace {
 		fmt.Fprintf(os.Stderr, "GetTickCount() %#x %v\n", ret, err)
 	}
@@ -773,14 +773,14 @@ func XGetTickCount(tls TLS) uint32 {
 	return (uint32)(ret)
 }
 
-// //sys: BOOL   	GetVersionExA(LPOSVERSIONINFO lpVersionInfo); 
+// //sys: BOOL   	GetVersionExA(LPOSVERSIONINFO lpVersionInfo);
 func XGetVersionExA(tls TLS, lpVersionInfo uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procGetVersionExA.Addr(), 1, uintptr(lpVersionInfo), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetVersionExA.Addr(), 1, uintptr(lpVersionInfo),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetVersionExA(%#x) %#x %v\n", lpVersionInfo, 
+		fmt.Fprintf(os.Stderr, "GetVersionExA(%#x) %#x %v\n", lpVersionInfo,
 			ret, err)
 	}
 	if err != 0 {
@@ -789,14 +789,14 @@ func XGetVersionExA(tls TLS, lpVersionInfo uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	GetVersionExW(LPOSVERSIONINFOW lpVersionInfo); 
+// //sys: BOOL   	GetVersionExW(LPOSVERSIONINFOW lpVersionInfo);
 func XGetVersionExW(tls TLS, lpVersionInfo uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procGetVersionExW.Addr(), 1, uintptr(lpVersionInfo), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procGetVersionExW.Addr(), 1, uintptr(lpVersionInfo),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "GetVersionExW(%#x) %#x %v\n", lpVersionInfo, 
+		fmt.Fprintf(os.Stderr, "GetVersionExW(%#x) %#x %v\n", lpVersionInfo,
 			ret, err)
 	}
 	if err != 0 {
@@ -805,16 +805,16 @@ func XGetVersionExW(tls TLS, lpVersionInfo uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: LPVOID 	HeapAlloc(HANDLE hHeap, DWORD dwFlags, SIZE_T dwBytes); 
+// //sys: LPVOID 	HeapAlloc(HANDLE hHeap, DWORD dwFlags, SIZE_T dwBytes);
 func XHeapAlloc(tls TLS, hHeap uintptr, dwFlags uint32, dwBytes uint64) uintptr {
 
-	ret, _, err := syscall.Syscall(procHeapAlloc.Addr(), 3, uintptr(hHeap), 
-		uintptr(dwFlags), 
-		uintptr(dwBytes));
+	ret, _, err := syscall.Syscall(procHeapAlloc.Addr(), 3, uintptr(hHeap),
+		uintptr(dwFlags),
+		uintptr(dwBytes))
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapAlloc(%#x, %#x, %#x) %#x %v\n", hHeap, 
-			dwFlags, 
-			dwBytes, 
+		fmt.Fprintf(os.Stderr, "HeapAlloc(%#x, %#x, %#x) %#x %v\n", hHeap,
+			dwFlags,
+			dwBytes,
 			ret, err)
 	}
 	if err != 0 {
@@ -823,15 +823,15 @@ func XHeapAlloc(tls TLS, hHeap uintptr, dwFlags uint32, dwBytes uint64) uintptr 
 	return (uintptr)(ret)
 }
 
-// //sys: SIZE_T   HeapCompact(HANDLE hHeap, DWORD dwFlags); 
+// //sys: SIZE_T   HeapCompact(HANDLE hHeap, DWORD dwFlags);
 func XHeapCompact(tls TLS, hHeap uintptr, dwFlags uint32) uint64 {
 
-	ret, _, err := syscall.Syscall(procHeapCompact.Addr(), 2, uintptr(hHeap), 
-		uintptr(dwFlags), 
-		0);
+	ret, _, err := syscall.Syscall(procHeapCompact.Addr(), 2, uintptr(hHeap),
+		uintptr(dwFlags),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapCompact(%#x, %#x) %#x %v\n", hHeap, 
-			dwFlags, 
+		fmt.Fprintf(os.Stderr, "HeapCompact(%#x, %#x) %#x %v\n", hHeap,
+			dwFlags,
 			ret, err)
 	}
 	if err != 0 {
@@ -840,16 +840,16 @@ func XHeapCompact(tls TLS, hHeap uintptr, dwFlags uint32) uint64 {
 	return (uint64)(ret)
 }
 
-// //sys: HANDLE   HeapCreate(DWORD flOptions, SIZE_T dwInitialSize, SIZE_T dwMaximumSize); 
+// //sys: HANDLE   HeapCreate(DWORD flOptions, SIZE_T dwInitialSize, SIZE_T dwMaximumSize);
 func XHeapCreate(tls TLS, flOptions uint32, dwInitialSize uint64, dwMaximumSize uint64) uintptr {
 
-	ret, _, err := syscall.Syscall(procHeapCreate.Addr(), 3, uintptr(flOptions), 
-		uintptr(dwInitialSize), 
-		uintptr(dwMaximumSize));
+	ret, _, err := syscall.Syscall(procHeapCreate.Addr(), 3, uintptr(flOptions),
+		uintptr(dwInitialSize),
+		uintptr(dwMaximumSize))
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapCreate(%#x, %#x, %#x) %#x %v\n", flOptions, 
-			dwInitialSize, 
-			dwMaximumSize, 
+		fmt.Fprintf(os.Stderr, "HeapCreate(%#x, %#x, %#x) %#x %v\n", flOptions,
+			dwInitialSize,
+			dwMaximumSize,
 			ret, err)
 	}
 	if err != 0 {
@@ -858,14 +858,14 @@ func XHeapCreate(tls TLS, flOptions uint32, dwInitialSize uint64, dwMaximumSize 
 	return (uintptr)(ret)
 }
 
-// //sys: BOOL     HeapDestroy(HANDLE hHeap); 
+// //sys: BOOL     HeapDestroy(HANDLE hHeap);
 func XHeapDestroy(tls TLS, hHeap uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procHeapDestroy.Addr(), 1, uintptr(hHeap), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procHeapDestroy.Addr(), 1, uintptr(hHeap),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapDestroy(%#x) %#x %v\n", hHeap, 
+		fmt.Fprintf(os.Stderr, "HeapDestroy(%#x) %#x %v\n", hHeap,
 			ret, err)
 	}
 	if err != 0 {
@@ -874,16 +874,16 @@ func XHeapDestroy(tls TLS, hHeap uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: BOOL     HeapFree(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem); 
+// //sys: BOOL     HeapFree(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem);
 func XHeapFree(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procHeapFree.Addr(), 3, uintptr(hHeap), 
-		uintptr(dwFlags), 
-		uintptr(lpMem));
+	ret, _, err := syscall.Syscall(procHeapFree.Addr(), 3, uintptr(hHeap),
+		uintptr(dwFlags),
+		uintptr(lpMem))
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapFree(%#x, %#x, %#x) %#x %v\n", hHeap, 
-			dwFlags, 
-			lpMem, 
+		fmt.Fprintf(os.Stderr, "HeapFree(%#x, %#x, %#x) %#x %v\n", hHeap,
+			dwFlags,
+			lpMem,
 			ret, err)
 	}
 	if err != 0 {
@@ -892,20 +892,20 @@ func XHeapFree(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: LPVOID   HeapReAlloc(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem, SIZE_T dwBytes); 
+// //sys: LPVOID   HeapReAlloc(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem, SIZE_T dwBytes);
 func XHeapReAlloc(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr, dwBytes uint64) uintptr {
 
-	ret, _, err := syscall.Syscall6(procHeapReAlloc.Addr(), 4, uintptr(hHeap), 
-		uintptr(dwFlags), 
-		uintptr(lpMem), 
-		uintptr(dwBytes), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall6(procHeapReAlloc.Addr(), 4, uintptr(hHeap),
+		uintptr(dwFlags),
+		uintptr(lpMem),
+		uintptr(dwBytes),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapReAlloc(%#x, %#x, %#x, %#x) %#x %v\n", hHeap, 
-			dwFlags, 
-			lpMem, 
-			dwBytes, 
+		fmt.Fprintf(os.Stderr, "HeapReAlloc(%#x, %#x, %#x, %#x) %#x %v\n", hHeap,
+			dwFlags,
+			lpMem,
+			dwBytes,
 			ret, err)
 	}
 	if err != 0 {
@@ -914,16 +914,16 @@ func XHeapReAlloc(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr, dwBytes
 	return (uintptr)(ret)
 }
 
-// //sys: SIZE_T   HeapSize(HANDLE hHeap, DWORD dwFlags, LPCVOID lpMem); 
+// //sys: SIZE_T   HeapSize(HANDLE hHeap, DWORD dwFlags, LPCVOID lpMem);
 func XHeapSize(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr) uint64 {
 
-	ret, _, err := syscall.Syscall(procHeapSize.Addr(), 3, uintptr(hHeap), 
-		uintptr(dwFlags), 
-		uintptr(lpMem));
+	ret, _, err := syscall.Syscall(procHeapSize.Addr(), 3, uintptr(hHeap),
+		uintptr(dwFlags),
+		uintptr(lpMem))
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapSize(%#x, %#x, %#x) %#x %v\n", hHeap, 
-			dwFlags, 
-			lpMem, 
+		fmt.Fprintf(os.Stderr, "HeapSize(%#x, %#x, %#x) %#x %v\n", hHeap,
+			dwFlags,
+			lpMem,
 			ret, err)
 	}
 	if err != 0 {
@@ -932,16 +932,16 @@ func XHeapSize(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr) uint64 {
 	return (uint64)(ret)
 }
 
-// //sys: BOOL     HeapValidate(HANDLE hHeap, DWORD dwFlags, LPCVOID lpMem); 
+// //sys: BOOL     HeapValidate(HANDLE hHeap, DWORD dwFlags, LPCVOID lpMem);
 func XHeapValidate(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procHeapValidate.Addr(), 3, uintptr(hHeap), 
-		uintptr(dwFlags), 
-		uintptr(lpMem));
+	ret, _, err := syscall.Syscall(procHeapValidate.Addr(), 3, uintptr(hHeap),
+		uintptr(dwFlags),
+		uintptr(lpMem))
 	if strace {
-		fmt.Fprintf(os.Stderr, "HeapValidate(%#x, %#x, %#x) %#x %v\n", hHeap, 
-			dwFlags, 
-			lpMem, 
+		fmt.Fprintf(os.Stderr, "HeapValidate(%#x, %#x, %#x) %#x %v\n", hHeap,
+			dwFlags,
+			lpMem,
 			ret, err)
 	}
 	if err != 0 {
@@ -950,14 +950,14 @@ func XHeapValidate(tls TLS, hHeap uintptr, dwFlags uint32, lpMem uintptr) int32 
 	return (int32)(ret)
 }
 
-// //sys: void   	InitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection); 
-func XInitializeCriticalSection(tls TLS, lpCriticalSection uintptr)  {
+// //sys: void   	InitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+func XInitializeCriticalSection(tls TLS, lpCriticalSection uintptr) {
 
-	ret, _, err := syscall.Syscall(procInitializeCriticalSection.Addr(), 1, uintptr(lpCriticalSection), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procInitializeCriticalSection.Addr(), 1, uintptr(lpCriticalSection),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "InitializeCriticalSection(%#x) %d %v\n", lpCriticalSection, 
+		fmt.Fprintf(os.Stderr, "InitializeCriticalSection(%#x) %d %v\n", lpCriticalSection,
 			ret, err)
 	}
 	if err != 0 {
@@ -965,14 +965,14 @@ func XInitializeCriticalSection(tls TLS, lpCriticalSection uintptr)  {
 	}
 }
 
-// //sys: void   	LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection); 
-func XLeaveCriticalSection(tls TLS, lpCriticalSection uintptr)  {
+// //sys: void   	LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+func XLeaveCriticalSection(tls TLS, lpCriticalSection uintptr) {
 
-	ret, _, err := syscall.Syscall(procLeaveCriticalSection.Addr(), 1, uintptr(lpCriticalSection), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procLeaveCriticalSection.Addr(), 1, uintptr(lpCriticalSection),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "LeaveCriticalSection(%#x) %d %v\n", lpCriticalSection, 
+		fmt.Fprintf(os.Stderr, "LeaveCriticalSection(%#x) %d %v\n", lpCriticalSection,
 			ret, err)
 	}
 	if err != 0 {
@@ -980,14 +980,14 @@ func XLeaveCriticalSection(tls TLS, lpCriticalSection uintptr)  {
 	}
 }
 
-// //sys: HMODULE  LoadLibraryA(LPCTSTR lpFileName); 
+// //sys: HMODULE  LoadLibraryA(LPCTSTR lpFileName);
 func XLoadLibraryA(tls TLS, lpFileName uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall(procLoadLibraryA.Addr(), 1, uintptr(lpFileName), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procLoadLibraryA.Addr(), 1, uintptr(lpFileName),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "LoadLibraryA(%s) %#x %v\n", GoUTF16String(uintptr(lpFileName)), 
+		fmt.Fprintf(os.Stderr, "LoadLibraryA(%s) %#x %v\n", GoUTF16String(uintptr(lpFileName)),
 			ret, err)
 	}
 	if err != 0 {
@@ -996,14 +996,14 @@ func XLoadLibraryA(tls TLS, lpFileName uintptr) uintptr {
 	return (uintptr)(ret)
 }
 
-// //sys: HMODULE  LoadLibraryW(LPCWSTR lpFileName); 
+// //sys: HMODULE  LoadLibraryW(LPCWSTR lpFileName);
 func XLoadLibraryW(tls TLS, lpFileName uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall(procLoadLibraryW.Addr(), 1, uintptr(lpFileName), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procLoadLibraryW.Addr(), 1, uintptr(lpFileName),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "LoadLibraryW(%s) %#x %v\n", lpFileName, 
+		fmt.Fprintf(os.Stderr, "LoadLibraryW(%s) %#x %v\n", lpFileName,
 			ret, err)
 	}
 	if err != 0 {
@@ -1012,14 +1012,14 @@ func XLoadLibraryW(tls TLS, lpFileName uintptr) uintptr {
 	return (uintptr)(ret)
 }
 
-// //sys: HLOCAL 	LocalFree(HLOCAL hMem); 
+// //sys: HLOCAL 	LocalFree(HLOCAL hMem);
 func XLocalFree(tls TLS, hMem uintptr) uintptr {
 
-	ret, _, err := syscall.Syscall(procLocalFree.Addr(), 1, uintptr(hMem), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procLocalFree.Addr(), 1, uintptr(hMem),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "LocalFree(%#x) %#x %v\n", hMem, 
+		fmt.Fprintf(os.Stderr, "LocalFree(%#x) %#x %v\n", hMem,
 			ret, err)
 	}
 	if err != 0 {
@@ -1028,21 +1028,21 @@ func XLocalFree(tls TLS, hMem uintptr) uintptr {
 	return (uintptr)(ret)
 }
 
-// //sys: BOOL     LockFile(HANDLE hFile, DWORD dwFileOffsetLow, DWORD dwFileOffsetHigh, DWORD nNumberOfBytesToLockLow, DWORD nNumberOfBytesToLockHigh); 
+// //sys: BOOL     LockFile(HANDLE hFile, DWORD dwFileOffsetLow, DWORD dwFileOffsetHigh, DWORD nNumberOfBytesToLockLow, DWORD nNumberOfBytesToLockHigh);
 func XLockFile(tls TLS, hFile uintptr, dwFileOffsetLow uint32, dwFileOffsetHigh uint32, nNumberOfBytesToLockLow uint32, nNumberOfBytesToLockHigh uint32) int32 {
 
-	ret, _, err := syscall.Syscall6(procLockFile.Addr(), 5, uintptr(hFile), 
-		uintptr(dwFileOffsetLow), 
-		uintptr(dwFileOffsetHigh), 
-		uintptr(nNumberOfBytesToLockLow), 
-		uintptr(nNumberOfBytesToLockHigh), 
-		0);
+	ret, _, err := syscall.Syscall6(procLockFile.Addr(), 5, uintptr(hFile),
+		uintptr(dwFileOffsetLow),
+		uintptr(dwFileOffsetHigh),
+		uintptr(nNumberOfBytesToLockLow),
+		uintptr(nNumberOfBytesToLockHigh),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "LockFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile, 
-			dwFileOffsetLow, 
-			dwFileOffsetHigh, 
-			nNumberOfBytesToLockLow, 
-			nNumberOfBytesToLockHigh, 
+		fmt.Fprintf(os.Stderr, "LockFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile,
+			dwFileOffsetLow,
+			dwFileOffsetHigh,
+			nNumberOfBytesToLockLow,
+			nNumberOfBytesToLockHigh,
 			ret, err)
 	}
 	if err != 0 {
@@ -1051,22 +1051,22 @@ func XLockFile(tls TLS, hFile uintptr, dwFileOffsetLow uint32, dwFileOffsetHigh 
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	LockFileEx(HANDLE hFile, DWORD dwFlags, DWORD dwReserved, DWORD nNumberOfBytesToLockLow, DWORD nNumberOfBytesToLockHigh, LPOVERLAPPED lpOverlapped); 
+// //sys: BOOL   	LockFileEx(HANDLE hFile, DWORD dwFlags, DWORD dwReserved, DWORD nNumberOfBytesToLockLow, DWORD nNumberOfBytesToLockHigh, LPOVERLAPPED lpOverlapped);
 func XLockFileEx(tls TLS, hFile uintptr, dwFlags uint32, dwReserved uint32, nNumberOfBytesToLockLow uint32, nNumberOfBytesToLockHigh uint32, lpOverlapped uintptr) int32 {
 
-	ret, _, err := syscall.Syscall6(procLockFileEx.Addr(), 6, uintptr(hFile), 
-		uintptr(dwFlags), 
-		uintptr(dwReserved), 
-		uintptr(nNumberOfBytesToLockLow), 
-		uintptr(nNumberOfBytesToLockHigh), 
-		uintptr(lpOverlapped));
+	ret, _, err := syscall.Syscall6(procLockFileEx.Addr(), 6, uintptr(hFile),
+		uintptr(dwFlags),
+		uintptr(dwReserved),
+		uintptr(nNumberOfBytesToLockLow),
+		uintptr(nNumberOfBytesToLockHigh),
+		uintptr(lpOverlapped))
 	if strace {
-		fmt.Fprintf(os.Stderr, "LockFileEx(%#x, %#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile, 
-			dwFlags, 
-			dwReserved, 
-			nNumberOfBytesToLockLow, 
-			nNumberOfBytesToLockHigh, 
-			lpOverlapped, 
+		fmt.Fprintf(os.Stderr, "LockFileEx(%#x, %#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile,
+			dwFlags,
+			dwReserved,
+			nNumberOfBytesToLockLow,
+			nNumberOfBytesToLockHigh,
+			lpOverlapped,
 			ret, err)
 	}
 	if err != 0 {
@@ -1075,21 +1075,21 @@ func XLockFileEx(tls TLS, hFile uintptr, dwFlags uint32, dwReserved uint32, nNum
 	return (int32)(ret)
 }
 
-// //sys: LPVOID   MapViewOfFile(HANDLE hFileMappingObject, DWORD dwDesiredAccess, DWORD dwFileOffsetHigh, DWORD dwFileOffsetLow, SIZE_T dwNumberOfBytesToMap); 
+// //sys: LPVOID   MapViewOfFile(HANDLE hFileMappingObject, DWORD dwDesiredAccess, DWORD dwFileOffsetHigh, DWORD dwFileOffsetLow, SIZE_T dwNumberOfBytesToMap);
 func XMapViewOfFile(tls TLS, hFileMappingObject uintptr, dwDesiredAccess uint32, dwFileOffsetHigh uint32, dwFileOffsetLow uint32, dwNumberOfBytesToMap uint64) uintptr {
 
-	ret, _, err := syscall.Syscall6(procMapViewOfFile.Addr(), 5, uintptr(hFileMappingObject), 
-		uintptr(dwDesiredAccess), 
-		uintptr(dwFileOffsetHigh), 
-		uintptr(dwFileOffsetLow), 
-		uintptr(dwNumberOfBytesToMap), 
-		0);
+	ret, _, err := syscall.Syscall6(procMapViewOfFile.Addr(), 5, uintptr(hFileMappingObject),
+		uintptr(dwDesiredAccess),
+		uintptr(dwFileOffsetHigh),
+		uintptr(dwFileOffsetLow),
+		uintptr(dwNumberOfBytesToMap),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "MapViewOfFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFileMappingObject, 
-			dwDesiredAccess, 
-			dwFileOffsetHigh, 
-			dwFileOffsetLow, 
-			dwNumberOfBytesToMap, 
+		fmt.Fprintf(os.Stderr, "MapViewOfFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFileMappingObject,
+			dwDesiredAccess,
+			dwFileOffsetHigh,
+			dwFileOffsetLow,
+			dwNumberOfBytesToMap,
 			ret, err)
 	}
 	if err != 0 {
@@ -1098,22 +1098,22 @@ func XMapViewOfFile(tls TLS, hFileMappingObject uintptr, dwDesiredAccess uint32,
 	return (uintptr)(ret)
 }
 
-// //sys: int 	  	MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCSTR lpMultiByteStr,	int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar); 
+// //sys: int 	  	MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCSTR lpMultiByteStr,	int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
 func XMultiByteToWideChar(tls TLS, CodePage uint32, dwFlags uint32, lpMultiByteStr uintptr, cbMultiByte int32, lpWideCharStr uintptr, cchWideChar int32) int32 {
 
-	ret, _, err := syscall.Syscall6(procMultiByteToWideChar.Addr(), 6, uintptr(CodePage), 
-		uintptr(dwFlags), 
-		uintptr(lpMultiByteStr), 
-		uintptr(cbMultiByte), 
-		uintptr(lpWideCharStr), 
-		uintptr(cchWideChar));
+	ret, _, err := syscall.Syscall6(procMultiByteToWideChar.Addr(), 6, uintptr(CodePage),
+		uintptr(dwFlags),
+		uintptr(lpMultiByteStr),
+		uintptr(cbMultiByte),
+		uintptr(lpWideCharStr),
+		uintptr(cchWideChar))
 	if strace {
-		fmt.Fprintf(os.Stderr, "MultiByteToWideChar(%#x, %#x, %s, %#x, %s, %#x) %#x %v\n", CodePage, 
-			dwFlags, 
-			GoUTF16String(uintptr(lpMultiByteStr)), 
-			cbMultiByte, 
-			lpWideCharStr, 
-			cchWideChar, 
+		fmt.Fprintf(os.Stderr, "MultiByteToWideChar(%#x, %#x, %s, %#x, %s, %#x) %#x %v\n", CodePage,
+			dwFlags,
+			GoUTF16String(uintptr(lpMultiByteStr)),
+			cbMultiByte,
+			lpWideCharStr,
+			cchWideChar,
 			ret, err)
 	}
 	if err != 0 {
@@ -1122,14 +1122,14 @@ func XMultiByteToWideChar(tls TLS, CodePage uint32, dwFlags uint32, lpMultiByteS
 	return (int32)(ret)
 }
 
-// //sys: void     OutputDebugStringA(LPCTSTR lpOutputString); 
-func XOutputDebugStringA(tls TLS, lpOutputString uintptr)  {
+// //sys: void     OutputDebugStringA(LPCTSTR lpOutputString);
+func XOutputDebugStringA(tls TLS, lpOutputString uintptr) {
 
-	ret, _, err := syscall.Syscall(procOutputDebugStringA.Addr(), 1, uintptr(lpOutputString), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procOutputDebugStringA.Addr(), 1, uintptr(lpOutputString),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "OutputDebugStringA(%s) %d %v\n", GoUTF16String(uintptr(lpOutputString)), 
+		fmt.Fprintf(os.Stderr, "OutputDebugStringA(%s) %d %v\n", GoUTF16String(uintptr(lpOutputString)),
 			ret, err)
 	}
 	if err != 0 {
@@ -1137,14 +1137,14 @@ func XOutputDebugStringA(tls TLS, lpOutputString uintptr)  {
 	}
 }
 
-// //sys: void     OutputDebugStringW(LPCWSTR lpOutputString); 
-func XOutputDebugStringW(tls TLS, lpOutputString uintptr)  {
+// //sys: void     OutputDebugStringW(LPCWSTR lpOutputString);
+func XOutputDebugStringW(tls TLS, lpOutputString uintptr) {
 
-	ret, _, err := syscall.Syscall(procOutputDebugStringW.Addr(), 1, uintptr(lpOutputString), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procOutputDebugStringW.Addr(), 1, uintptr(lpOutputString),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "OutputDebugStringW(%s) %d %v\n", lpOutputString, 
+		fmt.Fprintf(os.Stderr, "OutputDebugStringW(%s) %d %v\n", lpOutputString,
 			ret, err)
 	}
 	if err != 0 {
@@ -1152,14 +1152,14 @@ func XOutputDebugStringW(tls TLS, lpOutputString uintptr)  {
 	}
 }
 
-// //sys: BOOL   	QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount); 
+// //sys: BOOL   	QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount);
 func XQueryPerformanceCounter(tls TLS, lpPerformanceCount uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procQueryPerformanceCounter.Addr(), 1, uintptr(lpPerformanceCount), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procQueryPerformanceCounter.Addr(), 1, uintptr(lpPerformanceCount),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "QueryPerformanceCounter(%#x) %#x %v\n", lpPerformanceCount, 
+		fmt.Fprintf(os.Stderr, "QueryPerformanceCounter(%#x) %#x %v\n", lpPerformanceCount,
 			ret, err)
 	}
 	if err != 0 {
@@ -1168,21 +1168,21 @@ func XQueryPerformanceCounter(tls TLS, lpPerformanceCount uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead, LPOVERLAPPED lpOverlapped); 
+// //sys: BOOL   	ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead, LPOVERLAPPED lpOverlapped);
 func XReadFile(tls TLS, hFile uintptr, lpBuffer uintptr, nNumberOfBytesToRead uint32, lpNumberOfBytesRead uintptr, lpOverlapped uintptr) int32 {
 
-	ret, _, err := syscall.Syscall6(procReadFile.Addr(), 5, uintptr(hFile), 
-		uintptr(lpBuffer), 
-		uintptr(nNumberOfBytesToRead), 
-		uintptr(lpNumberOfBytesRead), 
-		uintptr(lpOverlapped), 
-		0);
+	ret, _, err := syscall.Syscall6(procReadFile.Addr(), 5, uintptr(hFile),
+		uintptr(lpBuffer),
+		uintptr(nNumberOfBytesToRead),
+		uintptr(lpNumberOfBytesRead),
+		uintptr(lpOverlapped),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "ReadFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile, 
-			lpBuffer, 
-			nNumberOfBytesToRead, 
-			lpNumberOfBytesRead, 
-			lpOverlapped, 
+		fmt.Fprintf(os.Stderr, "ReadFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile,
+			lpBuffer,
+			nNumberOfBytesToRead,
+			lpNumberOfBytesRead,
+			lpOverlapped,
 			ret, err)
 	}
 	if err != 0 {
@@ -1191,14 +1191,14 @@ func XReadFile(tls TLS, hFile uintptr, lpBuffer uintptr, nNumberOfBytesToRead ui
 	return (int32)(ret)
 }
 
-// //sys: BOOL     SetCurrentDirectoryW(LPCTSTR lpPathName); 
+// //sys: BOOL     SetCurrentDirectoryW(LPCTSTR lpPathName);
 func XSetCurrentDirectoryW(tls TLS, lpPathName uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procSetCurrentDirectoryW.Addr(), 1, uintptr(lpPathName), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procSetCurrentDirectoryW.Addr(), 1, uintptr(lpPathName),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "SetCurrentDirectoryW(%s) %#x %v\n", GoUTF16String(uintptr(lpPathName)), 
+		fmt.Fprintf(os.Stderr, "SetCurrentDirectoryW(%s) %#x %v\n", GoUTF16String(uintptr(lpPathName)),
 			ret, err)
 	}
 	if err != 0 {
@@ -1207,15 +1207,15 @@ func XSetCurrentDirectoryW(tls TLS, lpPathName uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: BOOL     SetConsoleTextAttribute(HANDLE hConsoleOutput, WORD wAttributes); 
+// //sys: BOOL     SetConsoleTextAttribute(HANDLE hConsoleOutput, WORD wAttributes);
 func XSetConsoleTextAttribute(tls TLS, hConsoleOutput uintptr, wAttributes uint16) int32 {
 
-	ret, _, err := syscall.Syscall(procSetConsoleTextAttribute.Addr(), 2, uintptr(hConsoleOutput), 
-		uintptr(wAttributes), 
-		0);
+	ret, _, err := syscall.Syscall(procSetConsoleTextAttribute.Addr(), 2, uintptr(hConsoleOutput),
+		uintptr(wAttributes),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "SetConsoleTextAttribute(%#x, %#x) %#x %v\n", hConsoleOutput, 
-			wAttributes, 
+		fmt.Fprintf(os.Stderr, "SetConsoleTextAttribute(%#x, %#x) %#x %v\n", hConsoleOutput,
+			wAttributes,
 			ret, err)
 	}
 	if err != 0 {
@@ -1224,14 +1224,14 @@ func XSetConsoleTextAttribute(tls TLS, hConsoleOutput uintptr, wAttributes uint1
 	return (int32)(ret)
 }
 
-// //sys: BOOL     SetEndOfFile(HANDLE hFile); 
+// //sys: BOOL     SetEndOfFile(HANDLE hFile);
 func XSetEndOfFile(tls TLS, hFile uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procSetEndOfFile.Addr(), 1, uintptr(hFile), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procSetEndOfFile.Addr(), 1, uintptr(hFile),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "SetEndOfFile(%#x) %#x %v\n", hFile, 
+		fmt.Fprintf(os.Stderr, "SetEndOfFile(%#x) %#x %v\n", hFile,
 			ret, err)
 	}
 	if err != 0 {
@@ -1240,20 +1240,20 @@ func XSetEndOfFile(tls TLS, hFile uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: DWORD    SetFilePointer(HANDLE hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod); 
+// //sys: DWORD    SetFilePointer(HANDLE hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod);
 func XSetFilePointer(tls TLS, hFile uintptr, lDistanceToMove int32, lpDistanceToMoveHigh uintptr, dwMoveMethod uint32) uint32 {
 
-	ret, _, err := syscall.Syscall6(procSetFilePointer.Addr(), 4, uintptr(hFile), 
-		uintptr(lDistanceToMove), 
-		uintptr(lpDistanceToMoveHigh), 
-		uintptr(dwMoveMethod), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall6(procSetFilePointer.Addr(), 4, uintptr(hFile),
+		uintptr(lDistanceToMove),
+		uintptr(lpDistanceToMoveHigh),
+		uintptr(dwMoveMethod),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "SetFilePointer(%#x, %#x, %#x, %#x) %#x %v\n", hFile, 
-			lDistanceToMove, 
-			lpDistanceToMoveHigh, 
-			dwMoveMethod, 
+		fmt.Fprintf(os.Stderr, "SetFilePointer(%#x, %#x, %#x, %#x) %#x %v\n", hFile,
+			lDistanceToMove,
+			lpDistanceToMoveHigh,
+			dwMoveMethod,
 			ret, err)
 	}
 	if err != 0 {
@@ -1262,14 +1262,14 @@ func XSetFilePointer(tls TLS, hFile uintptr, lDistanceToMove int32, lpDistanceTo
 	return (uint32)(ret)
 }
 
-// //sys: void     Sleep(DWORD dwMilliseconds); 
-func XSleep(tls TLS, dwMilliseconds uint32)  {
+// //sys: void     Sleep(DWORD dwMilliseconds);
+func XSleep(tls TLS, dwMilliseconds uint32) {
 
-	ret, _, err := syscall.Syscall(procSleep.Addr(), 1, uintptr(dwMilliseconds), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procSleep.Addr(), 1, uintptr(dwMilliseconds),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "Sleep(%#x) %d %v\n", dwMilliseconds, 
+		fmt.Fprintf(os.Stderr, "Sleep(%#x) %d %v\n", dwMilliseconds,
 			ret, err)
 	}
 	if err != 0 {
@@ -1277,15 +1277,15 @@ func XSleep(tls TLS, dwMilliseconds uint32)  {
 	}
 }
 
-// //sys: BOOL     SystemTimeToFileTime(SYSTEMTIME* lpSystemTime, LPFILETIME lpFileTime); 
+// //sys: BOOL     SystemTimeToFileTime(SYSTEMTIME* lpSystemTime, LPFILETIME lpFileTime);
 func XSystemTimeToFileTime(tls TLS, lpSystemTime uintptr, lpFileTime uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procSystemTimeToFileTime.Addr(), 2, uintptr(lpSystemTime), 
-		uintptr(lpFileTime), 
-		0);
+	ret, _, err := syscall.Syscall(procSystemTimeToFileTime.Addr(), 2, uintptr(lpSystemTime),
+		uintptr(lpFileTime),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "SystemTimeToFileTime(%#x, %#x) %#x %v\n", lpSystemTime, 
-			lpFileTime, 
+		fmt.Fprintf(os.Stderr, "SystemTimeToFileTime(%#x, %#x) %#x %v\n", lpSystemTime,
+			lpFileTime,
 			ret, err)
 	}
 	if err != 0 {
@@ -1294,21 +1294,21 @@ func XSystemTimeToFileTime(tls TLS, lpSystemTime uintptr, lpFileTime uintptr) in
 	return (int32)(ret)
 }
 
-// //sys: BOOL     UnlockFile(HANDLE hFile, DWORD dwFileOffsetLow, DWORD dwFileOffsetHigh, DWORD nNumberOfBytesToUnlockLow, DWORD nNumberOfBytesToUnlockHigh); 
+// //sys: BOOL     UnlockFile(HANDLE hFile, DWORD dwFileOffsetLow, DWORD dwFileOffsetHigh, DWORD nNumberOfBytesToUnlockLow, DWORD nNumberOfBytesToUnlockHigh);
 func XUnlockFile(tls TLS, hFile uintptr, dwFileOffsetLow uint32, dwFileOffsetHigh uint32, nNumberOfBytesToUnlockLow uint32, nNumberOfBytesToUnlockHigh uint32) int32 {
 
-	ret, _, err := syscall.Syscall6(procUnlockFile.Addr(), 5, uintptr(hFile), 
-		uintptr(dwFileOffsetLow), 
-		uintptr(dwFileOffsetHigh), 
-		uintptr(nNumberOfBytesToUnlockLow), 
-		uintptr(nNumberOfBytesToUnlockHigh), 
-		0);
+	ret, _, err := syscall.Syscall6(procUnlockFile.Addr(), 5, uintptr(hFile),
+		uintptr(dwFileOffsetLow),
+		uintptr(dwFileOffsetHigh),
+		uintptr(nNumberOfBytesToUnlockLow),
+		uintptr(nNumberOfBytesToUnlockHigh),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "UnlockFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile, 
-			dwFileOffsetLow, 
-			dwFileOffsetHigh, 
-			nNumberOfBytesToUnlockLow, 
-			nNumberOfBytesToUnlockHigh, 
+		fmt.Fprintf(os.Stderr, "UnlockFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile,
+			dwFileOffsetLow,
+			dwFileOffsetHigh,
+			nNumberOfBytesToUnlockLow,
+			nNumberOfBytesToUnlockHigh,
 			ret, err)
 	}
 	if err != 0 {
@@ -1317,21 +1317,21 @@ func XUnlockFile(tls TLS, hFile uintptr, dwFileOffsetLow uint32, dwFileOffsetHig
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	UnlockFileEx(HANDLE hFile, DWORD dwReserved, DWORD nNumberOfBytesToUnlockLow, DWORD nNumberOfBytesToUnlockHigh, LPOVERLAPPED lpOverlapped); 
+// //sys: BOOL   	UnlockFileEx(HANDLE hFile, DWORD dwReserved, DWORD nNumberOfBytesToUnlockLow, DWORD nNumberOfBytesToUnlockHigh, LPOVERLAPPED lpOverlapped);
 func XUnlockFileEx(tls TLS, hFile uintptr, dwReserved uint32, nNumberOfBytesToUnlockLow uint32, nNumberOfBytesToUnlockHigh uint32, lpOverlapped uintptr) int32 {
 
-	ret, _, err := syscall.Syscall6(procUnlockFileEx.Addr(), 5, uintptr(hFile), 
-		uintptr(dwReserved), 
-		uintptr(nNumberOfBytesToUnlockLow), 
-		uintptr(nNumberOfBytesToUnlockHigh), 
-		uintptr(lpOverlapped), 
-		0);
+	ret, _, err := syscall.Syscall6(procUnlockFileEx.Addr(), 5, uintptr(hFile),
+		uintptr(dwReserved),
+		uintptr(nNumberOfBytesToUnlockLow),
+		uintptr(nNumberOfBytesToUnlockHigh),
+		uintptr(lpOverlapped),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "UnlockFileEx(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile, 
-			dwReserved, 
-			nNumberOfBytesToUnlockLow, 
-			nNumberOfBytesToUnlockHigh, 
-			lpOverlapped, 
+		fmt.Fprintf(os.Stderr, "UnlockFileEx(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile,
+			dwReserved,
+			nNumberOfBytesToUnlockLow,
+			nNumberOfBytesToUnlockHigh,
+			lpOverlapped,
 			ret, err)
 	}
 	if err != 0 {
@@ -1340,14 +1340,14 @@ func XUnlockFileEx(tls TLS, hFile uintptr, dwReserved uint32, nNumberOfBytesToUn
 	return (int32)(ret)
 }
 
-// //sys: BOOL     UnmapViewOfFile(LPCVOID lpBaseAddress); 
+// //sys: BOOL     UnmapViewOfFile(LPCVOID lpBaseAddress);
 func XUnmapViewOfFile(tls TLS, lpBaseAddress uintptr) int32 {
 
-	ret, _, err := syscall.Syscall(procUnmapViewOfFile.Addr(), 1, uintptr(lpBaseAddress), 
-		0, 
-		0);
+	ret, _, err := syscall.Syscall(procUnmapViewOfFile.Addr(), 1, uintptr(lpBaseAddress),
+		0,
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "UnmapViewOfFile(%#x) %#x %v\n", lpBaseAddress, 
+		fmt.Fprintf(os.Stderr, "UnmapViewOfFile(%#x) %#x %v\n", lpBaseAddress,
 			ret, err)
 	}
 	if err != 0 {
@@ -1356,15 +1356,15 @@ func XUnmapViewOfFile(tls TLS, lpBaseAddress uintptr) int32 {
 	return (int32)(ret)
 }
 
-// //sys: DWORD    WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds); 
+// //sys: DWORD    WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
 func XWaitForSingleObject(tls TLS, hHandle uintptr, dwMilliseconds uint32) uint32 {
 
-	ret, _, err := syscall.Syscall(procWaitForSingleObject.Addr(), 2, uintptr(hHandle), 
-		uintptr(dwMilliseconds), 
-		0);
+	ret, _, err := syscall.Syscall(procWaitForSingleObject.Addr(), 2, uintptr(hHandle),
+		uintptr(dwMilliseconds),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "WaitForSingleObject(%#x, %#x) %#x %v\n", hHandle, 
-			dwMilliseconds, 
+		fmt.Fprintf(os.Stderr, "WaitForSingleObject(%#x, %#x) %#x %v\n", hHandle,
+			dwMilliseconds,
 			ret, err)
 	}
 	if err != 0 {
@@ -1373,16 +1373,16 @@ func XWaitForSingleObject(tls TLS, hHandle uintptr, dwMilliseconds uint32) uint3
 	return (uint32)(ret)
 }
 
-// //sys: DWORD    WaitForSingleObjectEx(HANDLE hHandle, DWORD dwMilliseconds, BOOL bAlertable); 
+// //sys: DWORD    WaitForSingleObjectEx(HANDLE hHandle, DWORD dwMilliseconds, BOOL bAlertable);
 func XWaitForSingleObjectEx(tls TLS, hHandle uintptr, dwMilliseconds uint32, bAlertable int32) uint32 {
 
-	ret, _, err := syscall.Syscall(procWaitForSingleObjectEx.Addr(), 3, uintptr(hHandle), 
-		uintptr(dwMilliseconds), 
-		uintptr(bAlertable));
+	ret, _, err := syscall.Syscall(procWaitForSingleObjectEx.Addr(), 3, uintptr(hHandle),
+		uintptr(dwMilliseconds),
+		uintptr(bAlertable))
 	if strace {
-		fmt.Fprintf(os.Stderr, "WaitForSingleObjectEx(%#x, %#x, %#x) %#x %v\n", hHandle, 
-			dwMilliseconds, 
-			bAlertable, 
+		fmt.Fprintf(os.Stderr, "WaitForSingleObjectEx(%#x, %#x, %#x) %#x %v\n", hHandle,
+			dwMilliseconds,
+			bAlertable,
 			ret, err)
 	}
 	if err != 0 {
@@ -1391,27 +1391,27 @@ func XWaitForSingleObjectEx(tls TLS, hHandle uintptr, dwMilliseconds uint32, bAl
 	return (uint32)(ret)
 }
 
-// //sys: int    	WideCharToMultiByte(UINT CodePage, DWORD dwFlags, LPCWSTR lpWideCharStr, int cchWideChar, LPSTR lpMultiByteStr, int cbMultiByte, LPCSTR lpDefaultChar, LPBOOL lpUsedDefaultChar); 
+// //sys: int    	WideCharToMultiByte(UINT CodePage, DWORD dwFlags, LPCWSTR lpWideCharStr, int cchWideChar, LPSTR lpMultiByteStr, int cbMultiByte, LPCSTR lpDefaultChar, LPBOOL lpUsedDefaultChar);
 func XWideCharToMultiByte(tls TLS, CodePage uint32, dwFlags uint32, lpWideCharStr uintptr, cchWideChar int32, lpMultiByteStr uintptr, cbMultiByte int32, lpDefaultChar uintptr, lpUsedDefaultChar uintptr) int32 {
 
-	ret, _, err := syscall.Syscall9(procWideCharToMultiByte.Addr(), 8, uintptr(CodePage), 
-		uintptr(dwFlags), 
-		uintptr(lpWideCharStr), 
-		uintptr(cchWideChar), 
-		uintptr(lpMultiByteStr), 
-		uintptr(cbMultiByte), 
-		uintptr(lpDefaultChar), 
-		uintptr(lpUsedDefaultChar), 
-		0);
+	ret, _, err := syscall.Syscall9(procWideCharToMultiByte.Addr(), 8, uintptr(CodePage),
+		uintptr(dwFlags),
+		uintptr(lpWideCharStr),
+		uintptr(cchWideChar),
+		uintptr(lpMultiByteStr),
+		uintptr(cbMultiByte),
+		uintptr(lpDefaultChar),
+		uintptr(lpUsedDefaultChar),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "WideCharToMultiByte(%#x, %#x, %s, %#x, %s, %#x, %s, %#x) %#x %v\n", CodePage, 
-			dwFlags, 
-			lpWideCharStr, 
-			cchWideChar, 
-			GoUTF16String(uintptr(lpMultiByteStr)), 
-			cbMultiByte, 
-			GoUTF16String(uintptr(lpDefaultChar)), 
-			lpUsedDefaultChar, 
+		fmt.Fprintf(os.Stderr, "WideCharToMultiByte(%#x, %#x, %s, %#x, %s, %#x, %s, %#x) %#x %v\n", CodePage,
+			dwFlags,
+			lpWideCharStr,
+			cchWideChar,
+			GoUTF16String(uintptr(lpMultiByteStr)),
+			cbMultiByte,
+			GoUTF16String(uintptr(lpDefaultChar)),
+			lpUsedDefaultChar,
 			ret, err)
 	}
 	if err != 0 {
@@ -1420,21 +1420,21 @@ func XWideCharToMultiByte(tls TLS, CodePage uint32, dwFlags uint32, lpWideCharSt
 	return (int32)(ret)
 }
 
-// //sys: BOOL   	WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped); 
+// //sys: BOOL   	WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped);
 func XWriteFile(tls TLS, hFile uintptr, lpBuffer uintptr, nNumberOfBytesToWrite uint32, lpNumberOfBytesWritten uintptr, lpOverlapped uintptr) int32 {
 
-	ret, _, err := syscall.Syscall6(procWriteFile.Addr(), 5, uintptr(hFile), 
-		uintptr(lpBuffer), 
-		uintptr(nNumberOfBytesToWrite), 
-		uintptr(lpNumberOfBytesWritten), 
-		uintptr(lpOverlapped), 
-		0);
+	ret, _, err := syscall.Syscall6(procWriteFile.Addr(), 5, uintptr(hFile),
+		uintptr(lpBuffer),
+		uintptr(nNumberOfBytesToWrite),
+		uintptr(lpNumberOfBytesWritten),
+		uintptr(lpOverlapped),
+		0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "WriteFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile, 
-			lpBuffer, 
-			nNumberOfBytesToWrite, 
-			lpNumberOfBytesWritten, 
-			lpOverlapped, 
+		fmt.Fprintf(os.Stderr, "WriteFile(%#x, %#x, %#x, %#x, %#x) %#x %v\n", hFile,
+			lpBuffer,
+			nNumberOfBytesToWrite,
+			lpNumberOfBytesWritten,
+			lpOverlapped,
 			ret, err)
 	}
 	if err != 0 {
@@ -1442,4 +1442,3 @@ func XWriteFile(tls TLS, hFile uintptr, lpBuffer uintptr, nNumberOfBytesToWrite 
 	}
 	return (int32)(ret)
 }
-
