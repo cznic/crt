@@ -38,6 +38,9 @@ const (
 	ptrSize = mathutil.UintPtrBits / 8
 )
 
+// TraceWriter is used for trace output.
+var TraceWriter = io.Writer(os.Stderr)
+
 var (
 	_ io.Writer = (*memWriter)(nil)
 

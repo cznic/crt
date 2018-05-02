@@ -6,7 +6,6 @@ package crt
 
 import (
 	"fmt"
-	"os"
 	"syscall"
 )
 
@@ -16,9 +15,7 @@ func Xlseek(tls TLS, fd int32, offset int64, whence int32) int64 {
 }
 
 // int ftruncate(int fildes, off_t length);
-func Xftruncate(tls TLS, fildes int32, length int64) int32 {
-	panic("TODO")
-}
+func Xftruncate(tls TLS, fildes int32, length int64) int32 { return Xftruncate64(tls, fildes, length) }
 
 // int ftruncate64(int fildes, off64_t length);
 //
@@ -68,7 +65,7 @@ func Xftruncate(tls TLS, fildes int32, length int64) int32 {
 func Xftruncate64(tls TLS, fildes int32, length int64) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_FTRUNCATE, uintptr(fildes), uintptr(length), 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "ftruncate64(%#x, %#x) %v, %v\n", fildes, length, r, err)
+		fmt.Fprintf(TraceWriter, "ftruncate64(%#x, %#x) %v, %v\n", fildes, length, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

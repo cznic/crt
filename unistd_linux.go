@@ -20,7 +20,7 @@ import (
 func Xclose(tls TLS, fd int32) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_CLOSE, uintptr(fd), 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "close(%v) %v %v\n", fd, r, err)
+		fmt.Fprintf(TraceWriter, "close(%v) %v %v\n", fd, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -35,7 +35,7 @@ func Xclose(tls TLS, fd int32) int32 {
 func Xaccess(tls TLS, path uintptr, amode int32) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_ACCESS, path, uintptr(amode), 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "access(%q) %v %v\n", GoString(path), r, err)
+		fmt.Fprintf(TraceWriter, "access(%q) %v %v\n", GoString(path), r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -47,7 +47,7 @@ func Xaccess(tls TLS, path uintptr, amode int32) int32 {
 func Xunlink(tls TLS, path uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_UNLINK, path, 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "unlink(%q) %v %v\n", GoString(path), r, err)
+		fmt.Fprintf(TraceWriter, "unlink(%q) %v %v\n", GoString(path), r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -90,7 +90,7 @@ func Xunlink(tls TLS, path uintptr) int32 {
 func Xrmdir(tls TLS, path uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_RMDIR, path, 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "rmdir(%q) %v %v\n", GoString(path), r, err)
+		fmt.Fprintf(TraceWriter, "rmdir(%q) %v %v\n", GoString(path), r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -112,7 +112,7 @@ func Xfchown(tls TLS, fd int32, owner, group uint32) int32 {
 func Xgetuid(tls TLS) uint32 {
 	r, _, err := syscall.RawSyscall(syscall.SYS_GETUID, 0, 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "getuid() %v\n", r)
+		fmt.Fprintf(TraceWriter, "getuid() %v\n", r)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -124,7 +124,7 @@ func Xgetuid(tls TLS) uint32 {
 func Xgeteuid(tls TLS) uint32 {
 	r, _, err := syscall.RawSyscall(syscall.SYS_GETEUID, 0, 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "geteuid() %v\n", r)
+		fmt.Fprintf(TraceWriter, "geteuid() %v\n", r)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -136,7 +136,7 @@ func Xgeteuid(tls TLS) uint32 {
 func Xfsync(tls TLS, fildes int32) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_FSYNC, uintptr(fildes), 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "fsync(%v) %v %v\n", fildes, r, err)
+		fmt.Fprintf(TraceWriter, "fsync(%v) %v %v\n", fildes, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -148,7 +148,7 @@ func Xfsync(tls TLS, fildes int32) int32 {
 func Xfdatasync(tls TLS, fildes int32) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_FDATASYNC, uintptr(fildes), 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "fdatasync(%v) %v %v\n", fildes, r, err)
+		fmt.Fprintf(TraceWriter, "fdatasync(%v) %v %v\n", fildes, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -160,7 +160,7 @@ func Xfdatasync(tls TLS, fildes int32) int32 {
 func Xgetpid(tls TLS) int32 {
 	r, _, err := syscall.RawSyscall(syscall.SYS_GETPID, 0, 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "getpid() %v\n", r)
+		fmt.Fprintf(TraceWriter, "getpid() %v\n", r)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -172,7 +172,7 @@ func Xgetpid(tls TLS) int32 {
 func Xsleep(tls TLS, seconds uint32) uint32 {
 	time.Sleep(time.Duration(seconds) * time.Second)
 	if strace {
-		fmt.Fprintf(os.Stderr, "sleep(%#x)", seconds)
+		fmt.Fprintf(TraceWriter, "sleep(%#x)", seconds)
 	}
 	return 0
 }
@@ -181,7 +181,7 @@ func Xsleep(tls TLS, seconds uint32) uint32 {
 func Xlseek64(tls TLS, fd int32, offset int64, whence int32) int64 {
 	r, _, err := syscall.Syscall(syscall.SYS_LSEEK, uintptr(fd), uintptr(offset), uintptr(whence))
 	if strace {
-		fmt.Fprintf(os.Stderr, "lseek64(%v, %v, %v) %v %v\n", fd, offset, whence, r, err)
+		fmt.Fprintf(TraceWriter, "lseek64(%v, %v, %v) %v %v\n", fd, offset, whence, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -193,7 +193,7 @@ func Xlseek64(tls TLS, fd int32, offset int64, whence int32) int64 {
 func Xusleep(tls TLS, usec uint32) int32 {
 	time.Sleep(time.Duration(usec) * time.Microsecond)
 	if strace {
-		fmt.Fprintf(os.Stderr, "usleep(%#x)", usec)
+		fmt.Fprintf(TraceWriter, "usleep(%#x)", usec)
 	}
 	return 0
 }
@@ -210,7 +210,7 @@ func Xchdir(tls TLS, path uintptr) int32 {
 	// and errno shall be set to indicate the error.
 	r, _, err := syscall.Syscall(syscall.SYS_CHDIR, path, 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "chdir(%q) %v %v\n", GoString(path), r, err)
+		fmt.Fprintf(TraceWriter, "chdir(%q) %v %v\n", GoString(path), r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -222,7 +222,7 @@ func Xchdir(tls TLS, path uintptr) int32 {
 func Xread(tls TLS, fd int32, buf uintptr, count size_t) ssize_t { //TODO stdin
 	r, _, err := syscall.Syscall(syscall.SYS_READ, uintptr(fd), buf, uintptr(count))
 	if strace {
-		fmt.Fprintf(os.Stderr, "read(%v, %#x, %v) %v %v\n", fd, buf, count, r, err)
+		fmt.Fprintf(TraceWriter, "read(%v, %#x, %v) %v %v\n", fd, buf, count, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -234,7 +234,7 @@ func Xread(tls TLS, fd int32, buf uintptr, count size_t) ssize_t { //TODO stdin
 func Xgetcwd(tls TLS, buf uintptr, size size_t) uintptr {
 	r, _, err := syscall.Syscall(syscall.SYS_GETCWD, buf, uintptr(size), 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "getcwd(%#x, %#x) %v %v %q\n", buf, size, r, err, GoString(buf))
+		fmt.Fprintf(TraceWriter, "getcwd(%#x, %#x) %v %v %q\n", buf, size, r, err, GoString(buf))
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -262,7 +262,7 @@ func Xwrite(tls TLS, fd int32, buf uintptr, count size_t) ssize_t {
 	}
 	r, _, err := syscall.Syscall(syscall.SYS_WRITE, uintptr(fd), buf, uintptr(count))
 	if strace {
-		fmt.Fprintf(os.Stderr, "write(%v, %#x, %v) %v %v\n", fd, buf, count, r, err)
+		fmt.Fprintf(TraceWriter, "write(%v, %#x, %v) %v %v\n", fd, buf, count, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -290,7 +290,7 @@ func Xwrite(tls TLS, fd int32, buf uintptr, count size_t) ssize_t {
 func Xreadlink(tls TLS, pathname, buf uintptr, bufsiz size_t) ssize_t {
 	r, _, err := syscall.Syscall(syscall.SYS_READLINK, pathname, buf, uintptr(bufsiz))
 	if strace {
-		fmt.Fprintf(os.Stderr, "readlink(%q, %#x, %#x) %v %v\n", GoString(pathname), buf, bufsiz, r, err)
+		fmt.Fprintf(TraceWriter, "readlink(%q, %#x, %#x) %v %v\n", GoString(pathname), buf, bufsiz, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -370,7 +370,7 @@ func Xlink(tls TLS, oldpath, newpath uintptr) int32 {
 func Xpipe(tls TLS, fildes uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_PIPE, fildes, 0, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "pipe(%#x) %v %v\n", fildes, r, err)
+		fmt.Fprintf(TraceWriter, "pipe(%#x) %v %v\n", fildes, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -564,7 +564,7 @@ func Xexecvp(tls TLS, file, argv uintptr) int32 {
 func Xdup2(tls TLS, fildes, fildes2 int32) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_DUP2, uintptr(fildes), uintptr(fildes2), 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "dup2(%v, %v) %v %v\n", fildes, fildes2, r, err)
+		fmt.Fprintf(TraceWriter, "dup2(%v, %v) %v %v\n", fildes, fildes2, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

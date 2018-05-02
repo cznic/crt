@@ -14,7 +14,7 @@ import (
 func Xstat(tls TLS, file, buf uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_STAT, file, buf, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "stat(%q, %#x) %v %v\n", GoString(file), buf, r, err)
+		fmt.Fprintf(TraceWriter, "stat(%q, %#x) %v %v\n", GoString(file), buf, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -26,7 +26,7 @@ func Xstat(tls TLS, file, buf uintptr) int32 {
 func Xstat64(tls TLS, file, buf uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_STAT64, file, buf, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "stat(%q, %#x) %v %v\n", GoString(file), buf, r, err)
+		fmt.Fprintf(TraceWriter, "stat(%q, %#x) %v %v\n", GoString(file), buf, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -38,7 +38,7 @@ func Xstat64(tls TLS, file, buf uintptr) int32 {
 func Xfstat(tls TLS, fd int32, buf uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_FSTAT, uintptr(fildes), buf, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "fstat(%v, %#x) %v %v\n", fildes, buf, r, err)
+		fmt.Fprintf(TraceWriter, "fstat(%v, %#x) %v %v\n", fildes, buf, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -50,7 +50,7 @@ func Xfstat(tls TLS, fd int32, buf uintptr) int32 {
 func Xfstat64(tls TLS, fildes int32, buf uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_FSTAT64, uintptr(fildes), buf, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "fstat64(%v, %#x) %v %v\n", fildes, buf, r, err)
+		fmt.Fprintf(TraceWriter, "fstat64(%v, %#x) %v %v\n", fildes, buf, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -67,7 +67,7 @@ func Xlstat(tls TLS, file, buf uintptr) int32 {
 func Xlstat64(tls TLS, file, buf uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_LSTAT64, file, buf, 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "lstat(%q, %#x) %v %v\n", GoString(file), buf, r, err)
+		fmt.Fprintf(TraceWriter, "lstat(%q, %#x) %v %v\n", GoString(file), buf, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
