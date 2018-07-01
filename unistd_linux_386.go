@@ -6,7 +6,6 @@ package crt
 
 import (
 	"fmt"
-	"os"
 	"syscall"
 )
 
@@ -25,7 +24,7 @@ func Xftruncate64(tls TLS, fildes int32, length int64) int32 {
 	panic("TODO")
 	r, _, err := syscall.Syscall(syscall.SYS_FTRUNCATE64, uintptr(fildes), uintptr(length), 0)
 	if strace {
-		fmt.Fprintf(os.Stderr, "ftruncate(%#x, %#x) %v, %v\n", fildes, length, r, err)
+		fmt.Fprintf(TraceWriter, "ftruncate(%#x, %#x) %v, %v\n", fildes, length, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

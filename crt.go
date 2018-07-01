@@ -41,6 +41,9 @@ const (
 var (
 	_ io.Writer = (*memWriter)(nil)
 
+	// TraceWriter is used for trace output.
+	TraceWriter = io.Writer(os.Stderr)
+
 	allocMu   sync.Mutex
 	allocator memory.Allocator
 	threadID  uintptr

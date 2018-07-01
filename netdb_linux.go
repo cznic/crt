@@ -59,7 +59,7 @@ func Xgethostbyname(tls TLS, name uintptr) uintptr {
 	if ip == nil {
 		addrs, err := net.LookupHost(host)
 		if err != nil {
-			tls.setErrno(err)
+			//TODO set h_errno
 			return 0
 		}
 
