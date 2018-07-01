@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"syscall"
 )
 
@@ -13,7 +14,7 @@ import (
 func Xfstatfs(tls TLS, fd int32, buf uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_FSTATFS, uintptr(fd), buf, 0)
 	if strace {
-		fmt.Fprintf(TraceWriter, "fstatfs(%v, %#x) %v %v\n", fd, buf, r, err)
+		fmt.Fprintf(os.Stderr, "fstatfs(%v, %#x) %v %v\n", fd, buf, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

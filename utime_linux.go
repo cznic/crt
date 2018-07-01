@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"syscall"
 )
 
@@ -37,7 +38,7 @@ import (
 func Xutime(tls TLS, path, times uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_UTIME, path, times, 0)
 	if strace {
-		fmt.Fprintf(TraceWriter, "utime(%q, %#x) %v %v\n", GoString(path), times, r, err)
+		fmt.Fprintf(os.Stderr, "utime(%q, %#x) %v %v\n", GoString(path), times, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

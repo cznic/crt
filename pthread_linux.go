@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"sync"
 	"time"
 	"unsafe"
@@ -248,9 +249,9 @@ func (l *locker) Unlock() {
 // These functions shall not return an error code of [EINTR].
 func Xpthread_mutexattr_destroy(tcl TLS, attr uintptr) (r int32) {
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_mutexattr_destroy(%#x) ", attr)
+		fmt.Fprintf(os.Stderr, "pthread_mutexattr_destroy(%#x) ", attr)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	*(*int32)(unsafe.Pointer(attr)) = -1
@@ -260,9 +261,9 @@ func Xpthread_mutexattr_destroy(tcl TLS, attr uintptr) (r int32) {
 // Documentation: see Xpthread_mutexattr_destroy.
 func Xpthread_mutexattr_init(tcl TLS, attr uintptr) (r int32) {
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_mutexattr_init(%#x) ", attr)
+		fmt.Fprintf(os.Stderr, "pthread_mutexattr_init(%#x) ", attr)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	*(*int32)(unsafe.Pointer(attr)) = pthread.CPTHREAD_MUTEX_DEFAULT
@@ -312,9 +313,9 @@ func Xpthread_mutexattr_gettype(tls TLS, attr pthread_mutexattr_t, typ int32) {
 func Xpthread_mutexattr_settype(tls TLS, attr uintptr, typ int32) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_mutexattr_settype.%v(%#x, %v) ", tid, attr, typ)
+		fmt.Fprintf(os.Stderr, "pthread_mutexattr_settype.%v(%#x, %v) ", tid, attr, typ)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	switch typ {
@@ -394,9 +395,9 @@ func Xpthread_mutexattr_settype(tls TLS, attr uintptr, typ int32) (r int32) {
 func Xpthread_mutex_destroy(tls TLS, mutex uintptr) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_mutex_destroy.%v(%#x) , ", tid, mutex)
+		fmt.Fprintf(os.Stderr, "pthread_mutex_destroy.%v(%#x) , ", tid, mutex)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	mu := mutexes.mutex(mutex)
@@ -409,9 +410,9 @@ func Xpthread_mutex_destroy(tls TLS, mutex uintptr) (r int32) {
 func Xpthread_mutex_init(tls TLS, mutex, attr uintptr) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_mutex_init.%v(%#x, %#x) ", tid, mutex, attr)
+		fmt.Fprintf(os.Stderr, "pthread_mutex_init.%v(%#x, %#x) ", tid, mutex, attr)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	mu := mutexes.mutex(mutex)
@@ -553,9 +554,9 @@ func Xpthread_mutex_init(tls TLS, mutex, attr uintptr) (r int32) {
 // These functions shall not return an error code of [EINTR].
 func Xpthread_mutex_lock(tls TLS, mutex uintptr) (r int32) {
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_mutex_lock.%v(%#x) ", tls.getThreadID(), mutex)
+		fmt.Fprintf(os.Stderr, "pthread_mutex_lock.%v(%#x) ", tls.getThreadID(), mutex)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	return mutexes.mutex(mutex).lock(tls.getThreadID())
@@ -569,9 +570,9 @@ func Xpthread_mutex_trylock(tls TLS, mutex uintptr) (r int32) {
 	defer mu.Unlock()
 
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_mutex_trylock.%v(%#x) ", tid, mutex)
+		fmt.Fprintf(os.Stderr, "pthread_mutex_trylock.%v(%#x) ", tid, mutex)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	switch mu.typ() {
@@ -591,9 +592,9 @@ func Xpthread_mutex_trylock(tls TLS, mutex uintptr) (r int32) {
 // Documentation: see Xpthread_mutex_lock.
 func Xpthread_mutex_unlock(tls TLS, mutex uintptr) (r int32) {
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_mutex_unlock.%v(%#x) ", tls.getThreadID(), mutex)
+		fmt.Fprintf(os.Stderr, "pthread_mutex_unlock.%v(%#x) ", tls.getThreadID(), mutex)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	return mutexes.mutex(mutex).unlock(tls.getThreadID())
@@ -611,9 +612,9 @@ func Xpthread_mutex_unlock(tls TLS, mutex uintptr) (r int32) {
 func Xpthread_self(tls TLS) (r pthread_t) {
 	tid := tls.getThreadID()
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_self.%v() ", tid)
+		fmt.Fprintf(os.Stderr, "pthread_self.%v() ", tid)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	return pthread_t(tid)
@@ -634,9 +635,9 @@ func Xpthread_self(tls TLS) (r pthread_t) {
 func Xpthread_equal(tls TLS, t1, t2 pthread_t) (r int32) {
 	tid := tls.getThreadID()
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_equal.%v(%#x, %#x) ", tid, t1, t2)
+		fmt.Fprintf(os.Stderr, "pthread_equal.%v(%#x, %#x) ", tid, t1, t2)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	if t1 == t2 {
@@ -677,9 +678,9 @@ func Xpthread_equal(tls TLS, t1, t2 pthread_t) (r int32) {
 func Xpthread_join(tls TLS, thread pthread_t, value_ptr uintptr) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_join.%v(%v, %#x) ", tid, thread, value_ptr)
+		fmt.Fprintf(os.Stderr, "pthread_join.%v(%v, %#x) ", tid, thread, value_ptr)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	threads.Lock()
@@ -759,9 +760,9 @@ func Xpthread_create(tls TLS, thread, pattr, start_routine, arg uintptr) (r int3
 	*(*pthread_t)(unsafe.Pointer(thread)) = tid
 	if ptrace {
 		id := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_create.%v(%#x, %#x, %#x, %#x) ", id, thread, pattr, start_routine, arg)
+		fmt.Fprintf(os.Stderr, "pthread_create.%v(%#x, %#x, %#x, %#x) ", id, thread, pattr, start_routine, arg)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v %v\n", tid, r)
+			fmt.Fprintf(os.Stderr, "%v %v\n", tid, r)
 		}()
 	}
 
@@ -785,7 +786,7 @@ func Xpthread_create(tls TLS, thread, pattr, start_routine, arg uintptr) (r int3
 				delete(threads.m, tid)
 				threads.Unlock()
 				if ptrace {
-					fmt.Fprintf(TraceWriter, "thread #%v was detached", tid)
+					fmt.Fprintf(os.Stderr, "thread #%v was detached", tid)
 				}
 			}
 		}()
@@ -796,7 +797,7 @@ func Xpthread_create(tls TLS, thread, pattr, start_routine, arg uintptr) (r int3
 			case threadExited:
 				t.retval = uintptr(x)
 				if ptrace {
-					fmt.Fprintf(TraceWriter, "thread #%v exited: %#x\n", tid, t.retval)
+					fmt.Fprintf(os.Stderr, "thread #%v exited: %#x\n", tid, t.retval)
 				}
 				return
 			default:
@@ -807,7 +808,7 @@ func Xpthread_create(tls TLS, thread, pattr, start_routine, arg uintptr) (r int3
 		close(ch)
 		t.retval = startRoutine(start_routine)(newTLS, arg)
 		if ptrace {
-			fmt.Fprintf(TraceWriter, "thread #%v returned: %#x\n", tid, t.retval)
+			fmt.Fprintf(os.Stderr, "thread #%v returned: %#x\n", tid, t.retval)
 		}
 	}()
 	<-ch
@@ -942,9 +943,9 @@ func Xpthread_create(tls TLS, thread, pattr, start_routine, arg uintptr) (r int3
 func Xpthread_cond_timedwait(tls TLS, cond, mutex, abstime uintptr) (r int32) {
 	tid := tls.getThreadID()
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_cond_timedwait.%v(%#x, %#x, %#x) ", tid, cond, mutex, abstime)
+		fmt.Fprintf(os.Stderr, "pthread_cond_timedwait.%v(%#x, %#x, %#x) ", tid, cond, mutex, abstime)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	ts := *(*Stimespec)(unsafe.Pointer(abstime))
@@ -966,9 +967,9 @@ func Xpthread_cond_timedwait(tls TLS, cond, mutex, abstime uintptr) (r int32) {
 func Xpthread_cond_wait(tls TLS, cond, mutex uintptr) (r int32) {
 	tid := tls.getThreadID()
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_cond_wait.%v(%#x, %#x) ", tid, cond, mutex)
+		fmt.Fprintf(os.Stderr, "pthread_cond_wait.%v(%#x, %#x) ", tid, cond, mutex)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	mu := mutexes.mutex(mutex)
@@ -1043,9 +1044,9 @@ func Xpthread_cond_wait(tls TLS, cond, mutex uintptr) (r int32) {
 func Xpthread_cond_destroy(tls TLS, cond uintptr) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_cond_destroy.%v(%#x) ", tid, cond)
+		fmt.Fprintf(os.Stderr, "pthread_cond_destroy.%v(%#x) ", tid, cond)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	conds.Lock()
@@ -1058,9 +1059,9 @@ func Xpthread_cond_destroy(tls TLS, cond uintptr) (r int32) {
 func Xpthread_cond_init(tls TLS, cond, attr uintptr) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_cond_init.%v(%#x, %#x) ", tid, cond, attr)
+		fmt.Fprintf(os.Stderr, "pthread_cond_init.%v(%#x, %#x) ", tid, cond, attr)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	if attr != 0 {
@@ -1113,9 +1114,9 @@ func Xpthread_cond_init(tls TLS, cond, attr uintptr) (r int32) {
 func Xpthread_cond_broadcast(tls TLS, cond uintptr) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_cond_broadcast.%v(%#x) ", tid, cond)
+		fmt.Fprintf(os.Stderr, "pthread_cond_broadcast.%v(%#x) ", tid, cond)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	c := conds.cond(cond)
@@ -1180,9 +1181,9 @@ func Xpthread_key_create(tls TLS, key, destructor uintptr) (r int32) {
 	var k pthread_key_t
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_key_create(%v, %#x, %#x) ", tid, key, destructor)
+		fmt.Fprintf(os.Stderr, "pthread_key_create(%v, %#x, %#x) ", tid, key, destructor)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v (key %#x)\n", r, k)
+			fmt.Fprintf(os.Stderr, "%v (key %#x)\n", r, k)
 		}()
 	}
 	pthreadDBMu.Lock()
@@ -1235,7 +1236,7 @@ func Xpthread_key_create(tls TLS, key, destructor uintptr) (r int32) {
 func Xpthread_exit(tls TLS, value_ptr uintptr) {
 	if ptrace {
 		tid := pthread_t(tls.getThreadID())
-		fmt.Fprintf(TraceWriter, "pthread_exit.%v(%#x) ", tid, value_ptr)
+		fmt.Fprintf(os.Stderr, "pthread_exit.%v(%#x) ", tid, value_ptr)
 	}
 	panic(threadExited(value_ptr))
 }
@@ -1277,9 +1278,9 @@ func Xpthread_exit(tls TLS, value_ptr uintptr) {
 func Xpthread_attr_destroy(tls TLS, attr uintptr) (r int32) {
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_attr_destroy.%v(%#x) ", tid, attr)
+		fmt.Fprintf(os.Stderr, "pthread_attr_destroy.%v(%#x) ", tid, attr)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	attrs.Lock()
@@ -1293,9 +1294,9 @@ func Xpthread_attr_init(tls TLS, attr uintptr) (r int32) {
 	attrs.attr(attr)
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_attr_init.%v(%#x) ", tid, attr)
+		fmt.Fprintf(os.Stderr, "pthread_attr_init.%v(%#x) ", tid, attr)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	return 0
@@ -1340,9 +1341,9 @@ func Xpthread_attr_setscope(tls TLS, attr uintptr, contentionscope int32) (r int
 	a := attrs.attr(attr)
 	if ptrace {
 		tid := tls.getThreadID()
-		fmt.Fprintf(TraceWriter, "pthread_attr_setscope.%v(%#x, %v) ", tid, a, contentionscope)
+		fmt.Fprintf(os.Stderr, "pthread_attr_setscope.%v(%#x, %v) ", tid, a, contentionscope)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	switch contentionscope {
@@ -1451,9 +1452,9 @@ func Xpthread_attr_setdetachstate(tls TLS, attr uintptr, detachstate int32) int3
 func Xpthread_getspecific(tls TLS, key pthread_key_t) (r uintptr) {
 	tid := tls.getThreadID()
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_getspecific.%v(%#x) ", tid, key)
+		fmt.Fprintf(os.Stderr, "pthread_getspecific.%v(%#x) ", tid, key)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	pthreadDBMu.Lock()
@@ -1466,9 +1467,9 @@ func Xpthread_getspecific(tls TLS, key pthread_key_t) (r uintptr) {
 func Xpthread_setspecific(tls TLS, key pthread_key_t, value uintptr) (r int32) {
 	tid := tls.getThreadID()
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_setspecific.%v(%#x, %#x) ", tid, key, value)
+		fmt.Fprintf(os.Stderr, "pthread_setspecific.%v(%#x, %#x) ", tid, key, value)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	pthreadDBMu.Lock()
@@ -1503,9 +1504,9 @@ func Xpthread_setspecific(tls TLS, key pthread_key_t, value uintptr) (r int32) {
 func Xpthread_key_delete(tls TLS, key pthread_key_t) (r int32) {
 	tid := tls.getThreadID()
 	if ptrace {
-		fmt.Fprintf(TraceWriter, "pthread_key_delete.%v(%#x) ", tid, key)
+		fmt.Fprintf(os.Stderr, "pthread_key_delete.%v(%#x) ", tid, key)
 		defer func() {
-			fmt.Fprintf(TraceWriter, "%v\n", r)
+			fmt.Fprintf(os.Stderr, "%v\n", r)
 		}()
 	}
 	pthreadDBMu.Lock()

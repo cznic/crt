@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"syscall"
 )
 
@@ -50,7 +51,7 @@ func Xmkdir(tls TLS, pathname uintptr, mode uint32) int32 {
 	// the error. If -1 is returned, no directory shall be created.
 	r, _, err := syscall.Syscall(syscall.SYS_MKDIR, pathname, uintptr(mode), 0)
 	if strace {
-		fmt.Fprintf(TraceWriter, "mkdir(%q, %#o) %v %v\n", GoString(pathname), mode, r, err)
+		fmt.Fprintf(os.Stderr, "mkdir(%q, %#o) %v %v\n", GoString(pathname), mode, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -88,7 +89,7 @@ func Xmkdir(tls TLS, pathname uintptr, mode uint32) int32 {
 func Xchmod(tls TLS, path uintptr, mode uint32) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_CHMOD, path, uintptr(mode), 0)
 	if strace {
-		fmt.Fprintf(TraceWriter, "chmod(%q, %#o) %v %v\n", GoString(path), mode, r, err)
+		fmt.Fprintf(os.Stderr, "chmod(%q, %#o) %v %v\n", GoString(path), mode, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -132,7 +133,7 @@ func Xumask(tls TLS, cmask uint32) uint32 {
 	// including any unspecified use of those bits.
 	r, _, err := syscall.Syscall(syscall.SYS_UMASK, uintptr(cmask), 0, 0)
 	if strace {
-		fmt.Fprintf(TraceWriter, "umask(%#o) %#o %v\n", cmask, r, err)
+		fmt.Fprintf(os.Stderr, "umask(%#o) %#o %v\n", cmask, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

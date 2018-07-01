@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"syscall"
 )
 
@@ -13,7 +14,7 @@ import (
 func Xgettimeofday(tls TLS, tp, tzp uintptr) int32 {
 	r, _, err := syscall.Syscall(syscall.SYS_GETTIMEOFDAY, tp, tzp, 0)
 	if strace {
-		fmt.Fprintf(TraceWriter, "gettimeofday(%#x, %#x) %v %v\n", tp, tzp, r, err)
+		fmt.Fprintf(os.Stderr, "gettimeofday(%#x, %#x) %v %v\n", tp, tzp, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

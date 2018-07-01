@@ -6,12 +6,13 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"syscall"
 )
 
 // int open(const char *pathname, int flags, ...);
 func Xopen(tls TLS, pathname uintptr, flags int32, args ...interface{}) int32 {
-	return Xopen64(tls, pathname, flags, args...)
+	return Xopen64(tls, pathname, flags)
 }
 
 // int open(const char *pathname, int flags, ...);
@@ -21,15 +22,13 @@ func Xopen64(tls TLS, pathname uintptr, flags int32, args ...interface{}) int32 
 		switch x := args[0].(type) {
 		case int32:
 			mode = uintptr(x)
-		case uint32:
-			mode = uintptr(x)
 		default:
 			panic(fmt.Errorf("crt.Xopen64 %T", x))
 		}
 	}
 	r, _, err := syscall.Syscall(syscall.SYS_OPEN, pathname, uintptr(flags), mode)
 	if strace {
-		fmt.Fprintf(TraceWriter, "open(%q, %v, %#o) %v %v\n", GoString(pathname), modeString(flags), mode, r, err)
+		fmt.Fprintf(os.Stderr, "open(%q, %v, %#o) %v %v\n", GoString(pathname), modeString(flags), mode, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

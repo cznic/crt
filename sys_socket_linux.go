@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"syscall"
 
 	"golang.org/x/sys/unix"
@@ -38,7 +39,7 @@ func Xgetsockname(tls TLS, sockfd int32, addr, addrlen uintptr) int32 {
 	// in the object pointed to by address is unspecified.
 	r, _, err := syscall.Syscall(unix.SYS_GETSOCKNAME, uintptr(sockfd), addr, addrlen)
 	if strace {
-		fmt.Fprintf(TraceWriter, "getsockname(%#x, %#x, %#x) %v %v\n", sockfd, addr, addrlen, r, err)
+		fmt.Fprintf(os.Stderr, "getsockname(%#x, %#x, %#x) %v %v\n", sockfd, addr, addrlen, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

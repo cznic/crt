@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"time"
 	"unsafe"
 )
@@ -31,13 +32,13 @@ func Xlocaltime_r(tls TLS, timep, stm uintptr) uintptr {
 	p.Xtm_min = int32(t.Minute())
 	p.Xtm_hour = int32(t.Hour())
 	p.Xtm_mday = int32(t.Day())
-	p.Xtm_mon = int32(t.Month() - 1)
-	p.Xtm_year = int32(t.Year() - 1900)
+	p.Xtm_mon = int32(t.Month())
+	p.Xtm_year = int32(t.Year())
 	p.Xtm_wday = int32(t.Weekday())
 	p.Xtm_yday = int32(t.YearDay())
 	p.Xtm_isdst = -1 //TODO
 	if strace {
-		fmt.Fprintf(TraceWriter, "localtime_r(%v, %#x) %+v\n", ut, stm, p)
+		fmt.Fprintf(os.Stderr, "localtime_r(%v, %#x) %+v\n", ut, stm, p)
 	}
 	return stm
 }

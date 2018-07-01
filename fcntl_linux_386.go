@@ -6,6 +6,7 @@ package crt
 
 import (
 	"fmt"
+	"os"
 	"syscall"
 )
 
@@ -24,7 +25,7 @@ func Xfcntl(tls TLS, fildes, cmd int32, args ...interface{}) int32 {
 	}
 	r, _, err := syscall.Syscall(syscall.SYS_FCNTL64, uintptr(fildes), uintptr(cmd), arg)
 	if strace {
-		fmt.Fprintf(TraceWriter, "fcntl(%v, %v, %#x) %v %v\n", fildes, cmdString(cmd), arg, r, err)
+		fmt.Fprintf(os.Stderr, "fcntl(%v, %v, %#x) %v %v\n", fildes, cmdString(cmd), arg, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)

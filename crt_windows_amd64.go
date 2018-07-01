@@ -12,17 +12,3 @@ type (
 	ssize_t   = int64
 	ulong_t   = uint32
 )
-
-type tm struct {
-	Xtm_sec      int32
-	Xtm_min      int32
-	Xtm_hour     int32
-	Xtm_mday     int32
-	Xtm_mon      int32
-	Xtm_year     int32
-	Xtm_wday     int32
-	Xtm_yday     int32
-	Xtm_isdst    int32
-	X__tm_gmtoff int64
-	X__tm_zone   uintptr // *int8
-}
