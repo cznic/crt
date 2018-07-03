@@ -1,6 +1,6 @@
 # crt
 
-Package crt provides C-runtime services. (Work In Progress)
+Package crt provides C-runtime services. Work In Progress. API unstable.
 
 Installation
 
