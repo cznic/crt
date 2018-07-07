@@ -33,6 +33,7 @@ edit:
 
 editor:
 	gofmt -l -s -w *.go
+	GOOS=linux GOARCH=arm go build
 	#TODO GOOS=linux GOARCH=386 go build
 	GOOS=linux GOARCH=amd64 go build
 	#TODO GOOS=windows GOARCH=386 go build
