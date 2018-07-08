@@ -16,14 +16,6 @@ type (
 
 //TODO export types as aliases.
 
-type dirent struct {
-	Xd_ino    uint64
-	Xd_off    int64
-	Xd_reclen uint16
-	Xd_type   uint8
-	Xd_name   [256]int8
-}
-
 type passwd struct {
 	Xpw_name   uintptr // *int8
 	Xpw_passwd uintptr // *int8

@@ -35,9 +35,9 @@ func Xstat64(tls TLS, file, buf uintptr) int32 {
 
 // int fstat(int fd, struct stat *buf);
 func Xfstat(tls TLS, fd int32, buf uintptr) int32 {
-	r, _, err := syscall.Syscall(syscall.SYS_FSTAT, uintptr(fildes), buf, 0)
+	r, _, err := syscall.Syscall(syscall.SYS_FSTAT, uintptr(fd), buf, 0)
 	if strace {
-		fmt.Fprintf(TraceWriter, "fstat(%v, %#x) %v %v\n", fildes, buf, r, err)
+		fmt.Fprintf(TraceWriter, "fstat(%v, %#x) %v %v\n", fd, buf, r, err)
 	}
 	if err != 0 {
 		tls.setErrno(err)
@@ -59,7 +59,14 @@ func Xfstat64(tls TLS, fildes int32, buf uintptr) int32 {
 
 // extern int lstat(char *__file, struct stat *__buf);
 func Xlstat(tls TLS, file, buf uintptr) int32 {
-	panic("TODO")
+	r, _, err := syscall.Syscall(syscall.SYS_LSTAT, file, buf, 0)
+	if strace {
+		fmt.Fprintf(TraceWriter, "lstat(%q, %#x) %v %v\n", GoString(file), buf, r, err)
+	}
+	if err != 0 {
+		tls.setErrno(err)
+	}
+	return int32(r)
 }
 
 // extern int lstat64(char *__file, struct stat64 *__buf);

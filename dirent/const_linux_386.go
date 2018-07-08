@@ -27,13 +27,13 @@ const (
 	XXATTR_SIZE_MAX                = 65536
 	Xd_fileno                      = 0
 
-	XDT_BLK     = 6
-	XDT_CHR     = 2
-	XDT_DIR     = 4
-	XDT_FIFO    = 1
-	XDT_LNK     = 10
-	XDT_REG     = 8
-	XDT_SOCK    = 12
-	XDT_UNKNOWN = 0
-	XDT_WHT     = 14
+	CDT_BLK     = 6
+	CDT_CHR     = 2
+	CDT_DIR     = 4
+	CDT_FIFO    = 1
+	CDT_LNK     = 10
+	CDT_REG     = 8
+	CDT_SOCK    = 12
+	CDT_UNKNOWN = 0
+	CDT_WHT     = 14
 )

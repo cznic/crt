@@ -5,7 +5,7 @@ package time
 const (
 	XFD_SETSIZE = 1024
 
-	XITIMER_PROF    = 2
-	XITIMER_REAL    = 0
-	XITIMER_VIRTUAL = 1
+	CITIMER_PROF    = 2
+	CITIMER_REAL    = 0
+	CITIMER_VIRTUAL = 1
 )

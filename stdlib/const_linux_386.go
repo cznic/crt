@@ -18,7 +18,7 @@ const (
 	XWSTOPPED      = 2
 	XWUNTRACED     = 2
 
-	XP_ALL  = 0
-	XP_PGID = 2
-	XP_PID  = 1
+	CP_ALL  = 0
+	CP_PGID = 2
+	CP_PID  = 1
 )
