@@ -11,6 +11,7 @@ const (
 	XMADV_FREE             = 8
 	XMADV_HUGEPAGE         = 14
 	XMADV_HWPOISON         = 100
+	XMADV_KEEPONFORK       = 19
 	XMADV_MERGEABLE        = 12
 	XMADV_NOHUGEPAGE       = 15
 	XMADV_NORMAL           = 0
@@ -19,6 +20,7 @@ const (
 	XMADV_SEQUENTIAL       = 2
 	XMADV_UNMERGEABLE      = 13
 	XMADV_WILLNEED         = 3
+	XMADV_WIPEONFORK       = 18
 	XMAP_32BIT             = 64
 	XMAP_ANON              = 32
 	XMAP_ANONYMOUS         = 32

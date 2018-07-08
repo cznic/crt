@@ -950,7 +950,7 @@ func Xpthread_cond_timedwait(tls TLS, cond, mutex, abstime uintptr) (r int32) {
 	ts := *(*Stimespec)(unsafe.Pointer(abstime))
 	if ts.Xtv_nsec < 0 || ts.Xtv_nsec > 1e9 {
 	}
-	deadline := time.Unix(ts.Xtv_sec, ts.Xtv_nsec)
+	deadline := time.Unix(int64(ts.Xtv_sec), int64(ts.Xtv_nsec))
 	if r = Xpthread_cond_wait(tls, cond, mutex); r != 0 {
 		return r
 	}

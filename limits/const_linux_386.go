@@ -18,12 +18,10 @@ const (
 	XHOST_NAME_MAX                 = 64
 	XINT_MAX                       = 2147483647
 	XINT_MIN                       = -2147483648
-	XIOV_MAX                       = 1024
 	XLINE_MAX                      = 2048
 	XLLONG_MAX                     = 9223372036854775807
 	XLLONG_MIN                     = -9223372036854775808
 	XLOGIN_NAME_MAX                = 256
-	XLONG_BIT                      = 32
 	XLONG_MAX                      = 2147483647
 	XLONG_MIN                      = -2147483648
 	XMAX_CANON                     = 255
@@ -32,12 +30,6 @@ const (
 	XMQ_PRIO_MAX                   = 32768
 	XNAME_MAX                      = 255
 	XNGROUPS_MAX                   = 65536
-	XNL_ARGMAX                     = 4096
-	XNL_LANGMAX                    = 2048
-	XNL_MSGMAX                     = 2147483647
-	XNL_SETMAX                     = 2147483647
-	XNL_TEXTMAX                    = 2147483647
-	XNZERO                         = 20
 	XPATH_MAX                      = 4096
 	XPIPE_BUF                      = 4096
 	XPTHREAD_DESTRUCTOR_ITERATIONS = 4
@@ -57,7 +49,6 @@ const (
 	XULLONG_MAX                    = 18446744073709551615
 	XULONG_MAX                     = 4294967295
 	XUSHRT_MAX                     = 65535
-	XWORD_BIT                      = 32
 	XXATTR_LIST_MAX                = 65536
 	XXATTR_NAME_MAX                = 255
 	XXATTR_SIZE_MAX                = 65536

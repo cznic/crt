@@ -8,16 +8,16 @@ const (
 	XLITTLE_ENDIAN = 1234
 	XPDP_ENDIAN    = 3412
 
-	X_ISalnum  = 8
-	X_ISalpha  = 1024
-	X_ISblank  = 1
-	X_IScntrl  = 2
-	X_ISdigit  = 2048
-	X_ISgraph  = 32768
-	X_ISlower  = 512
-	X_ISprint  = 16384
-	X_ISpunct  = 4
-	X_ISspace  = 8192
-	X_ISupper  = 256
-	X_ISxdigit = 4096
+	C_ISalnum  = 8
+	C_ISalpha  = 1024
+	C_ISblank  = 1
+	C_IScntrl  = 2
+	C_ISdigit  = 2048
+	C_ISgraph  = 32768
+	C_ISlower  = 512
+	C_ISprint  = 16384
+	C_ISpunct  = 4
+	C_ISspace  = 8192
+	C_ISupper  = 256
+	C_ISxdigit = 4096
 )
