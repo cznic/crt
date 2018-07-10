@@ -34,13 +34,13 @@ edit:
 editor:
 	gofmt -l -s -w *.go
 
-	GOOS=linux GOARCH=arm go build
-	GOOS=linux GOARCH=386 go build
-	GOOS=linux GOARCH=amd64 go build
-	#TODO GOOS=windows GOARCH=386 go build
-	#TODO GOOS=windows GOARCH=amd64 go build
+	GOOS=linux GOARCH=arm go build 2>&1 | tee log
+	GOOS=linux GOARCH=386 go build 2>&1 | tee -a log
+	GOOS=linux GOARCH=amd64 go build 2>&1 | tee -a log
+	#TODO GOOS=windows GOARCH=386 go build 2>&1 | tee -a log
+	#TODO GOOS=windows GOARCH=amd64 go build 2>&1 | tee -a log
 	go test -i
-	go test 2>&1 | tee log
+	go test 2>&1 | tee -a log
 	go install
 
 internalError:
