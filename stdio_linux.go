@@ -22,20 +22,29 @@ import (
 var (
 	stdin, stdout, stderr, penviron uintptr
 
+	stdinf  = &cfile{f: os.Stdin}
+	stdoutf = &cfile{f: os.Stdout}
+	stderrf = &cfile{f: os.Stderr}
+
 	files = &fmap{
-		m: map[uintptr]*os.File{},
+		m: map[uintptr]*cfile{},
 	}
 	nullReader = bytes.NewBuffer(nil)
 )
 
+type cfile struct {
+	f      *os.File
+	ferror int32
+}
+
 type fmap struct {
-	m  map[uintptr]*os.File
+	m  map[uintptr]*cfile
 	mu sync.Mutex
 }
 
 func (m *fmap) add(f *os.File, u uintptr) {
 	m.mu.Lock()
-	m.m[u] = f
+	m.m[u] = &cfile{f: f}
 	m.mu.Unlock()
 }
 
@@ -50,17 +59,17 @@ func (m *fmap) reader(u uintptr) io.Reader {
 	m.mu.Lock()
 	f := m.m[u]
 	m.mu.Unlock()
-	return f
+	return f.f
 }
 
-func (m *fmap) file(u uintptr) *os.File {
+func (m *fmap) file(u uintptr) *cfile {
 	switch u {
 	case stdin:
-		return os.Stdin
+		return stdinf
 	case stdout:
-		return os.Stdout
+		return stdoutf
 	case stderr:
-		return os.Stderr
+		return stderrf
 	}
 
 	m.mu.Lock()
@@ -82,7 +91,7 @@ func (m *fmap) writer(u uintptr) io.Writer {
 	m.mu.Lock()
 	f := m.m[u]
 	m.mu.Unlock()
-	return f
+	return f.f
 }
 
 func (m *fmap) extract(u uintptr) *os.File {
@@ -90,7 +99,7 @@ func (m *fmap) extract(u uintptr) *os.File {
 	f := m.m[u]
 	delete(m.m, u)
 	m.mu.Unlock()
-	return f
+	return f.f
 }
 
 // int printf(const char *format, ...);
@@ -459,7 +468,7 @@ func fseek(tls TLS, stream uintptr, offset long_t, whence int32) int32 {
 		return -1
 	}
 
-	if _, err := f.Seek(int64(offset), int(whence)); err != nil {
+	if _, err := f.f.Seek(int64(offset), int(whence)); err != nil {
 		tls.setErrno(errno.XEINVAL)
 		return -1
 	}
@@ -474,7 +483,7 @@ func ftell(tls TLS, stream uintptr) long_t {
 		return -1
 	}
 
-	n, err := f.Seek(0, os.SEEK_CUR)
+	n, err := f.f.Seek(0, os.SEEK_CUR)
 	if err != nil {
 		tls.setErrno(errno.XEBADF)
 		return -1
@@ -549,7 +558,7 @@ func Xfflush(tls TLS, stream uintptr) int32 {
 		return -1
 	}
 
-	if err := f.Sync(); err != nil {
+	if err := f.f.Sync(); err != nil {
 		tls.setErrno(err)
 		return -1
 	}
@@ -610,7 +619,7 @@ func Xfdopen(tls TLS, fd int32, mode uintptr) uintptr {
 
 // int sscanf(const char *str, const char *format, ...);
 func Xsscanf(tls TLS, str, format uintptr, args ...interface{}) int32 {
-	panic("TOD")
+	panic("TODO")
 }
 
 func X__isoc99_sscanf(tls TLS, str, format uintptr, args ...interface{}) int32 {
@@ -619,20 +628,37 @@ func X__isoc99_sscanf(tls TLS, str, format uintptr, args ...interface{}) int32 {
 
 // int rename(const char *oldpath, const char *newpath);
 func Xrename(tls TLS, oldpath, newpath uintptr) int32 {
-	panic("TOD")
+	panic("TODO")
 }
 
 // int fileno(FILE *stream);
 func Xfileno(tls TLS, stream uintptr) int32 {
-	panic("TOD")
+	panic("TODO")
 }
 
 // int ferror(FILE *stream);
+//
+// The ferror() function shall test the error indicator for the stream pointed
+// to by stream.
+//
+// The ferror() function shall not change the setting of errno if stream is
+// valid.
+//
+// The ferror() function shall return non-zero if and only if the error
+// indicator is set for stream.
+//
+// No errors are defined.
 func Xferror(tls TLS, stream uintptr) int32 {
-	panic("TOD")
+	f := files.file(stream)
+	if f == nil {
+		tls.setErrno(errno.XEBADF)
+		return -1
+	}
+
+	return f.ferror
 }
 
 // int feof(FILE *stream);
 func Xfeof(tls TLS, stream uintptr) int32 {
-	panic("TOD")
+	panic("TODO")
 }
