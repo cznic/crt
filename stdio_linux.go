@@ -322,6 +322,16 @@ func Xsprintf(tls TLS, str, format uintptr, args ...interface{}) int32 {
 	return X__builtin_sprintf(tls, str, format, args...)
 }
 
+// int snprintf(char *str, size_t n, const char *format, ...);
+func Xsnprintf(tls TLS, str uintptr, n size_t, format uintptr, args ...interface{}) int32 {
+	panic("TODO")
+}
+
+// int vsnprintf(char *str, size_t n, const char *format, ...);
+func Xvsnprintf(tls TLS, str uintptr, n size_t, format uintptr, ap *[]interface{}) int32 {
+	panic("TODO")
+}
+
 // int fputc(int c, FILE *stream);
 func Xfputc(tls TLS, c int32, stream uintptr) int32 {
 	w := files.writer(stream)
@@ -661,4 +671,69 @@ func Xferror(tls TLS, stream uintptr) int32 {
 // int feof(FILE *stream);
 func Xfeof(tls TLS, stream uintptr) int32 {
 	panic("TODO")
+}
+
+// int puts(const char *s);
+//
+// The puts() function shall write the string pointed to by s, followed by a
+// <newline>, to the standard output stream stdout. The terminating null byte
+// shall not be written.
+//
+// The last data modification and last file status change timestamps of the
+// file shall be marked for update between the successful execution of puts()
+// and the next successful completion of a call to fflush() or fclose() on the
+// same stream or a call to exit() or abort().
+//
+// Upon successful completion, puts() shall return a non-negative number.
+// Otherwise, it shall return EOF, shall set an error indicator for the stream,
+// and errno shall be set to indicate the error.
+//
+// The put() function shall fail if either the stream is unbuffered or the
+// stream's buffer needs to be flushed, and:
+//
+// [EAGAIN] The O_NONBLOCK flag is set for the file descriptor underlying
+// stream and the thread would be delayed in the write operation.
+//
+// [EBADF] The file descriptor underlying stream is not a valid file descriptor
+// open for writing.
+//
+// [EFBIG] An attempt was made to write to a file that exceeds the maximum file
+// size.
+//
+// [EFBIG] An attempt was made to write to a file that exceeds the file size
+// limit of the process.
+//
+// [EFBIG] The file is a regular file and an attempt was made to write at or
+// beyond the offset maximum.
+//
+// [EINTR] The write operation was terminated due to the receipt of a signal,
+// and no data was transferred.
+//
+// [EIO] A physical I/O error has occurred, or the process is a member of a
+// background process group attempting to write to its controlling terminal,
+// TOSTOP is set, the calling thread is not blocking SIGTTOU, the process is
+// not ignoring SIGTTOU, and the process group of the process is orphaned. This
+// error may also be returned under implementation-defined conditions.
+//
+// [ENOSPC] There was no free space remaining on the device containing the
+// file.
+//
+// [EPIPE] An attempt is made to write to a pipe or FIFO that is not open for
+// reading by any process. A SIGPIPE signal shall also be sent to the thread.
+//
+//
+// The puts() function may fail if:
+//
+// [ENOMEM] Insufficient storage space is available.
+//
+// [ENXIO] A request was made of a nonexistent device, or the request was
+// outside the capabilities of the device.
+func Xputs(tls TLS, s uintptr) int32 {
+	_, err := fmt.Println(GoString(s))
+	if err == nil {
+		return 1
+	}
+
+	tls.setErrno(err)
+	return stdio.XEOF
 }

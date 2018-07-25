@@ -5,6 +5,7 @@
 package crt
 
 type (
+	clock_t       = int32
 	long_t        = int32
 	pthread_key_t = uint32
 	pthread_t     = uint32
