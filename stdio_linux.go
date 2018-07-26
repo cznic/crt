@@ -292,6 +292,9 @@ func goFprintf(w io.Writer, format uintptr /* *int8 */, ap *[]interface{}) int32
 
 				n, _ := fmt.Fprintf(&b, fmt.Sprintf("%%%sX", modifiers), append(w, arg)...)
 				written += n
+			case '%':
+				b.WriteByte('%')
+				written++
 			default:
 				panic(fmt.Errorf("TODO %q", "%"+string(c)))
 			}
@@ -343,9 +346,7 @@ func Xfputc(tls TLS, c int32, stream uintptr) int32 {
 }
 
 // int putc(int c, FILE *stream);
-func Xputc(tls TLS, c int32, stream uintptr) int32 {
-	panic("TODO putc")
-}
+func Xputc(tls TLS, c int32, stream uintptr) int32 { return Xfputc(tls, c, stream) }
 
 // int putc(int c, FILE *stream);
 func X_IO_putc(tls TLS, c int32, stream uintptr) int32 { return Xputc(tls, c, stream) }
