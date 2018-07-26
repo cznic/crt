@@ -5,8 +5,9 @@
 package crt
 
 type (
-	T__gid_t = uint32
-	T__uid_t = uint32
+	T__gid_t  = uint32
+	T__uid_t  = uint32
+	in_addr_t = uint32
 )
 
 type TDIR = S__dirstream
