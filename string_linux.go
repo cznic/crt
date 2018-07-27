@@ -53,7 +53,7 @@ func Xstrchr(tls TLS, s uintptr, c int32) uintptr {
 }
 
 // char *strchrnul(const char *s, int c);
-func Xstrchrnul(tls TLS, s uintptr, c int32) uintptr {
+func X__builtin_strchrnul(tls TLS, s uintptr, c int32) uintptr {
 	for {
 		ch2 := *(*byte)(unsafe.Pointer(s))
 		if ch2 == 0 || ch2 == byte(c) {
@@ -63,6 +63,9 @@ func Xstrchrnul(tls TLS, s uintptr, c int32) uintptr {
 		s++
 	}
 }
+
+// char *strchrnul(const char *s, int c);
+func Xstrchrnul(tls TLS, s uintptr, c int32) uintptr { return X__builtin_strchrnul(tls, s, c) }
 
 // int strcmp(const char *s1, const char *s2)
 func X__builtin_strcmp(tls TLS, s1, s2 uintptr) int32 {
