@@ -59,6 +59,7 @@ func Xgethostbyname(tls TLS, name uintptr) uintptr {
 	if ip == nil {
 		addrs, err := net.LookupHost(host)
 		if err != nil {
+			panic("TODO")
 			//TODO set h_errno
 			return 0
 		}
@@ -98,4 +99,9 @@ func Xgethostbyname(tls TLS, name uintptr) uintptr {
 	}
 
 	panic(host)
+}
+
+// extern int *__h_errno_location(void)
+func X__h_errno_location(tls TLS) uintptr {
+	panic("TODO")
 }

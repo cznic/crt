@@ -39,6 +39,11 @@ func Xreaddir64_r(tls TLS, dirp, entry, result uintptr) int32 {
 	panic("TODO")
 }
 
+// struct dirent64 * readdir64( DIR *dirp );
+func Xreaddir64(tls TLS, dirp uintptr) uintptr {
+	panic("TODO")
+}
+
 // struct dirent *readdir(DIR *dirp);
 //
 // The type DIR, which is defined in the <dirent.h> header, represents a
