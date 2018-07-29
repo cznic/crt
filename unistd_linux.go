@@ -571,3 +571,8 @@ func Xdup2(tls TLS, fildes, fildes2 int32) int32 {
 	}
 	return int32(r)
 }
+
+// unsigned int alarm(unsigned int seconds);
+func Xalarm(tls TLS, seconds uint32) int32 {
+	panic("TODO")
+}

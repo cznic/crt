@@ -195,7 +195,10 @@ func (m *memWriter) WriteByte(b byte) error {
 
 // Copy copies n bytes form src to dest and returns n.
 func Copy(dst, src uintptr, n int) int {
-	return copy((*rawmem)(unsafe.Pointer(dst))[:n], (*rawmem)(unsafe.Pointer(src))[:n])
+	if n != 0 {
+		return copy((*rawmem)(unsafe.Pointer(dst))[:n], (*rawmem)(unsafe.Pointer(src))[:n])
+	}
+	return n
 }
 
 // CString allocates a C string initialized from s.

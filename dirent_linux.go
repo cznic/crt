@@ -41,7 +41,7 @@ func Xreaddir64_r(tls TLS, dirp, entry, result uintptr) int32 {
 
 // struct dirent64 * readdir64( DIR *dirp );
 func Xreaddir64(tls TLS, dirp uintptr) uintptr {
-	panic("TODO")
+	return Xreaddir(tls, dirp) //TODO not generally correct
 }
 
 // struct dirent *readdir(DIR *dirp);

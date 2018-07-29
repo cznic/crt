@@ -12,6 +12,14 @@ type (
 
 type TDIR = S__dirstream
 
+type Sdirent64 = struct {
+	Fd_ino    uint64
+	Fd_off    int64
+	Fd_reclen uint16
+	Fd_type   uint8
+	Fd_name   [256]int8
+}
+
 type S__dirstream struct {
 	buf  uintptr
 	next uintptr

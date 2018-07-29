@@ -81,3 +81,8 @@ func X__sysv_signal(tls TLS, signum int32, handler uintptr) (r uintptr) {
 	}
 	return r
 }
+
+// int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
+func Xsigaction(tls TLS, signum int32, act, oldact uintptr) int32 {
+	panic("TODO")
+}
