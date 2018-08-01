@@ -4,6 +4,10 @@
 
 package crt
 
+import (
+	"unsafe"
+)
+
 // int ffs(int i);
 func X__builtin_ffs(tls TLS, i int32) int32 {
 	if i == 0 {
@@ -36,10 +40,35 @@ func Xffsll(tls TLS, i int64) int32 { return X__builtin_ffsll(tls, i) }
 
 // int strcasecmp(const char *s1, const char *s2);
 func Xstrcasecmp(tls TLS, s1, s2 uintptr) int32 {
-	panic("TODO")
+	if s1 == s2 {
+		return 0
+	}
+
+	for {
+		c1 := Xtolower(tls, int32(*(*byte)(unsafe.Pointer(s1))))
+		s1++
+		c2 := Xtolower(tls, int32(*(*byte)(unsafe.Pointer(s2))))
+		s2++
+		if r := int32(c1) - int32(c2); r != 0 || c1 == 0 || c2 == 0 {
+			return r
+		}
+	}
 }
 
 // int strncasecmp(const char *s1, const char *s2, size_t n);
-func Xstrncasecmp(tls TLS, s1, s2 uintptr, n size_t) int32 {
-	panic("TODO")
+func Xstrncasecmp(tls TLS, s1, s2 uintptr, n size_t) (r int32) {
+	if s1 == s2 {
+		return 0
+	}
+
+	for ; n > 0; n-- {
+		c1 := Xtolower(tls, int32(*(*byte)(unsafe.Pointer(s1))))
+		s1++
+		c2 := Xtolower(tls, int32(*(*byte)(unsafe.Pointer(s2))))
+		s2++
+		if r = int32(c1) - int32(c2); r != 0 || c1 == 0 || c2 == 0 {
+			break
+		}
+	}
+	return r
 }
