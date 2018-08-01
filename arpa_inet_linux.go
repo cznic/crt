@@ -4,6 +4,11 @@
 
 package crt
 
+// uint32_t ntohl(uint32_t netlong);
+func Xntohl(tls TLS, netlong uint32) uint32 {
+	panic("TODO")
+}
+
 // uint16_t ntohs(uint16_t netshort);
 func Xntohs(tls TLS, netshort uint16) uint16 {
 	panic("TODO")
