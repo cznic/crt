@@ -14,6 +14,7 @@ package crt
 
 import (
 	"fmt"
+	rnd "math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -26,6 +27,7 @@ import (
 
 	"github.com/cznic/crt/errno"
 	"github.com/cznic/crt/limits"
+	"github.com/cznic/crt/stdlib"
 	"github.com/cznic/mathutil"
 )
 
@@ -812,4 +814,24 @@ func nextSuffix(n int) string {
 // [EINVAL] No conversion could be performed.
 func Xstrtod(tls TLS, nptr, endptr uintptr) float64 {
 	panic("TODO")
+}
+
+// int rand(void);
+//
+// The rand() function shall compute a sequence of pseudo-random integers in
+// the range [0, {RAND_MAX}].
+func Xrand(tls TLS) int32 {
+	return int32(rnd.Intn(stdlib.XRAND_MAX))
+}
+
+// void srand(unsigned int seed);
+//
+// The srand() function uses the argument as a seed for a new sequence of
+// pseudo-random numbers to be returned by subsequent calls to rand(). If
+// srand() is then called with the same seed value, the sequence of
+// pseudo-random numbers shall be repeated. If rand() is called before any
+// calls to srand() are made, the same sequence shall be generated as when
+// srand() is first called with a seed value of 1.
+func Xsrand(tls TLS, seed uint32) {
+	rnd.Seed(int64(seed))
 }
