@@ -38,3 +38,8 @@ func Xffsll(tls TLS, i int64) int32 { return X__builtin_ffsll(tls, i) }
 func Xstrcasecmp(tls TLS, s1, s2 uintptr) int32 {
 	panic("TODO")
 }
+
+// int strncasecmp(const char *s1, const char *s2, size_t n);
+func Xstrncasecmp(tls TLS, s1, s2 uintptr, n size_t) int32 {
+	panic("TODO")
+}
