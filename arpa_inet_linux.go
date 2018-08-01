@@ -4,24 +4,30 @@
 
 package crt
 
+import "unsafe"
+
 // uint32_t ntohl(uint32_t netlong);
 func Xntohl(tls TLS, netlong uint32) uint32 {
-	panic("TODO")
+	b := (*[4]byte)(unsafe.Pointer(&netlong))
+	return uint32(b[0])<<24 | uint32(b[1])<<16 | uint32(b[2])<<8 | uint32(b[3])
 }
 
 // uint16_t ntohs(uint16_t netshort);
 func Xntohs(tls TLS, netshort uint16) uint16 {
-	panic("TODO")
+	b := (*[2]byte)(unsafe.Pointer(&netshort))
+	return uint16(b[0])<<8 | uint16(b[1])
 }
 
 // uint32_t htonl(uint32_t hostlong);
 func Xhtonl(tls TLS, hostlong uint32) uint32 {
-	panic("TODO")
+	b := [4]byte{byte(hostlong >> 24), byte(hostlong >> 16), byte(hostlong >> 8), byte(hostlong)}
+	return *(*uint32)(unsafe.Pointer(&b))
 }
 
 // uint16_t htons(uint16_t hostshort);
 func Xhtons(tls TLS, hostshort uint16) uint16 {
-	panic("TODO")
+	b := [2]byte{byte(hostshort >> 8), byte(hostshort)}
+	return *(*uint16)(unsafe.Pointer(&b))
 }
 
 // int listen(int sockfd, int backlog);
