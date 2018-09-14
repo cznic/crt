@@ -465,10 +465,12 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
 				dso->td_index = new;
 				new->args[0] = def.dso->tls_id;
 				new->args[1] = tls_val + addend;
-				reloc_addr[0] = (size_t)__tlsdesc_dynamic;
-				reloc_addr[1] = (size_t)new;
+				__assert_fail("TODO(ccgo)", __FILE__, __LINE__, __func__);
+//TODO(ccgo)					reloc_addr[0] = (size_t)__tlsdesc_dynamic;
+//TODO(ccgo)					reloc_addr[1] = (size_t)new;
 			} else {
-				reloc_addr[0] = (size_t)__tlsdesc_static;
+				__assert_fail("TODO(ccgo)", __FILE__, __LINE__, __func__);
+//TODO(ccgo)					reloc_addr[0] = (size_t)__tlsdesc_static;
 #ifdef TLS_ABOVE_TP
 				reloc_addr[1] = tls_val + def.dso->tls.offset
 					+ TPOFF_K + addend;
