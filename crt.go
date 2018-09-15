@@ -418,6 +418,7 @@ func checkSyscall(n long) bool { //TODO- eventually after making the C code clea
 		DSYS_chmod,
 		DSYS_clock_gettime,
 		DSYS_close,
+		DSYS_fchmod,
 		DSYS_fcntl,
 		DSYS_fstat,
 		DSYS_fsync,
