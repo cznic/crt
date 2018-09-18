@@ -102912,7 +102912,6 @@ const (
 	D_POSIX_SHARED_MEMORY_OBJECTS           = 200809
 	D_POSIX_SHELL                           = 1
 	D_POSIX_SIGQUEUE_MAX                    = 32
-	D_POSIX_SOURCE                          = 1
 	D_POSIX_SPAWN                           = 200809
 	D_POSIX_SPIN_LOCKS                      = 200809
 	D_POSIX_SSIZE_MAX                       = 32767
