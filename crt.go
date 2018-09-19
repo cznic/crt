@@ -43,6 +43,7 @@ import (
 var (
 	allocMu   sync.Mutex
 	allocator memory.Allocator
+	allocs    = map[uintptr][]byte{}
 	env       = os.Environ()
 	threadID  uintptr //TODO-
 
@@ -112,10 +113,31 @@ func UsableSize(p uintptr) int {
 
 // Malloc allocates uninitialized memory.
 func Malloc(size int) (uintptr, error) {
+	if size < 0 {
+		panic("internal error")
+	}
+
+	if size == 0 {
+		return 0, nil
+	}
+
 	allocMu.Lock()
-	p, err := allocator.UintptrMalloc(size)
+	r, _ := malloc(size)
 	allocMu.Unlock()
-	return p, err
+	return r, nil
+}
+
+func malloc(size int) (uintptr, error) {
+	b := make([]byte, size+16)
+	r := uintptr(unsafe.Pointer(&b[0]))
+	if r%2*unsafe.Sizeof(uintptr(0)) != 0 {
+		panic("internal error")
+	}
+	if _, ok := allocs[r]; ok {
+		panic("internal error")
+	}
+	allocs[r] = b
+	return r, nil
 }
 
 // MustCalloc is like Calloc but panics if the allocation cannot be made.
@@ -129,11 +151,58 @@ func MustCalloc(size int) uintptr {
 }
 
 // Calloc allocates zeroed memory.
-func Calloc(size int) (uintptr, error) {
+func Calloc(size int) (uintptr, error) { return Malloc(size) }
+
+// Realloc reallocates memory.
+func Realloc(p uintptr, size int) (uintptr, error) {
+	if p == 0 {
+		return Malloc(size)
+	}
+
+	if size == 0 {
+		Free(p)
+		return 0, nil
+	}
+
 	allocMu.Lock()
-	p, err := allocator.UintptrCalloc(size)
+	b, ok := allocs[p]
+	if !ok {
+		panic("internal error")
+	}
+
+	switch {
+	case cap(b) >= size:
+		b = b[:size]
+		allocs[p] = b
+	default:
+		r, _ := malloc(size)
+		copy(allocs[r], b)
+		free(p)
+		p = r
+	}
 	allocMu.Unlock()
-	return p, err
+	return p, nil
+}
+
+// Free frees memory allocated by Calloc, Malloc or Realloc.
+func Free(p uintptr) error {
+	allocMu.Lock()
+	err := free(p)
+	allocMu.Unlock()
+	return err
+}
+
+func free(p uintptr) error {
+	if p == 0 {
+		return nil
+	}
+
+	if _, ok := allocs[p]; !ok {
+		panic("internal error")
+	}
+
+	delete(allocs, p)
+	return nil
 }
 
 // CString allocates a C string initialized from s.
@@ -161,7 +230,7 @@ func MustCString(s string) uintptr {
 // BSS allocates the the bss segment of a package/command.
 func BSS(init *byte) uintptr {
 	r := uintptr(unsafe.Pointer(init))
-	if r%unsafe.Sizeof(uintptr(0)) != 0 {
+	if r%2*unsafe.Sizeof(uintptr(0)) != 0 {
 		panic("internal error")
 	}
 
@@ -171,18 +240,10 @@ func BSS(init *byte) uintptr {
 // TS allocates the R/O text segment of a package/command.
 func TS(init string) uintptr { return (*reflect.StringHeader)(unsafe.Pointer(&init)).Data }
 
-// Free frees memory allocated by Calloc, Malloc or Realloc.
-func Free(p uintptr) error {
-	allocMu.Lock()
-	err := allocator.UintptrFree(p)
-	allocMu.Unlock()
-	return err
-}
-
 // DS allocates the the data segment of a package/command.
 func DS(init []byte) uintptr {
 	r := (*reflect.SliceHeader)(unsafe.Pointer(&init)).Data
-	if r%unsafe.Sizeof(uintptr(0)) != 0 {
+	if r%2*unsafe.Sizeof(uintptr(0)) != 0 {
 		panic("internal error")
 	}
 
@@ -283,14 +344,6 @@ func a_dec(p uintptr) {
 //static inline int a_fetch_add(volatile int *p, int v)
 func a_fetch_add(p uintptr, v int32) int32 {
 	return atomic.AddInt32((*int32)(unsafe.Pointer(p)), v)
-}
-
-// Realloc reallocates memory.
-func Realloc(p uintptr, size int) (uintptr, error) {
-	allocMu.Lock()
-	p, err := allocator.UintptrRealloc(p, size)
-	allocMu.Unlock()
-	return p, err
 }
 
 func debugStack() { fmt.Printf("%s\n", debug.Stack()) }
