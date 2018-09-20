@@ -90369,7 +90369,7 @@ _20:
 	}
 
 	_scale = int32(2)
-	if 1 == 0 || int32(*(*uint8)(unsafe.Pointer(_map + 4))) != int32('2') {
+	if int32(*(*uint8)(unsafe.Pointer(_map + 4))) != int32('2') {
 		goto _22
 	}
 
