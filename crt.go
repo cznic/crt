@@ -348,9 +348,19 @@ func a_fetch_add(p uintptr, v int32) int32 {
 
 func debugStack() { fmt.Printf("%s\n", debug.Stack()) }
 
+type int16watch = struct {
+	s string
+	v int16
+}
+
 type int32watch = struct {
 	s string
 	v int32
+}
+
+type int64watch = struct {
+	s string
+	v int64
 }
 
 type uint32watch = struct {
@@ -384,6 +394,17 @@ func WatchPtr(tls TLS, s string, p uintptr) {
 	watching(tls, []string{fmt.Sprintf("%q @ %#x is initially %#x)", s, p, v)})
 }
 
+func WatchInt16(tls TLS, s string, p uintptr) {
+	if s == "" {
+		delete(watches, p)
+		return
+	}
+
+	v := *(*int16)(unsafe.Pointer(p))
+	watches[p] = &int16watch{s, v}
+	watching(tls, []string{fmt.Sprintf("%q @ %#x is initially %v(%#[3]x)", s, p, v)})
+}
+
 func WatchInt32(tls TLS, s string, p uintptr) {
 	if s == "" {
 		delete(watches, p)
@@ -392,6 +413,17 @@ func WatchInt32(tls TLS, s string, p uintptr) {
 
 	v := *(*int32)(unsafe.Pointer(p))
 	watches[p] = &int32watch{s, v}
+	watching(tls, []string{fmt.Sprintf("%q @ %#x is initially %v(%#[3]x)", s, p, v)})
+}
+
+func WatchInt64(tls TLS, s string, p uintptr) {
+	if s == "" {
+		delete(watches, p)
+		return
+	}
+
+	v := *(*int64)(unsafe.Pointer(p))
+	watches[p] = &int64watch{s, v}
 	watching(tls, []string{fmt.Sprintf("%q @ %#x is initially %v(%#[3]x)", s, p, v)})
 }
 
@@ -435,10 +467,20 @@ func Watch(tls TLS) { //TODO-
 	var a []string
 	for p, v := range watches {
 		switch x := v.(type) {
+		case *int16watch:
+			if w := *(*int16)(unsafe.Pointer(p)); w != x.v {
+				x.v = w
+				a = append(a, fmt.Sprintf("%q @ %#x is now %v(%#[3]x)", x.s, p, w))
+			}
 		case *int32watch:
 			if w := *(*int32)(unsafe.Pointer(p)); w != x.v {
 				x.v = w
 				a = append(a, fmt.Sprintf("%q @ %#x is now %v(%#[3]x)", x.s, p, w))
+			}
+		case *int64watch:
+			if w := *(*int64)(unsafe.Pointer(p)); w != x.v {
+				a = append(a, fmt.Sprintf("%q @ %#x is now %v(%#[3]x) was %[4]v(%#[4]x)", x.s, p, w, x.v))
+				x.v = w
 			}
 		case *uint32watch:
 			if w := *(*uint32)(unsafe.Pointer(p)); w != x.v {

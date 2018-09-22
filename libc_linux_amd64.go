@@ -15198,10 +15198,10 @@ var x555__func__ = ds + 27976
 
 // linking dlerror.o
 
-func setb556(p *uint8, v int32) (r uint8) {
-	r = uint8(v)
-	*p = (*p &^ ((1<<1 - 1) << 2)) | (r << 2 & ((1<<1 - 1) << 2))
-	return r
+func setb556(p *uint8, v int32) uint8 {
+	w := uint8(v) & (1<<1 - 1)
+	*p = (*p &^ ((1<<1 - 1) << 2)) | (w << 2)
+	return w << (8 - 1) >> (8 - 1)
 }
 
 // Xdlerror is defined at dlerror.c:7:6
@@ -57792,10 +57792,10 @@ _3:
 	return _s
 }
 
-func setb763(p *uint8, v int32) (r uint32) {
-	r = uint32(v)
-	*p = (*p &^ ((1<<1 - 1) << 0)) | (uint8(r) << 0 & ((1<<1 - 1) << 0))
-	return r
+func setb763(p *uint8, v int32) uint32 {
+	w := uint8(v) & (1<<1 - 1)
+	*p = (*p &^ ((1<<1 - 1) << 0)) | (w << 0)
+	return uint32(w) << (32 - 1) >> (32 - 1)
 }
 
 // xtre_ast_new_iter is defined at regcomp.c:169:23
@@ -85266,10 +85266,10 @@ var X__default_guardsize = ds + 46584
 
 func fp1029(f func(TLS, uintptr) uintptr) uintptr { return *(*uintptr)(unsafe.Pointer(&f)) }
 
-func setb1030(p *uint8, v int32) (r uint8) {
-	r = uint8(v)
-	*p = (*p &^ ((1<<1 - 1) << 1)) | (r << 1 & ((1<<1 - 1) << 1))
-	return r
+func setb1030(p *uint8, v int32) uint8 {
+	w := uint8(v) & (1<<1 - 1)
+	*p = (*p &^ ((1<<1 - 1) << 1)) | (w << 1)
+	return w << (8 - 1) >> (8 - 1)
 }
 
 func fp1031(f func(TLS, uintptr) int32) uintptr { return *(*uintptr)(unsafe.Pointer(&f)) }
@@ -88546,10 +88546,10 @@ type s174__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_setspecific.o
 
-func setb1056(p *uint8, v int32) (r uint8) {
-	r = uint8(v)
-	*p = (*p &^ ((1<<1 - 1) << 0)) | (r << 0 & ((1<<1 - 1) << 0))
-	return r
+func setb1056(p *uint8, v int32) uint8 {
+	w := uint8(v) & (1<<1 - 1)
+	*p = (*p &^ ((1<<1 - 1) << 0)) | (w << 0)
+	return w << (8 - 1) >> (8 - 1)
 }
 
 // Xpthread_setspecific is defined at pthread_setspecific.c:3:5
@@ -89556,10 +89556,10 @@ type Ttss_t = uint32
 
 // linking tss_set.o
 
-func setb1068(p *uint8, v int32) (r uint8) {
-	r = uint8(v)
-	*p = (*p &^ ((1<<1 - 1) << 0)) | (r << 0 & ((1<<1 - 1) << 0))
-	return r
+func setb1068(p *uint8, v int32) uint8 {
+	w := uint8(v) & (1<<1 - 1)
+	*p = (*p &^ ((1<<1 - 1) << 0)) | (w << 0)
+	return w << (8 - 1) >> (8 - 1)
 }
 
 // Xtss_set is defined at tss_set.c:4:5
