@@ -82616,12 +82616,12 @@ func fn899(p uintptr) func(TLS, uintptr, uintptr, uint64) uint64 {
 
 // Xvfprintf is defined at vfprintf.c:655:5
 func Xvfprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
-	esc := MustMalloc(208)
+	esc := MustMalloc(224)
 	var (
-		_ap2           uintptr     // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
-		_nl_type       = esc       // *[10]int32
-		_nl_arg        = esc + 48  // *[10]Uarg
-		_internal_buf  = esc + 128 // *[80]uint8
+		_ap2           = esc       // *Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_nl_type       = esc + 16  // *[10]int32
+		_nl_arg        = esc + 64  // *[10]Uarg
+		_internal_buf  = esc + 144 // *[80]uint8
 		_saved_buf     uintptr     // *uint8
 		_olderr        int32
 		_ret           int32
@@ -82630,12 +82630,12 @@ func Xvfprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *in
 	defer Free(esc)
 	Copy(_nl_type, ts+4608 /* "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00..." */, 40)
 	_saved_buf = 0
-	_ap2 = X__builtin_va_copy(tls, _ap)
-	if xprintf_core(tls, null, _fmt, uintptr(unsafe.Pointer(&_ap2)), _nl_arg, _nl_type) >= int32(0) {
+	*(*uintptr)(unsafe.Pointer(_ap2)) = X__builtin_va_copy(tls, _ap)
+	if xprintf_core(tls, null, _fmt, _ap2, _nl_arg, _nl_type) >= int32(0) {
 		goto _1
 	}
 
-	X__builtin_free(tls, _ap2)
+	X__builtin_free(tls, *(*uintptr)(unsafe.Pointer(_ap2)))
 	return int32(-1)
 
 _1:
@@ -82664,7 +82664,7 @@ _2:
 	*(*uint64)(unsafe.Pointer(_f + 96)) = uint64(80)
 	*(*uintptr)(unsafe.Pointer(_f + 32)) = _internal_buf + uintptr(80)
 _3:
-	_ret = xprintf_core(tls, _f, _fmt, uintptr(unsafe.Pointer(&_ap2)), _nl_arg, _nl_type)
+	_ret = xprintf_core(tls, _f, _fmt, _ap2, _nl_arg, _nl_type)
 	if _saved_buf == 0 {
 		goto _4
 	}
@@ -82696,7 +82696,7 @@ _6:
 
 	X__unlockfile(tls, _f)
 _8:
-	X__builtin_free(tls, _ap2)
+	X__builtin_free(tls, *(*uintptr)(unsafe.Pointer(_ap2)))
 	return _ret
 }
 
@@ -85523,23 +85523,23 @@ type s137__locale_struct = struct{ Fcat [6]uintptr }
 
 // Xvfwprintf is defined at vfwprintf.c:334:5
 func Xvfwprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr) (r int32) {
-	esc := MustMalloc(120)
+	esc := MustMalloc(136)
 	var (
-		_ap2           uintptr    // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
-		_nl_type       = esc      // *[9]int32
-		_nl_arg        = esc + 48 // *[9]Uarg
+		_ap2           = esc      // *Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_nl_type       = esc + 16 // *[9]int32
+		_nl_arg        = esc + 64 // *[9]Uarg
 		_olderr        int32
 		_ret           int32
 		___need_unlock int32
 	)
 	defer Free(esc)
 	Copy(_nl_type, ts+3392 /* "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00..." */, 36)
-	_ap2 = X__builtin_va_copy(tls, _ap)
-	if xwprintf_core(tls, null, _fmt, uintptr(unsafe.Pointer(&_ap2)), _nl_arg, _nl_type) >= int32(0) {
+	*(*uintptr)(unsafe.Pointer(_ap2)) = X__builtin_va_copy(tls, _ap)
+	if xwprintf_core(tls, null, _fmt, _ap2, _nl_arg, _nl_type) >= int32(0) {
 		goto _1
 	}
 
-	X__builtin_free(tls, _ap2)
+	X__builtin_free(tls, *(*uintptr)(unsafe.Pointer(_ap2)))
 	return int32(-1)
 
 _1:
@@ -85555,7 +85555,7 @@ _1:
 		p := (*uint32)(unsafe.Pointer(_f))
 		*p = *p & uint32(4294967263)
 	}
-	_ret = xwprintf_core(tls, _f, _fmt, uintptr(unsafe.Pointer(&_ap2)), _nl_arg, _nl_type)
+	_ret = xwprintf_core(tls, _f, _fmt, _ap2, _nl_arg, _nl_type)
 	if (*(*uint32)(unsafe.Pointer(_f)) & uint32(32)) == 0 {
 		goto _2
 	}
@@ -85572,7 +85572,7 @@ _2:
 
 	X__unlockfile(tls, _f)
 _4:
-	X__builtin_free(tls, _ap2)
+	X__builtin_free(tls, *(*uintptr)(unsafe.Pointer(_ap2)))
 	return _ret
 }
 
