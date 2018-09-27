@@ -192,6 +192,8 @@ func Free(p uintptr) error {
 	return err
 }
 
+func X__builtin_free(tls TLS, p uintptr) { Xfree(tls, p) }
+
 func free(p uintptr) error {
 	if p == 0 {
 		return nil

@@ -20,11 +20,14 @@ var _ = unsafe.Pointer(null)
 
 // linking ccgo.o
 
+// X__builtin_va_list_header_instance T__builtin_va_list_header = stru...truct{Fsize int32;Fdata int8;};}, escapes: true, builtin.h:47:26
+var X__builtin_va_list_header_instance = bss + 0
+
 // X__init_array_start *func(TLS), escapes: true, ccgo.c:9:6
-var X__init_array_start = bss + 0
+var X__init_array_start = bss + 16
 
 // X__fini_array_start *func(TLS), escapes: true, ccgo.c:9:43
-var X__fini_array_start = bss + 8
+var X__fini_array_start = bss + 24
 
 // X_init is defined at ccgo.c:17:6
 func X_init(tls TLS) {
@@ -82,10 +85,10 @@ func X__ccgo_envc(tls TLS) (r int32) {
 }
 
 // X__ccgo_main_tls Tpthread_t = *S__pthread, escapes: true, ccgo.c:44:11
-var X__ccgo_main_tls = bss + 16
+var X__ccgo_main_tls = bss + 32
 
 // X_DYNAMIC [1]uint64, escapes: true, ccgo.c:45:8
-var X_DYNAMIC = bss + 24
+var X_DYNAMIC = bss + 40
 
 // Xdlsym is defined at ccgo.c:50:7
 func Xdlsym(tls TLS, _ uintptr /* *void */, _ uintptr /* *int8 */) (r uintptr /* *void */) {
@@ -115,7 +118,16 @@ _1:
 	return x__syscall6(tls, _n, _a1, _a2, _a3, _a4, _a5, _a6)
 }
 
-type Tpthread_t = uintptr // Tpthread_t = *S__pthread
+type T__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type T__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type Tsize_t = uint64
 
@@ -148,7 +160,7 @@ type S__pthread struct{ uintptr }
 // linking aio.o
 
 // X__aio_fut int32, escapes: true, aio.c:72:14
-var X__aio_fut = bss + 32
+var X__aio_fut = bss + 48
 
 // Xaio_read is defined at aio.c:303:5
 func Xaio_read(tls TLS, _cb uintptr /* *Saiocb */) (r int32) {
@@ -269,6 +281,17 @@ func X__aio_close(tls TLS, _fd int32) (r int32) {
 	Xaio_cancel(tls, _fd, null)
 _1:
 	return _fd
+}
+
+type t1__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Saiocb = struct {
@@ -540,10 +563,8 @@ func xa_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return r
 }
 
-type t1pthread_t = uintptr // Tpthread_t = *S__pthread
-
 // xaio_fd_cnt int32, escapes: true, aio.c:71:21
-var xaio_fd_cnt = bss + 40
+var xaio_fd_cnt = bss + 56
 
 type t1size_t = uint64
 
@@ -782,7 +803,7 @@ type Tpthread_cond_t = struct {
 }
 
 // xmaplock Tpthread_rwlock_t = struct{F__u ...7]uintptr;F int64; _ [48]byte};}, escapes: true, aio.c:69:25
-var xmaplock = bss + 48
+var xmaplock = bss + 64
 
 // xmap *****Saio_queue, escapes: false, aio.c:70:25
 var xmap uintptr
@@ -805,8 +826,6 @@ type S__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type Tlocale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type S__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -1160,6 +1179,17 @@ _26:
 	return r
 }
 
+type t2__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t2__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Stimespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -1265,8 +1295,6 @@ type s1__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t1locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s1__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -1425,6 +1453,17 @@ _19:
 	Xpthread_sigmask(tls, int32(2), _set, null)
 _14:
 	return int32(0)
+}
+
+type t3__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t3__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2aiocb = struct {
@@ -1634,8 +1673,6 @@ type s2__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t2locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s2__locale_struct = struct{ Fcat [6]uintptr }
 
 // xnotify_signal is defined at lio_listio.c:41:13
@@ -1712,6 +1749,17 @@ func X__ldexp_cexp(tls TLS, _z complex128, _expt int32) (r complex128) {
 		}}))
 		return _unnamed2
 	}()))
+}
+
+type t4__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t4__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1uint64_t = uint64
@@ -1812,6 +1860,17 @@ func X__ldexp_cexpf(tls TLS, _z complex64, _expt int32) (r complex64) {
 	}()))
 }
 
+type t5__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t5__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t2uint32_t = uint32
 
 // x__frexp_expf is defined at __cexpf.c:39:14
@@ -1862,6 +1921,17 @@ func Xcabs(tls TLS, _z complex128) (r float64) {
 	}() + 8)))
 }
 
+type t6__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t6__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cabsf.o
 
 // Xcabsf is defined at cabsf.c:3:7
@@ -1885,11 +1955,33 @@ func Xcabsf(tls TLS, _z complex64) (r float32) {
 	}() + 4)))
 }
 
+type t7__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t7__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cabsl.o
 
 // Xcabsl is defined at cabsl.c:4:13
 func Xcabsl(tls TLS, _z complex128) (r float64) {
 	return Xcabs(tls, _z)
+}
+
+type t8__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t8__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cacos.o
@@ -1935,6 +2027,17 @@ func Xcacos(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t9__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t9__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cacosf.o
 
 // Xcacosf is defined at cacosf.c:5:15
@@ -1976,6 +2079,17 @@ func Xcacosf(tls TLS, _z complex64) (r complex64) {
 		}}))
 		return _unnamed2
 	}()))
+}
+
+type t10__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t10__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cacosh.o
@@ -2021,6 +2135,17 @@ func Xcacosh(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t11__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t11__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cacoshf.o
 
 // Xcacoshf is defined at cacoshf.c:3:15
@@ -2064,6 +2189,17 @@ func Xcacoshf(tls TLS, _z complex64) (r complex64) {
 	}()))
 }
 
+type t12__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t12__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cacoshl.o
 
 // Xcacoshl is defined at cacoshl.c:4:21
@@ -2071,11 +2207,33 @@ func Xcacoshl(tls TLS, _z complex128) (r complex128) {
 	return Xcacosh(tls, _z)
 }
 
+type t13__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t13__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cacosl.o
 
 // Xcacosl is defined at cacosl.c:4:21
 func Xcacosl(tls TLS, _z complex128) (r complex128) {
 	return Xcacos(tls, _z)
+}
+
+type t14__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t14__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking carg.o
@@ -2101,6 +2259,17 @@ func Xcarg(tls TLS, _z complex128) (r float64) {
 	}() + 8)), real(_z))
 }
 
+type t15__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t15__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cargf.o
 
 // Xcargf is defined at cargf.c:3:7
@@ -2124,11 +2293,33 @@ func Xcargf(tls TLS, _z complex64) (r float32) {
 	}() + 4)), real(_z))
 }
 
+type t16__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t16__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cargl.o
 
 // Xcargl is defined at cargl.c:4:13
 func Xcargl(tls TLS, _z complex128) (r float64) {
 	return Xcarg(tls, _z)
+}
+
+type t17__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t17__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking casin.o
@@ -2229,6 +2420,17 @@ func Xcasin(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t18__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t18__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking casinf.o
 
 // Xcasinf is defined at casinf.c:5:15
@@ -2327,6 +2529,17 @@ func Xcasinf(tls TLS, _z complex64) (r complex64) {
 	}()))
 }
 
+type t19__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t19__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking casinh.o
 
 // Xcasinh is defined at casinh.c:5:16
@@ -2399,6 +2612,17 @@ func Xcasinh(tls TLS, _z complex128) (r complex128) {
 		}}))
 		return _unnamed4
 	}()))
+}
+
+type t20__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t20__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking casinhf.o
@@ -2475,6 +2699,17 @@ func Xcasinhf(tls TLS, _z complex64) (r complex64) {
 	}()))
 }
 
+type t21__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t21__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking casinhl.o
 
 // Xcasinhl is defined at casinhl.c:4:21
@@ -2482,11 +2717,33 @@ func Xcasinhl(tls TLS, _z complex128) (r complex128) {
 	return Xcasinh(tls, _z)
 }
 
+type t22__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t22__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking casinl.o
 
 // Xcasinl is defined at casinl.c:4:21
 func Xcasinl(tls TLS, _z complex128) (r complex128) {
 	return Xcasin(tls, _z)
+}
+
+type t23__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t23__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking catan.o
@@ -2546,6 +2803,17 @@ func Xcatan(tls TLS, _z complex128) (r complex128) {
 		return _unnamed2
 	}()))
 	return _w
+}
+
+type t24__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t24__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x_redupi is defined at catan.c:69:15
@@ -2646,6 +2914,17 @@ _3:
 lovrf:
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+88 /* "src/complex/cata..." */, int32(115), x472__func__)
 	return _w
+}
+
+type t25__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t25__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [7]int8, escapes: true, catanf.c:84:1
@@ -2759,6 +3038,17 @@ func Xcatanh(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t26__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t26__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking catanhf.o
 
 // Xcatanhf is defined at catanhf.c:3:15
@@ -2833,6 +3123,17 @@ func Xcatanhf(tls TLS, _z complex64) (r complex64) {
 	}()))
 }
 
+type t27__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t27__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking catanhl.o
 
 // Xcatanhl is defined at catanhl.c:4:21
@@ -2840,11 +3141,33 @@ func Xcatanhl(tls TLS, _z complex128) (r complex128) {
 	return Xcatanh(tls, _z)
 }
 
+type t28__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t28__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking catanl.o
 
 // Xcatanl is defined at catanl.c:66:21
 func Xcatanl(tls TLS, _z complex128) (r complex128) {
 	return Xcatan(tls, _z)
+}
+
+type t29__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t29__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ccos.o
@@ -2889,6 +3212,17 @@ func Xccos(tls TLS, _z complex128) (r complex128) {
 	}())))
 }
 
+type t30__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t30__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking ccosf.o
 
 // Xccosf is defined at ccosf.c:3:15
@@ -2929,6 +3263,17 @@ func Xccosf(tls TLS, _z complex64) (r complex64) {
 		}}))
 		return _unnamed2
 	}())))
+}
+
+type t31__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t31__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ccosh.o
@@ -3296,6 +3641,17 @@ _14:
 		}}))
 		return _unnamed15
 	}()))
+}
+
+type t32__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t32__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tint32_t = int32
@@ -3670,6 +4026,17 @@ _14:
 	}()))
 }
 
+type t33__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t33__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1int32_t = int32
 
 type t4uint32_t = uint32
@@ -3684,11 +4051,33 @@ func Xccoshl(tls TLS, _z complex128) (r complex128) {
 	return Xccosh(tls, _z)
 }
 
+type t34__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t34__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking ccosl.o
 
 // Xccosl is defined at ccosl.c:4:21
 func Xccosl(tls TLS, _z complex128) (r complex128) {
 	return Xccos(tls, _z)
+}
+
+type t35__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t35__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cexp.o
@@ -3885,6 +4274,17 @@ _10:
 
 _11:
 	return r
+}
+
+type t36__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t36__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t5uint32_t = uint32
@@ -4089,6 +4489,17 @@ _11:
 	return r
 }
 
+type t37__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t37__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t6uint32_t = uint32
 
 // xexp_ovfl Tuint32_t = uint32, escapes: false, cexpf.c:31:1
@@ -4102,6 +4513,17 @@ var x1cexp_ovfl = uint32(0x43400074)
 // Xcexpl is defined at cexpl.c:4:21
 func Xcexpl(tls TLS, _z complex128) (r complex128) {
 	return Xcexp(tls, _z)
+}
+
+type t38__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t38__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cimag.o
@@ -4127,6 +4549,17 @@ func Xcimag(tls TLS, _z complex128) (r float64) {
 	}() + 8))
 }
 
+type t39__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t39__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cimagf.o
 
 // Xcimagf is defined at cimagf.c:3:7
@@ -4150,6 +4583,17 @@ func Xcimagf(tls TLS, _z complex64) (r float32) {
 	}() + 4))
 }
 
+type t40__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t40__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cimagl.o
 
 // Xcimagl is defined at cimagl.c:3:13
@@ -4171,6 +4615,17 @@ func Xcimagl(tls TLS, _z complex128) (r float64) {
 		})(unsafe.Pointer(&struct{ f complex128 }{_z}))
 		return _unnamed1
 	}() + 8))
+}
+
+type t41__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t41__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking clog.o
@@ -4205,6 +4660,17 @@ func Xclog(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t42__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t42__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking clogf.o
 
 // Xclogf is defined at clogf.c:5:15
@@ -4237,11 +4703,33 @@ func Xclogf(tls TLS, _z complex64) (r complex64) {
 	}()))
 }
 
+type t43__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t43__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking clogl.o
 
 // Xclogl is defined at clogl.c:4:21
 func Xclogl(tls TLS, _z complex128) (r complex128) {
 	return Xclog(tls, _z)
+}
+
+type t44__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t44__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking conj.o
@@ -4286,6 +4774,17 @@ func Xconj(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t45__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t45__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking conjf.o
 
 // Xconjf is defined at conjf.c:3:15
@@ -4326,6 +4825,17 @@ func Xconjf(tls TLS, _z complex64) (r complex64) {
 		}}))
 		return _unnamed2
 	}()))
+}
+
+type t46__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t46__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking conjl.o
@@ -4370,11 +4880,33 @@ func Xconjl(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t47__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t47__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cpow.o
 
 // Xcpow is defined at cpow.c:5:16
 func Xcpow(tls TLS, _z complex128, _c complex128) (r complex128) {
 	return Xcexp(tls, _c*Xclog(tls, _z))
+}
+
+type t48__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t48__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cpowf.o
@@ -4384,11 +4916,33 @@ func Xcpowf(tls TLS, _z complex64, _c complex64) (r complex64) {
 	return Xcexpf(tls, _c*Xclogf(tls, _z))
 }
 
+type t49__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t49__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cpowl.o
 
 // Xcpowl is defined at cpowl.c:4:21
 func Xcpowl(tls TLS, _z complex128, _c complex128) (r complex128) {
 	return Xcpow(tls, _z, _c)
+}
+
+type t50__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t50__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cproj.o
@@ -4442,6 +4996,17 @@ func Xcproj(tls TLS, _z complex128) (r complex128) {
 
 _1:
 	return _z
+}
+
+type t51__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t51__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -4504,6 +5069,17 @@ _1:
 	return _z
 }
 
+type t52__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t52__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__FLOAT_BITS is defined at math.h:43:26
 func x__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 	esc := MustMalloc(4)
@@ -4520,11 +5096,33 @@ func Xcprojl(tls TLS, _z complex128) (r complex128) {
 	return Xcproj(tls, _z)
 }
 
+type t53__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t53__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking creal.o
 
 // Xcreal is defined at creal.c:3:8
 func Xcreal(tls TLS, _z complex128) (r float64) {
 	return real(_z)
+}
+
+type t54__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t54__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking crealf.o
@@ -4534,11 +5132,33 @@ func Xcrealf(tls TLS, _z complex64) (r float32) {
 	return real(_z)
 }
 
+type t55__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t55__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking creall.o
 
 // Xcreall is defined at creall.c:3:13
 func Xcreall(tls TLS, _z complex128) (r float64) {
 	return real(_z)
+}
+
+type t56__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t56__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking csin.o
@@ -4615,6 +5235,17 @@ func Xcsin(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t57__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t57__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking csinf.o
 
 // Xcsinf is defined at csinf.c:3:15
@@ -4687,6 +5318,17 @@ func Xcsinf(tls TLS, _z complex64) (r complex64) {
 		}}))
 		return _unnamed4
 	}()))
+}
+
+type t58__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t58__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking csinh.o
@@ -5054,6 +5696,17 @@ _14:
 		}}))
 		return _unnamed15
 	}()))
+}
+
+type t59__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t59__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t2int32_t = int32
@@ -5428,6 +6081,17 @@ _14:
 	}()))
 }
 
+type t60__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t60__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t3int32_t = int32
 
 type t8uint32_t = uint32
@@ -5442,11 +6106,33 @@ func Xcsinhl(tls TLS, _z complex128) (r complex128) {
 	return Xcsinh(tls, _z)
 }
 
+type t61__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t61__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking csinl.o
 
 // Xcsinl is defined at csinl.c:4:21
 func Xcsinl(tls TLS, _z complex128) (r complex128) {
 	return Xcsin(tls, _z)
+}
+
+type t62__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t62__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking csqrt.o
@@ -5668,6 +6354,17 @@ _11:
 	return _result
 }
 
+type t63__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t63__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__DOUBLE_BITS is defined at math.h:49:36
 func x1__DOUBLE_BITS(tls TLS, ___f float64) (r uint64) {
 	esc := MustMalloc(8)
@@ -5878,6 +6575,17 @@ _8:
 	return r
 }
 
+type t64__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t64__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__FLOAT_BITS is defined at math.h:43:26
 func x1__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 	esc := MustMalloc(4)
@@ -5892,6 +6600,17 @@ func x1__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 // Xcsqrtl is defined at csqrtl.c:4:21
 func Xcsqrtl(tls TLS, _z complex128) (r complex128) {
 	return Xcsqrt(tls, _z)
+}
+
+type t65__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t65__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ctan.o
@@ -5968,6 +6687,17 @@ func Xctan(tls TLS, _z complex128) (r complex128) {
 	}()))
 }
 
+type t66__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t66__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking ctanf.o
 
 // Xctanf is defined at ctanf.c:3:15
@@ -6040,6 +6770,17 @@ func Xctanf(tls TLS, _z complex64) (r complex64) {
 		}}))
 		return _unnamed4
 	}()))
+}
+
+type t67__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t67__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ctanh.o
@@ -6228,6 +6969,17 @@ _6:
 		}}))
 		return _unnamed6
 	}()))
+}
+
+type t68__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t68__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t9uint32_t = uint32
@@ -6421,6 +7173,17 @@ _6:
 	}()))
 }
 
+type t69__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t69__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t10uint32_t = uint32
 
 // x__FLOAT_BITS is defined at math.h:43:26
@@ -6439,11 +7202,33 @@ func Xctanhl(tls TLS, _z complex128) (r complex128) {
 	return Xctanh(tls, _z)
 }
 
+type t70__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t70__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking ctanl.o
 
 // Xctanl is defined at ctanl.c:4:21
 func Xctanl(tls TLS, _z complex128) (r complex128) {
 	return Xctan(tls, _z)
+}
+
+type t71__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t71__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking confstr.o
@@ -6473,6 +7258,17 @@ _2:
 	return uint64(Xsnprintf(tls, _buf, _len, ts+132 /* "%s" */, _s) + int32(1))
 }
 
+type t72__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t72__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t4size_t = uint64
 
 // linking fpathconf.o
@@ -6488,6 +7284,17 @@ func Xfpathconf(tls TLS, _fd int32, _name int32) (r int64) {
 
 _1:
 	return int64(*(*int16)(unsafe.Pointer(x473values + 2*uintptr(_name))))
+}
+
+type t73__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t73__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1values [21]int16, escapes: true, fpathconf.c:7:21
@@ -6515,11 +7322,33 @@ func Xget_avphys_pages(tls TLS) (r int64) {
 	return Xsysconf(tls, int32(86))
 }
 
+type t74__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t74__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pathconf.o
 
 // Xpathconf is defined at pathconf.c:3:6
 func Xpathconf(tls TLS, _path uintptr /* *int8 */, _name int32) (r int64) {
 	return Xfpathconf(tls, int32(-1), _name)
+}
+
+type t75__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t75__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sysconf.o
@@ -6680,6 +7509,17 @@ _7:
 	return int64(*(*int16)(unsafe.Pointer(x475values + 2*uintptr(_name))))
 }
 
+type t76__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t76__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1values [249]int16, escapes: true, sysconf.c:26:21
 var x475values = ds + 96
 
@@ -6719,8 +7559,19 @@ func Xcrypt(tls TLS, _key uintptr /* *int8 */, _salt uintptr /* *int8 */) (r uin
 	return X__crypt_r(tls, _key, _salt, x476buf)
 }
 
+type t77__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t77__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1buf [128]int8, escapes: true, crypt.c:14:14
-var x476buf = bss + 104
+var x476buf = bss + 120
 
 // linking crypt_blowfish.o
 
@@ -6736,6 +7587,17 @@ func X__crypt_blowfish(tls TLS, _key uintptr /* *int8 */, _setting uintptr /* *i
 	_test_setting = ts + 280 /* "$2a$00$abcdefghi..." */
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+312 /* "src/crypt/crypt_..." */, int32(750), x477__func__)
 	return r
+}
+
+type t78__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t78__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [17]int8, escapes: true, crypt_blowfish.c:747:1
@@ -6946,6 +7808,17 @@ _2:
 	}
 
 	return ts + 424 /* "*" */
+}
+
+type t79__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t79__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sexpanded_key = struct {
@@ -7259,6 +8132,17 @@ func X__crypt_md5(tls TLS, _key uintptr /* *int8 */, _setting uintptr /* *int8 *
 
 _1:
 	return _p
+}
+
+type t80__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t80__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1testkey [18]int8, escapes: true, crypt_md5.c:275:20
@@ -7716,6 +8600,17 @@ _1:
 	return X__crypt_des(tls, _key, _salt, _output)
 }
 
+type t81__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t81__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Scrypt_data = struct {
 	Finitialized int32
 	F__buf       [256]int8
@@ -7742,6 +8637,17 @@ func X__crypt_sha256(tls TLS, _key uintptr /* *int8 */, _setting uintptr /* *int
 
 _1:
 	return _p
+}
+
+type t82__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t82__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1testkey [18]int8, escapes: true, crypt_sha256.c:312:20
@@ -8243,6 +9149,17 @@ func X__crypt_sha512(tls TLS, _key uintptr /* *int8 */, _setting uintptr /* *int
 
 _1:
 	return _p
+}
+
+type t83__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t83__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1testkey [18]int8, escapes: true, crypt_sha512.c:361:20
@@ -8900,10 +9817,21 @@ _16:
 _13:
 }
 
+type t84__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t84__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t14uint32_t = uint32
 
 // x__encrypt_key Sexpanded_key, escapes: true, encrypt.c:15:28
-var x__encrypt_key = bss + 232
+var x__encrypt_key = bss + 248
 
 type s1expanded_key = struct {
 	Fl [16]uint32
@@ -8917,8 +9845,19 @@ func X__ctype_b_loc(tls TLS) (r uintptr /* **uint16 */) {
 	return xptable
 }
 
+type t85__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t85__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xptable *uint16, escapes: true, __ctype_b_loc.c:36:29
-var xptable = bss + 360 // pointer to unsigned short
+var xptable = bss + 376 // pointer to unsigned short
 
 func init() { *(*uintptr)(unsafe.Pointer(xptable)) = xtable + 2*uintptr(128) }
 
@@ -8937,17 +9876,24 @@ func X__ctype_get_mb_cur_max(tls TLS) (r uint64) {
 	}())
 }
 
-type t9size_t = uint64
+type t86__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t3locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t86__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t9size_t = uint64
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x2__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 	return uintptr(tls)
 	return r
 }
-
-type s3__locale_struct = struct{ Fcat [6]uintptr }
 
 type s4__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -8996,6 +9942,8 @@ type s3__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
+type s3__locale_struct = struct{ Fcat [6]uintptr }
+
 // linking __ctype_tolower_loc.o
 
 // X__ctype_tolower_loc is defined at __ctype_tolower_loc.c:27:15
@@ -9003,8 +9951,19 @@ func X__ctype_tolower_loc(tls TLS) (r uintptr /* **Tint32_t = int32 */) {
 	return x1ptable
 }
 
+type t87__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t87__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xptable *Tint32_t = int32, escapes: true, __ctype_tolower_loc.c:25:22
-var x1ptable = bss + 368 // pointer to int32_t
+var x1ptable = bss + 384 // pointer to int32_t
 
 func init() { *(*uintptr)(unsafe.Pointer(x1ptable)) = x1table + 4*uintptr(128) }
 
@@ -9020,8 +9979,19 @@ func X__ctype_toupper_loc(tls TLS) (r uintptr /* **Tint32_t = int32 */) {
 	return x2ptable
 }
 
+type t88__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t88__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xptable *Tint32_t = int32, escapes: true, __ctype_toupper_loc.c:25:22
-var x2ptable = bss + 376 // pointer to int32_t
+var x2ptable = bss + 392 // pointer to int32_t
 
 func init() { *(*uintptr)(unsafe.Pointer(x2ptable)) = x2table + 4*uintptr(128) }
 
@@ -9042,7 +10012,16 @@ func X__isalnum_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisalnum(tls, _c)
 }
 
-type t4locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t89__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t89__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s4__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9058,7 +10037,16 @@ func X__isalpha_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisalpha(tls, _c)
 }
 
-type t5locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t90__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t90__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s5__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9067,6 +10055,17 @@ type s5__locale_struct = struct{ Fcat [6]uintptr }
 // Xisascii is defined at isascii.c:4:5
 func Xisascii(tls TLS, _c int32) (r int32) {
 	return bool2int(_c&int32(-128) == 0)
+}
+
+type t91__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t91__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking isblank.o
@@ -9081,7 +10080,16 @@ func X__isblank_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisblank(tls, _c)
 }
 
-type t6locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t92__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t92__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s6__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9097,7 +10105,16 @@ func X__iscntrl_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xiscntrl(tls, _c)
 }
 
-type t7locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t93__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t93__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s7__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9113,7 +10130,16 @@ func X__isdigit_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisdigit(tls, _c)
 }
 
-type t8locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t94__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t94__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s8__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9129,7 +10155,16 @@ func X__isgraph_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisgraph(tls, _c)
 }
 
-type t9locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t95__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t95__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s9__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9145,7 +10180,16 @@ func X__islower_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xislower(tls, _c)
 }
 
-type t10locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t96__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t96__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s10__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9161,7 +10205,16 @@ func X__isprint_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisprint(tls, _c)
 }
 
-type t11locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t97__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t97__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s11__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9177,7 +10230,16 @@ func X__ispunct_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xispunct(tls, _c)
 }
 
-type t12locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t98__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t98__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s12__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9193,7 +10255,16 @@ func X__isspace_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisspace(tls, _c)
 }
 
-type t13locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t99__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t99__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s13__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9209,7 +10280,16 @@ func X__isupper_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xisupper(tls, _c)
 }
 
-type t14locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t100__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t100__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s14__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9225,9 +10305,18 @@ func X__iswalnum_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswalnum(tls, _c)
 }
 
-type Twint_t = uint32
+type t101__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t15locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t101__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type Twint_t = uint32
 
 type s15__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9257,12 +10346,21 @@ func X__iswalpha_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswalpha(tls, _c)
 }
 
+type t102__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t102__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1wint_t = uint32
 
 // xtable [3680]uint8, escapes: true, iswalpha.c:4:28
 var x3table = ds + 13384
-
-type t16locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s16__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9278,9 +10376,18 @@ func X__iswblank_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswblank(tls, _c)
 }
 
-type t2wint_t = uint32
+type t103__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t17locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t103__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t2wint_t = uint32
 
 type s17__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9296,9 +10403,18 @@ func X__iswcntrl_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswcntrl(tls, _c)
 }
 
-type t3wint_t = uint32
+type t104__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t18locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t104__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t3wint_t = uint32
 
 type s18__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9412,14 +10528,23 @@ func X__wctype_l(tls TLS, _s uintptr /* *int8 */, _l uintptr /* Tlocale_t = *S__
 	return Xwctype(tls, _s)
 }
 
+type t105__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t105__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t4wint_t = uint32
 
 type Twctype_t = uint64
 
 // x1names [73]int8, escapes: true, iswctype.c:54:20
 var x501names = ds + 17064
-
-type t19locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s19__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9435,9 +10560,18 @@ func X__iswdigit_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswdigit(tls, _c)
 }
 
-type t5wint_t = uint32
+type t106__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t20locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t106__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t5wint_t = uint32
 
 type s20__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9453,9 +10587,18 @@ func X__iswgraph_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswgraph(tls, _c)
 }
 
-type t6wint_t = uint32
+type t107__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t21locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t107__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t6wint_t = uint32
 
 type s21__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9471,9 +10614,18 @@ func X__iswlower_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswlower(tls, _c)
 }
 
-type t7wint_t = uint32
+type t108__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t22locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t108__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t7wint_t = uint32
 
 type s22__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9510,9 +10662,18 @@ func X__iswprint_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswprint(tls, _c)
 }
 
-type t8wint_t = uint32
+type t109__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t23locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t109__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t8wint_t = uint32
 
 type s23__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9535,12 +10696,21 @@ func X__iswpunct_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswpunct(tls, _c)
 }
 
+type t110__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t110__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t9wint_t = uint32
 
 // xtable [3648]uint8, escapes: true, iswpunct.c:4:28
 var x4table = ds + 17144
-
-type t24locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s24__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9556,12 +10726,21 @@ func X__iswspace_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswspace(tls, _c)
 }
 
+type t111__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t111__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t10wint_t = uint32
 
 // x1spaces [22]int32, escapes: true, iswspace.c:11:23
 var x502spaces = ds + 20792
-
-type t25locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s25__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9579,9 +10758,18 @@ func X__iswupper_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 	return Xiswupper(tls, _c)
 }
 
-type t11wint_t = uint32
+type t112__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t26locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t112__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t11wint_t = uint32
 
 type s26__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9597,9 +10785,18 @@ func X__iswxdigit_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_str
 	return Xiswxdigit(tls, _c)
 }
 
-type t12wint_t = uint32
+type t113__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t27locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t113__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t12wint_t = uint32
 
 type s27__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9615,7 +10812,16 @@ func X__isxdigit_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struc
 	return Xisxdigit(tls, _c)
 }
 
-type t28locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t114__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t114__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s28__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9624,6 +10830,17 @@ type s28__locale_struct = struct{ Fcat [6]uintptr }
 // Xtoascii is defined at toascii.c:4:5
 func Xtoascii(tls TLS, _c int32) (r int32) {
 	return _c & int32(0x7f)
+}
+
+type t115__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t115__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking tolower.o
@@ -9645,7 +10862,16 @@ func X__tolower_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xtolower(tls, _c)
 }
 
-type t29locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t116__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t116__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s29__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9668,7 +10894,16 @@ func X__toupper_l(tls TLS, _c int32, _l uintptr /* Tlocale_t = *S__locale_struct
 	return Xtoupper(tls, _c)
 }
 
-type t30locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t117__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t117__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s30__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -9700,6 +10935,17 @@ func X__towupper_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_stru
 // X__towlower_l is defined at towctrans.c:312:8
 func X__towlower_l(tls TLS, _c uint32, _l uintptr /* Tlocale_t = *S__locale_struct */) (r uint32) {
 	return Xtowlower(tls, _c)
+}
+
+type t118__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t118__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t13wint_t = uint32
@@ -9849,8 +11095,6 @@ _23:
 	return _wc
 }
 
-type t31locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s31__locale_struct = struct{ Fcat [6]uintptr }
 
 type t1wchar_t = int32
@@ -9891,6 +11135,17 @@ _3:
 	}
 
 	return _l
+}
+
+type t119__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t119__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t10size_t = uint64
@@ -9947,11 +11202,18 @@ func X__towctrans_l(tls TLS, _c uint32, _t uintptr /* Twctrans_t = *int32 */, _l
 	return Xtowctrans(tls, _c, _t)
 }
 
-type Twctrans_t = uintptr // Twctrans_t = *int32
+type t120__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t120__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type t14wint_t = uint32
-
-type t32locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s32__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -10020,6 +11282,17 @@ _7:
 	return int32(1)
 }
 
+type t121__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t121__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t3wchar_t = int32
 
 // xtable [2464]uint8, escapes: true, wcwidth.c:3:28
@@ -10033,6 +11306,17 @@ var xwtable = ds + 24168
 // X__getdents is defined at __getdents.c:5:5
 func X__getdents(tls TLS, _fd int32, _buf uintptr /* *Sdirent */, _len uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x2__syscall3(tls, int64(217), int64(_fd), int64(_buf), int64(_len)))))
+}
+
+type t122__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t122__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t11size_t = uint64
@@ -10061,6 +11345,17 @@ func Xalphasort(tls TLS, _a uintptr /* **Sdirent */, _b uintptr /* **Sdirent */)
 	return Xstrcoll(tls, *(*uintptr)(unsafe.Pointer(_a))+19, *(*uintptr)(unsafe.Pointer(_b))+19)
 }
 
+type t123__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t123__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1dirent = struct {
 	Fd_ino    uint64
 	Fd_off    int64
@@ -10084,6 +11379,17 @@ func Xclosedir(tls TLS, _dir uintptr /* *TDIR = S__dirstream */) (r int32) {
 	return _ret
 }
 
+type t124__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t124__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type S__dirstream = struct {
 	Ftell    int64
 	Ffd      int32
@@ -10100,6 +11406,17 @@ type t5off_t = int64
 // Xdirfd is defined at dirfd.c:4:5
 func Xdirfd(tls TLS, _d uintptr /* *TDIR = S__dirstream */) (r int32) {
 	return *(*int32)(unsafe.Pointer(_d + 8))
+}
+
+type t125__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t125__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1__dirstream = struct {
@@ -10150,6 +11467,17 @@ _3:
 	Xfcntl(tls, _fd, int32(2), int32(1))
 	*(*int32)(unsafe.Pointer(_dir + 8)) = _fd
 	return _dir
+}
+
+type t126__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t126__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2__dirstream = struct {
@@ -10237,6 +11565,17 @@ _2:
 	return _dir
 }
 
+type t127__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t127__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s3__dirstream = struct {
 	Ftell    int64
 	Ffd      int32
@@ -10291,6 +11630,17 @@ _1:
 	}
 	*(*int64)(unsafe.Pointer(_dir)) = *(*int64)(unsafe.Pointer(_de + 8))
 	return _de
+}
+
+type t128__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t128__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s4__dirstream = struct {
@@ -10358,6 +11708,17 @@ _3:
 	return int32(0)
 }
 
+type t129__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t129__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s5__dirstream = struct {
 	Ftell    int64
 	Ffd      int32
@@ -10392,6 +11753,17 @@ func Xrewinddir(tls TLS, _dir uintptr /* *TDIR = S__dirstream */) {
 	*(*int32)(unsafe.Pointer(_dir + 12)) = set509((*int32)(unsafe.Pointer(_dir+16)), int32(0))
 	*(*int64)(unsafe.Pointer(_dir)) = int64(0)
 	X__unlock(tls, _dir+20)
+}
+
+type t130__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t130__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s6__dirstream = struct {
@@ -10523,6 +11895,17 @@ _13:
 	return int32(_cnt)
 }
 
+type t131__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t131__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s4dirent = struct {
 	Fd_ino    uint64
 	Fd_off    int64
@@ -10551,6 +11934,17 @@ func Xseekdir(tls TLS, _dir uintptr /* *TDIR = S__dirstream */, _off int64) {
 	X__unlock(tls, _dir+20)
 }
 
+type t132__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t132__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s8__dirstream = struct {
 	Ftell    int64
 	Ffd      int32
@@ -10567,6 +11961,17 @@ type t13off_t = int64
 // Xtelldir is defined at telldir.c:4:6
 func Xtelldir(tls TLS, _dir uintptr /* *TDIR = S__dirstream */) (r int64) {
 	return *(*int64)(unsafe.Pointer(_dir))
+}
+
+type t133__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t133__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s9__dirstream = struct {
@@ -10587,6 +11992,17 @@ func Xversionsort(tls TLS, _a uintptr /* **Sdirent */, _b uintptr /* **Sdirent *
 	return Xstrverscmp(tls, *(*uintptr)(unsafe.Pointer(_a))+19, *(*uintptr)(unsafe.Pointer(_b))+19)
 }
 
+type t134__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t134__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s5dirent = struct {
 	Fd_ino    uint64
 	Fd_off    int64
@@ -10602,7 +12018,18 @@ type t15off_t = int64
 // linking __environ.o
 
 // X__environ **int8, escapes: true, __environ.c:3:6
-var X__environ = bss + 384
+var X__environ = bss + 400
+
+type t135__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t135__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking __init_tls.o
 
@@ -10668,7 +12095,16 @@ _3:
 	return _td
 }
 
-type t2pthread_t = uintptr // Tpthread_t = *S__pthread
+type t136__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t136__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s5__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -10708,8 +12144,6 @@ type s5__pthread = struct {
 	Fcanary_at_end uint64
 	Fdtv_copy      uintptr // **void
 }
-
-type t33locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type Stls_module = struct {
 	Fnext   uintptr // *Stls_module
@@ -10830,7 +12264,7 @@ type TElf64_Addr = uint64
 type TElf64_Xword = uint64
 
 // xmain_tls Stls_module, escapes: true, __init_tls.c:36:26
-var xmain_tls = bss + 392
+var xmain_tls = bss + 408
 
 // x__syscall6 is defined at syscall_arch.h:63:22
 func x1__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64, _a6 int64) (r int64) {
@@ -10838,7 +12272,7 @@ func x1__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64,
 }
 
 // xbuiltin_tls [1]struct{Fc int8;Fpt S__pthread;Fspace [16]uintptr;}, escapes: true, __init_tls.c:33:3
-var xbuiltin_tls = bss + 440
+var xbuiltin_tls = bss + 456
 
 // xa_crash is defined at atomic_arch.h:121:20
 func xa_crash(tls TLS) {
@@ -10946,7 +12380,7 @@ _15:
 }
 
 // X__ccgo_argv **int8, escapes: true, __libc_start_main.c:78:6
-var X__ccgo_argv = bss + 816
+var X__ccgo_argv = bss + 832
 
 func postinc518(p *uintptr) uintptr { r := *p; *p += 8; return r }
 
@@ -10999,6 +12433,17 @@ _6:
 	X__libc_start_init(tls)
 }
 
+type t137__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t137__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at __libc_start_main.c:12:13
 func xdummy(tls TLS) {
 }
@@ -11011,8 +12456,6 @@ func xdummy1(tls TLS, _p uintptr /* *void */) {
 var x517__func__ = ds + 25704
 
 type t17size_t = uint64
-
-type t3pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type Spollfd = struct {
 	Ffd      int32
@@ -11097,7 +12540,16 @@ _4:
 _1:
 }
 
-type t4pthread_t = uintptr // Tpthread_t = *S__pthread
+type t138__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t138__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s7__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -11163,14 +12615,12 @@ type s5__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t34locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s34__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking __stack_chk_fail.o
 
 // X__stack_chk_guard Tuintptr_t = uint64, escapes: true, __stack_chk_fail.c:5:11
-var X__stack_chk_guard = bss + 824
+var X__stack_chk_guard = bss + 840
 
 // X__init_ssp is defined at __stack_chk_fail.c:7:6
 func X__init_ssp(tls TLS, _entropy uintptr /* *void */) {
@@ -11190,6 +12640,17 @@ _2:
 // X__stack_chk_fail is defined at __stack_chk_fail.c:15:6
 func X__stack_chk_fail(tls TLS) {
 	x2a_crash(tls)
+}
+
+type t139__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t139__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t7uintptr_t = uint64
@@ -11252,8 +12713,6 @@ type s6__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t35locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s35__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking clearenv.o
@@ -11281,6 +12740,17 @@ _2:
 _3:
 _1:
 	return int32(0)
+}
+
+type t140__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t140__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xdummy is defined at clearenv.c:5:13
@@ -11319,6 +12789,17 @@ _5:
 _4:
 _1:
 	return null
+}
+
+type t141__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t141__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t20size_t = uint64
@@ -11423,6 +12904,17 @@ func Xputenv(tls TLS, _s uintptr /* *int8 */) (r int32) {
 
 _1:
 	return X__putenv(tls, _s, _l, null)
+}
+
+type t142__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t142__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xdummy is defined at putenv.c:7:13
@@ -11533,6 +13025,17 @@ _3:
 	return X__putenv(tls, _s, _l1, _s)
 }
 
+type t143__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t143__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1env_alloced **int8, escapes: false, setenv.c:10:14
 var x526env_alloced uintptr
 
@@ -11591,6 +13094,17 @@ _2:
 	return int32(0)
 }
 
+type t144__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t144__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at unsetenv.c:9:13
 func x3dummy(tls TLS, _old uintptr /* *int8 */, _new uintptr /* *int8 */) {
 }
@@ -11605,6 +13119,17 @@ type t23size_t = uint64
 // X__errno_location is defined at __errno_location.c:4:5
 func X__errno_location(tls TLS) (r uintptr /* *int32 */) {
 	return x5__pthread_self(tls) + 60
+}
+
+type t145__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t145__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__pthread_self is defined at pthread_arch.h:1:30
@@ -11661,8 +13186,6 @@ type s7__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t36locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s36__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -11731,7 +13254,16 @@ func Xstrerror(tls TLS, _e int32) (r uintptr /* *int8 */) {
 	return X__strerror_l(tls, _e, *(*uintptr)(unsafe.Pointer(x6__pthread_self(tls) + 192)))
 }
 
-type t37locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t146__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t146__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s37__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -11803,12 +13335,34 @@ func X_Exit(tls TLS, _ec int32) {
 	os.Exit(int(_ec))
 }
 
+type t147__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t147__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking abort.o
 
 // Xabort is defined at abort.c:7:16
 func Xabort(tls TLS) {
 	println(string(debug.Stack()))
 	X_Exit(tls, int32(127))
+}
+
+type t148__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t148__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking assert.o
@@ -11818,6 +13372,17 @@ func X__assert_fail(tls TLS, _expr uintptr /* *int8 */, _file uintptr /* *int8 *
 	Xfprintf(tls, *(*uintptr)(unsafe.Pointer(Xstderr)), ts+984 /* "Assertion failed..." */, _expr, _file, _func, _line)
 	Xfflush(tls, null)
 	Xabort(tls)
+}
+
+type t149__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t149__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking at_quick_exit.o
@@ -11867,14 +13432,25 @@ _2:
 	return _r
 }
 
+type t150__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t150__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xlock [1]int32, escapes: true, at_quick_exit.c:8:21
-var xlock = bss + 832
+var xlock = bss + 848
 
 // xcount int32, escapes: false, at_quick_exit.c:7:12
 var xcount int32
 
 // xfuncs [32]*func(TLS), escapes: true, at_quick_exit.c:6:13
-var xfuncs = bss + 840
+var xfuncs = bss + 856
 
 // linking atexit.o
 
@@ -11961,8 +13537,19 @@ func Xatexit(tls TLS, _func uintptr /* *func(TLS) */) (r int32) {
 	return X__cxa_atexit(tls, fp534(xcall), uintptr(uint64(_func)), null)
 }
 
+type t151__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t151__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xlock [1]int32, escapes: true, atexit.c:16:21
-var x1lock = bss + 1096
+var x1lock = bss + 1112
 
 // xhead *struct{Fnext *Sfl;Ff [32]*func(TLS, uintptr);Fa [32]uintptr;}, escapes: false, atexit.c:13:12
 var xhead uintptr
@@ -11977,7 +13564,7 @@ type Sfl = struct {
 }
 
 // xbuiltin struct{Fnext *Sfl;Ff [32]*func(TLS, uintptr);Fa [32]uintptr;}, escapes: true, atexit.c:13:3
-var xbuiltin = bss + 1104
+var xbuiltin = bss + 1120
 
 func fn535(p uintptr) func(TLS) { return *(*func(TLS))(unsafe.Pointer(&p)) }
 
@@ -11998,6 +13585,17 @@ func Xexit(tls TLS, _code int32) {
 	X__libc_exit_fini(tls)
 	X__stdio_exit(tls)
 	X_Exit(tls, _code)
+}
+
+type t152__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t152__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xdummy is defined at exit.c:6:13
@@ -12035,6 +13633,17 @@ func Xquick_exit(tls TLS, _code int32) {
 	X_Exit(tls, _code)
 }
 
+type t153__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t153__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at quick_exit.c:4:13
 func x5dummy(tls TLS) {
 }
@@ -12046,6 +13655,17 @@ func Xcreat(tls TLS, _filename uintptr /* *int8 */, _mode uint32) (r int32) {
 	return Xopen(tls, _filename, int32(577), _mode)
 }
 
+type t154__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t154__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1mode_t = uint32
 
 // linking fcntl.o
@@ -12055,18 +13675,15 @@ func Xfcntl(tls TLS, _fd int32, _cmd int32, ap ...interface{}) (r int32) {
 	esc := MustMalloc(8)
 	var (
 		_arg  uint64
-		_ap   *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-		_ex   = esc          // *Sf_owner_ex
+		_ap   uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_ex   = esc   // *Sf_owner_ex
 		_ret  int32
 		_1ret int32
 	)
 	defer Free(esc)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_arg = VAuint64(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	if _cmd != int32(4) {
 		goto _1
 	}
@@ -12171,6 +13788,17 @@ _17:
 	return r
 }
 
+type t155__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t155__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sf_owner_ex = struct {
 	Ftype int32
 	Fpid  int32
@@ -12196,7 +13824,7 @@ type t1syscall_arg_t = int64
 func Xopen(tls TLS, _filename uintptr /* *int8 */, _flags int32, ap ...interface{}) (r int32) {
 	var (
 		_mode uint32
-		_ap   *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap   uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_fd   int32
 	)
 	_mode = uint32(0)
@@ -12204,12 +13832,9 @@ func Xopen(tls TLS, _filename uintptr /* *int8 */, _flags int32, ap ...interface
 		goto _1
 	}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_mode = VAuint32(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 _1:
 	_fd = int32(X__syscall_cp(tls, int64(2), int64(_filename), int64(_flags|int32(0)), int64(_mode), int64(0), int64(0), int64(0)))
 	if _fd < int32(0) || _flags&int32(02000000) == 0 {
@@ -12219,6 +13844,17 @@ _1:
 	x6__syscall3(tls, int64(72), int64(_fd), int64(2), int64(1))
 _2:
 	return int32(X__syscall_ret(tls, uint64(_fd)))
+}
+
+type t156__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t156__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t2mode_t = uint32
@@ -12237,22 +13873,30 @@ func Xopenat(tls TLS, _fd int32, _filename uintptr /* *int8 */, _flags int32, ap
 	var (
 		_mode uint32
 		_     = _mode
-		_ap   *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap   uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
 	_mode = uint32(0)
 	if _flags&int32(0100) == 0 && _flags&int32(020200000) != int32(020200000) {
 		goto _1
 	}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_mode = VAuint32(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 _1:
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1020 /* "src/fcntl/openat..." */, int32(18), x537__func__)
 	return r
+}
+
+type t157__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t157__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [7]int8, escapes: true, openat.c:8:1
@@ -12267,6 +13911,17 @@ func Xposix_fadvise(tls TLS, _fd int32, _base int64, _len int64, _advice int32) 
 	return int32(-x__syscall4(tls, int64(221), int64(_fd), _base, _len, int64(_advice)))
 }
 
+type t158__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t158__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t16off_t = int64
 
 // x__syscall4 is defined at syscall_arch.h:42:22
@@ -12279,6 +13934,17 @@ func x__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64) 
 // Xposix_fallocate is defined at posix_fallocate.c:5:5
 func Xposix_fallocate(tls TLS, _fd int32, _base int64, _len int64) (r int32) {
 	return int32(-x1__syscall4(tls, int64(285), int64(_fd), int64(0), _base, _len))
+}
+
+type t159__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t159__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t17off_t = int64
@@ -12320,12 +13986,34 @@ _1:
 	return int32(-1)
 }
 
+type t160__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t160__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking fegetexceptflag.o
 
 // Xfegetexceptflag is defined at fegetexceptflag.c:3:5
 func Xfegetexceptflag(tls TLS, _fp uintptr /* *Tfexcept_t = uint16 */, _mask int32) (r int32) {
 	*(*uint16)(unsafe.Pointer(_fp)) = uint16(Xfetestexcept(tls, _mask))
 	return int32(0)
+}
+
+type t161__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t161__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tfexcept_t = uint16
@@ -12337,6 +14025,17 @@ func Xfeholdexcept(tls TLS, _envp uintptr /* *Tfenv_t = struct{F__control_wor...
 	Xfegetenv(tls, _envp)
 	Xfeclearexcept(tls, int32(63))
 	return int32(0)
+}
+
+type t162__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t162__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking fenv.o
@@ -12376,6 +14075,17 @@ func Xfesetenv(tls TLS, _envp uintptr /* *Tfenv_t = struct{F__control_wor...unus
 	return int32(0)
 }
 
+type t163__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t163__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking fesetexceptflag.o
 
 // Xfesetexceptflag is defined at fesetexceptflag.c:3:5
@@ -12383,6 +14093,17 @@ func Xfesetexceptflag(tls TLS, _fp uintptr /* *Tfexcept_t = uint16 */, _mask int
 	Xfeclearexcept(tls, ^int32(*(*uint16)(unsafe.Pointer(_fp)))&_mask)
 	Xferaiseexcept(tls, int32(*(*uint16)(unsafe.Pointer(_fp)))&_mask)
 	return int32(0)
+}
+
+type t164__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t164__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1fexcept_t = uint16
@@ -12401,6 +14122,17 @@ _1:
 	return X__fesetround(tls, _r)
 }
 
+type t165__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t165__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking feupdateenv.o
 
 // Xfeupdateenv is defined at feupdateenv.c:3:5
@@ -12411,6 +14143,17 @@ func Xfeupdateenv(tls TLS, _envp uintptr /* *Tfenv_t = struct{F__control_wor...u
 	Xfesetenv(tls, _envp)
 	Xferaiseexcept(tls, _ex)
 	return int32(0)
+}
+
+type t166__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t166__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking floatscan.o
@@ -12679,6 +14422,17 @@ _36:
 	_c = int32('0')
 _35:
 	return xdecfloat(tls, _f, _c, _bits, _emin, _sign, _pok)
+}
+
+type t167__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t167__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type S_IO_FILE = struct {
@@ -14080,6 +15834,17 @@ _43:
 	return _y ^ uint64(_neg) - uint64(_neg)
 }
 
+type t168__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t168__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -14133,19 +15898,30 @@ type s39__locale_struct = struct{ Fcat [6]uintptr }
 // linking libc.o
 
 // X__libc S__libc, escapes: true, libc.c:3:15
-var X__libc = bss + 1624
+var X__libc = bss + 1640
 
 // X__hwcap Tsize_t = uint64, escapes: true, libc.c:5:8
-var X__hwcap = bss + 1736
+var X__hwcap = bss + 1752
 
 // X__sysinfo Tsize_t = uint64, escapes: true, libc.c:6:8
-var X__sysinfo = bss + 1744
+var X__sysinfo = bss + 1760
 
 // X__progname *int8, escapes: true, libc.c:7:6
-var X__progname = bss + 1752
+var X__progname = bss + 1768
 
 // X__progname_full *int8, escapes: true, libc.c:7:21
-var X__progname_full = bss + 1760
+var X__progname_full = bss + 1776
+
+type t169__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t169__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type S__libc = struct {
 	Fcan_do_threads  int32
@@ -14230,6 +16006,17 @@ _8:
 _10:
 }
 
+type t170__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t170__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking shgetc.o
 
 // X__shlim is defined at shgetc.c:3:6
@@ -14290,6 +16077,17 @@ _5:
 	return _c
 }
 
+type t171__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t171__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t20off_t = int64
 
 type s2_IO_FILE = struct {
@@ -14345,6 +16143,17 @@ func X__syscall_ret(tls TLS, _r uint64) (r int64) {
 
 _1:
 	return int64(_r)
+}
+
+type t172__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t172__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking vdso.o
@@ -14542,6 +16351,17 @@ _26:
 	return null
 }
 
+type t173__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t173__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t31size_t = uint64
 
 type TElf64_Half = uint16
@@ -14600,6 +16420,17 @@ func X__libc_get_version(tls TLS) (r uintptr /* *int8 */) {
 	return xversion
 }
 
+type t174__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t174__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xversion [7]int8, escapes: true, version.c:3:19
 var xversion = ds + 27944
 
@@ -14636,6 +16467,17 @@ func Xftok(tls TLS, _path uintptr /* *int8 */, _id int32) (r int32) {
 
 _1:
 	return int32(*(*uint64)(unsafe.Pointer(_st + 8))&uint64(0xffff) | *(*uint64)(unsafe.Pointer(_st))&uint64(0xff)<<(uint(16)%64) | uint64(uint32(_id)&uint32(0xff)<<(uint(24)%32)))
+}
+
+type t175__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t175__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tkey_t = int32
@@ -14693,6 +16535,17 @@ func Xmsgctl(tls TLS, _q int32, _cmd int32, _buf uintptr /* *Smsqid_ds */) (r in
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
 
+type t176__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t176__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Smsqid_ds = struct {
 	Fmsg_perm   Sipc_perm
 	Fmsg_stime  int64
@@ -14746,6 +16599,17 @@ func Xmsgget(tls TLS, _k int32, _flag int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x__syscall2(tls, int64(68), int64(_k), int64(_flag)))))
 }
 
+type t177__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t177__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t2key_t = int32
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -14759,6 +16623,17 @@ func x__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 func Xmsgrcv(tls TLS, _q int32, _m uintptr /* *void */, _len uint64, _type int64, _flag int32) (r int64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1084 /* "src/ipc/msgrcv.c" */, int32(10), x551__func__)
 	return r
+}
+
+type t178__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t178__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t32size_t = uint64
@@ -14776,6 +16651,17 @@ func Xmsgsnd(tls TLS, _q int32, _m uintptr /* *void */, _len uint64, _flag int32
 	return r
 }
 
+type t179__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t179__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t33size_t = uint64
 
 // x1__func__ [7]int8, escapes: true, msgsnd.c:8:1
@@ -14787,9 +16673,8 @@ var x552__func__ = ds + 27960
 func Xsemctl(tls TLS, _id int32, _num int32, _cmd int32, ap ...interface{}) (r int32) {
 	esc := MustMalloc(8)
 	var (
-		_arg = esc          // *Usemun
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-		_    = _ap
+		_arg = esc   // *Usemun
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_r   int32
 	)
 	defer Free(esc)
@@ -14822,15 +16707,23 @@ _6:
 _7:
 _8:
 _9:
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1136 /* "src/ipc/semctl.c" */, int32(26), x553__func__)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 _1:
 	_r = int32(x2__syscall4(tls, int64(66), int64(_id), int64(_num), int64(_cmd|int32(0)), int64(*(*uintptr)(unsafe.Pointer(_arg)))))
 	return int32(X__syscall_ret(tls, uint64(_r)))
+}
+
+type t180__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t180__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [7]int8, escapes: true, semctl.c:19:1
@@ -14896,6 +16789,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x8__syscall3(tls, int64(64), int64(_key), int64(_n), int64(_fl)))))
 }
 
+type t181__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t181__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t4key_t = int32
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -14908,6 +16812,17 @@ func x8__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) 
 // Xsemop is defined at semop.c:5:5
 func Xsemop(tls TLS, _id int32, _buf uintptr /* *Ssembuf */, _n uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x9__syscall3(tls, int64(65), int64(_id), int64(_buf), int64(_n)))))
+}
+
+type t182__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t182__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t34size_t = uint64
@@ -14928,6 +16843,17 @@ func x9__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) 
 // Xsemtimedop is defined at semtimedop.c:6:5
 func Xsemtimedop(tls TLS, _id int32, _buf uintptr /* *Ssembuf */, _n uint64, _ts uintptr /* *Stimespec */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x3__syscall4(tls, int64(220), int64(_id), int64(_buf), int64(_n), int64(_ts)))))
+}
+
+type t183__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t183__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t35size_t = uint64
@@ -14957,6 +16883,17 @@ func Xshmat(tls TLS, _id int32, _addr uintptr /* *void */, _flag int32) (r uintp
 	return uintptr(X__syscall_ret(tls, uint64(x10__syscall3(tls, int64(30), int64(_id), int64(_addr), int64(_flag)))))
 }
 
+type t184__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t184__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall3 is defined at syscall_arch.h:33:22
 func x10__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
@@ -14970,6 +16907,17 @@ func Xshmctl(tls TLS, _id int32, _cmd int32, _buf uintptr /* *Sshmid_ds */) (r i
 
 	_r = int32(x11__syscall3(tls, int64(31), int64(_id), int64(_cmd|int32(0)), int64(_buf)))
 	return int32(X__syscall_ret(tls, uint64(_r)))
+}
+
+type t185__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t185__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sshmid_ds = struct {
@@ -15023,6 +16971,17 @@ func Xshmdt(tls TLS, _addr uintptr /* *void */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x2__syscall1(tls, int64(67), int64(_addr)))))
 }
 
+type t186__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t186__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x2__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -15041,6 +17000,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x12__syscall3(tls, int64(29), int64(_key), int64(_size), int64(_flag)))))
 }
 
+type t187__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t187__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t6key_t = int32
 
 type t37size_t = uint64
@@ -15052,6 +17022,17 @@ func x12__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 
 // linking __dlsym.o
 
+type t188__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t188__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xstub_dlsym is defined at __dlsym.c:7:13
 func xstub_dlsym(tls TLS, _p uintptr /* *void */, _s uintptr /* *int8 */, _ra uintptr /* *void */) (r uintptr /* *void */) {
 	X__dl_seterr(tls, ts+1156 /* "Symbol not found..." */, _s)
@@ -15059,6 +17040,17 @@ func xstub_dlsym(tls TLS, _p uintptr /* *void */, _s uintptr /* *int8 */, _ra ui
 }
 
 // linking dl_iterate_phdr.o
+
+type t189__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t189__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 func fn554(p uintptr) func(TLS, uintptr, uint64, uintptr) int32 {
 	return *(*func(TLS, uintptr, uint64, uintptr) int32)(unsafe.Pointer(&p))
@@ -15180,6 +17172,17 @@ type t1uint16_t = uint16
 
 // linking dladdr.o
 
+type t190__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t190__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xstub_dladdr is defined at dladdr.c:5:12
 func xstub_dladdr(tls TLS, _addr uintptr /* *void */, _info uintptr /* *TDl_info = struct{Fdli_fname *i...sname *int8;Fdli_saddr uintptr;} */) (r int32) {
 	return int32(0)
@@ -15191,6 +17194,17 @@ func xstub_dladdr(tls TLS, _addr uintptr /* *void */, _info uintptr /* *TDl_info
 func Xdlclose(tls TLS, _p uintptr /* *void */) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1196 /* "src/ldso/dlclose..." */, int32(9), x555__func__)
 	return r
+}
+
+type t191__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t191__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [8]int8, escapes: true, dlclose.c:8:1
@@ -15249,17 +17263,14 @@ _1:
 }
 
 // X__dl_vseterr is defined at dlerror.c:27:6
-func X__dl_vseterr(tls TLS, _fmt uintptr /* *int8 */, _ap *[]interface{}) {
+func X__dl_vseterr(tls TLS, _fmt uintptr /* *int8 */, _ap uintptr) {
 	var (
-		_ap2  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-		_self uintptr        // Tpthread_t = *S__pthread
+		_ap2  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_self uintptr // Tpthread_t = *S__pthread
 		_len  uint64
 		_buf  uintptr // *int8
 	)
-	{
-		x := *_ap
-		_ap2 = &x
-	}
+	_ap2 = X__builtin_va_copy(tls, _ap)
 	_self = x7__pthread_self(tls)
 	if *(*uintptr)(unsafe.Pointer(_self + 208)) == uintptr(18446744073709551615) {
 		goto _1
@@ -15268,7 +17279,7 @@ func X__dl_vseterr(tls TLS, _fmt uintptr /* *int8 */, _ap *[]interface{}) {
 	Xfree(tls, *(*uintptr)(unsafe.Pointer(_self + 208)))
 _1:
 	_len = uint64(Xvsnprintf(tls, null, uint64(0), _fmt, _ap2))
-	_ap2 = nil
+	X__builtin_free(tls, _ap2)
 	_buf = Xmalloc(tls, _len+uint64(1))
 	if _buf == 0 {
 		goto _2
@@ -15286,17 +17297,23 @@ _3:
 
 // X__dl_seterr is defined at dlerror.c:47:6
 func X__dl_seterr(tls TLS, _fmt uintptr /* *int8 */, ap ...interface{}) {
-	var _ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+	var _ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	X__dl_vseterr(tls, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 }
 
-type t5pthread_t = uintptr // Tpthread_t = *S__pthread
+type t192__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t192__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s11__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -15359,13 +17376,7 @@ type s9__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t38locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s42__locale_struct = struct{ Fcat [6]uintptr }
-
-type T__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type T__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
 
 // linking dlinfo.o
 
@@ -15384,10 +17395,32 @@ _1:
 	return int32(0)
 }
 
+type t193__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t193__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [7]int8, escapes: true, dlinfo.c:12:1
 var x557__func__ = ds + 27984
 
 // linking dlopen.o
+
+type t194__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t194__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // xstub_dlopen is defined at dlopen.c:7:13
 func xstub_dlopen(tls TLS, _file uintptr /* *int8 */, _mode int32) (r uintptr /* *void */) {
@@ -15476,6 +17509,17 @@ func Xcuserid(tls TLS, _buf uintptr /* *int8 */) (r uintptr /* *int8 */) {
 _1:
 	Xsnprintf(tls, _buf, uint64(20), ts+132 /* "%s" */, *(*uintptr)(unsafe.Pointer(_pw)))
 	return _buf
+}
+
+type t195__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t195__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Spasswd = struct {
@@ -15587,12 +17631,23 @@ _12:
 	return int32(0)
 }
 
+type t196__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t196__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t4pid_t = int32
 
 // linking err.o
 
 // Xvwarn is defined at err.c:8:6
-func Xvwarn(tls TLS, _fmt uintptr /* *int8 */, _ap *[]interface{}) {
+func Xvwarn(tls TLS, _fmt uintptr /* *int8 */, _ap uintptr) {
 	Xfprintf(tls, *(*uintptr)(unsafe.Pointer(Xstderr)), ts+1396 /* "%s: " */, *(*uintptr)(unsafe.Pointer(X__progname)))
 	if _fmt == 0 {
 		goto _1
@@ -15605,7 +17660,7 @@ _1:
 }
 
 // Xvwarnx is defined at err.c:18:6
-func Xvwarnx(tls TLS, _fmt uintptr /* *int8 */, _ap *[]interface{}) {
+func Xvwarnx(tls TLS, _fmt uintptr /* *int8 */, _ap uintptr) {
 	Xfprintf(tls, *(*uintptr)(unsafe.Pointer(Xstderr)), ts+1396 /* "%s: " */, *(*uintptr)(unsafe.Pointer(X__progname)))
 	if _fmt == 0 {
 		goto _1
@@ -15617,68 +17672,63 @@ _1:
 }
 
 // Xverr is defined at err.c:25:16
-func Xverr(tls TLS, _status int32, _fmt uintptr /* *int8 */, _ap *[]interface{}) {
+func Xverr(tls TLS, _status int32, _fmt uintptr /* *int8 */, _ap uintptr) {
 	Xvwarn(tls, _fmt, _ap)
 	Xexit(tls, _status)
 }
 
 // Xverrx is defined at err.c:31:16
-func Xverrx(tls TLS, _status int32, _fmt uintptr /* *int8 */, _ap *[]interface{}) {
+func Xverrx(tls TLS, _status int32, _fmt uintptr /* *int8 */, _ap uintptr) {
 	Xvwarnx(tls, _fmt, _ap)
 	Xexit(tls, _status)
 }
 
 // Xwarn is defined at err.c:37:6
 func Xwarn(tls TLS, _fmt uintptr /* *int8 */, ap ...interface{}) {
-	var _ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+	var _ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	Xvwarn(tls, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 }
 
 // Xwarnx is defined at err.c:45:6
 func Xwarnx(tls TLS, _fmt uintptr /* *int8 */, ap ...interface{}) {
-	var _ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+	var _ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	Xvwarnx(tls, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 }
 
 // Xerr is defined at err.c:53:16
 func Xerr(tls TLS, _status int32, _fmt uintptr /* *int8 */, ap ...interface{}) {
-	var _ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+	var _ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	Xverr(tls, _status, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 }
 
 // Xerrx is defined at err.c:61:16
 func Xerrx(tls TLS, _status int32, _fmt uintptr /* *int8 */, ap ...interface{}) {
-	var _ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+	var _ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	Xverrx(tls, _status, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 }
 
-type t1__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t197__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t1__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t197__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking euidaccess.o
 
@@ -15687,12 +17737,34 @@ func Xeuidaccess(tls TLS, _filename uintptr /* *int8 */, _amode int32) (r int32)
 	return Xfaccessat(tls, int32(-100), _filename, _amode, int32(0x200))
 }
 
+type t198__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t198__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking ftw.o
 
 // Xftw is defined at ftw.c:5:5
 func Xftw(tls TLS, _path uintptr /* *int8 */, _fn uintptr /* *func(TLS, uintptr, uintptr, int32) int32 */, _fd_limit int32) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1408 /* "src/legacy/ftw.c" */, int32(10), x559__func__)
 	return r
+}
+
+type t199__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t199__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [4]int8, escapes: true, ftw.c:6:1
@@ -15717,6 +17789,17 @@ _1:
 	*(*int64)(unsafe.Pointer(_times + 16)) = *(*int64)(unsafe.Pointer(_tv + 16))
 	*(*int64)(unsafe.Pointer((_times + 16) + 8)) = *(*int64)(unsafe.Pointer((_tv + 16) + 8)) * int64(1000)
 	return Xfutimens(tls, _fd, _times)
+}
+
+type t200__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t200__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Stimeval = struct {
@@ -15746,6 +17829,17 @@ func Xgetdtablesize(tls TLS) (r int32) {
 	}
 
 	return int32(0x7fffffff)
+}
+
+type t201__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t201__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1rlimit = struct {
@@ -15797,6 +17891,17 @@ _5:
 	return _n
 }
 
+type t202__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t202__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1sysinfo = struct {
 	Fuptime     uint64
 	Floads      [3]uint64
@@ -15819,6 +17924,17 @@ type s1sysinfo = struct {
 // Xgetpagesize is defined at getpagesize.c:5:5
 func Xgetpagesize(tls TLS) (r int32) {
 	return int32(4096)
+}
+
+type t203__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t203__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking getpass.o
@@ -15886,8 +18002,19 @@ _2:
 	return x561password
 }
 
+type t204__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t204__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1password [128]int8, escapes: true, getpass.c:13:14
-var x561password = bss + 1768
+var x561password = bss + 1784
 
 type Stermios = struct {
 	Fc_iflag    uint32
@@ -15973,6 +18100,17 @@ _4:
 	return *(*uintptr)(unsafe.Pointer(xline))
 }
 
+type t205__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t205__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xf *TFILE = S_IO_FILE, escapes: false, getusershell.c:9:13
 var xf uintptr
 
@@ -15982,10 +18120,10 @@ var xdefshells = ds + 28000
 type t5ssize_t = int64
 
 // xline *int8, escapes: true, getusershell.c:7:13
-var xline = bss + 1896
+var xline = bss + 1912
 
 // xlinesize Tsize_t = uint64, escapes: true, getusershell.c:8:15
-var xlinesize = bss + 1904
+var xlinesize = bss + 1920
 
 type t42size_t = uint64
 
@@ -16002,6 +18140,17 @@ func Xisastream(tls TLS, _fd int32) (r int32) {
 	return int32(0)
 }
 
+type t206__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t206__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lutimes.o
 
 // Xlutimes is defined at lutimes.c:6:5
@@ -16014,6 +18163,17 @@ func Xlutimes(tls TLS, _filename uintptr /* *int8 */, _tv uintptr /* [2]Stimeval
 	*(*int64)(unsafe.Pointer(_times + 16)) = *(*int64)(unsafe.Pointer(_tv + 16))
 	*(*int64)(unsafe.Pointer((_times + 16) + 8)) = *(*int64)(unsafe.Pointer((_tv + 16) + 8)) * int64(1000)
 	return Xutimensat(tls, int32(-100), _filename, _times, int32(0x100))
+}
+
+type t207__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t207__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1timeval = struct {
@@ -16038,7 +18198,7 @@ func Xulimit(tls TLS, _cmd int32, ap ...interface{}) (r int64) {
 	var (
 		_rl  = esc // *Srlimit
 		_val int64
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
 	defer Free(esc)
 	Xgetrlimit(tls, int32(1), _rl)
@@ -16046,12 +18206,9 @@ func Xulimit(tls TLS, _cmd int32, ap ...interface{}) (r int64) {
 		goto _1
 	}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_val = VAint64(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	*(*uint64)(unsafe.Pointer(_rl)) = uint64(512) * uint64(_val)
 	if Xsetrlimit(tls, int32(1), _rl) == 0 {
 		goto _2
@@ -16062,6 +18219,17 @@ func Xulimit(tls TLS, _cmd int32, ap ...interface{}) (r int64) {
 _2:
 _1:
 	return int64(*(*uint64)(unsafe.Pointer(_rl)) / uint64(512))
+}
+
+type t208__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t208__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2rlimit = struct {
@@ -16111,6 +18279,17 @@ func X__utmpxname(tls TLS, _f uintptr /* *int8 */) (r int32) {
 	return int32(-1)
 }
 
+type t209__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t209__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sutmpx = struct {
 	Fut_type int16
 	Fut_pid  int32
@@ -16140,6 +18319,17 @@ type t9time_t = int64
 type t2suseconds_t = int64
 
 // linking valloc.o
+
+type t210__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t210__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking adjtime.o
 
@@ -16192,6 +18382,17 @@ _4:
 	return int32(0)
 }
 
+type t211__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t211__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s3timeval = struct {
 	Ftv_sec  int64
 	Ftv_usec int64
@@ -16235,6 +18436,17 @@ func x3__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xadjtimex is defined at adjtimex.c:4:5
 func Xadjtimex(tls TLS, _tx uintptr /* *Stimex */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x4__syscall1(tls, int64(159), int64(_tx)))))
+}
+
+type t212__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t212__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1timex = struct {
@@ -16282,6 +18494,17 @@ func Xarch_prctl(tls TLS, _code int32, _addr uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x1__syscall2(tls, int64(158), int64(_code), int64(_addr)))))
 }
 
+type t213__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t213__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x1__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -16294,7 +18517,29 @@ func Xbrk(tls TLS, _end uintptr /* *void */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(18446744073709551604)))
 }
 
+type t214__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t214__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cache.o
+
+type t215__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t215__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking cap.o
 
@@ -16306,6 +18551,17 @@ func Xcapset(tls TLS, _a uintptr /* *void */, _b uintptr /* *void */) (r int32) 
 // Xcapget is defined at cap.c:8:5
 func Xcapget(tls TLS, _a uintptr /* *void */, _b uintptr /* *void */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x2__syscall2(tls, int64(125), int64(_a), int64(_b)))))
+}
+
+type t216__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t216__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -16320,6 +18576,17 @@ func Xchroot(tls TLS, _path uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x5__syscall1(tls, int64(161), int64(_path)))))
 }
 
+type t217__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t217__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x5__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -16330,6 +18597,17 @@ func x5__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xclock_adjtime is defined at clock_adjtime.c:4:5
 func Xclock_adjtime(tls TLS, _clock_id int32, _utx uintptr /* *Stimex */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x3__syscall2(tls, int64(305), int64(_clock_id), int64(_utx)))))
+}
+
+type t218__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t218__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1clockid_t = int32
@@ -16377,20 +18655,28 @@ type t5suseconds_t = int64
 // Xclone is defined at clone.c:6:5
 func Xclone(tls TLS, _func uintptr /* *func(TLS, uintptr) int32 */, _stack uintptr /* *void */, _flags int32, _arg uintptr /* *void */, ap ...interface{}) (r int32) {
 	var (
-		_ap   *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-		_ptid uintptr        // *Tpid_t = int32
-		_ctid uintptr        // *Tpid_t = int32
-		_tls  uintptr        // *void
+		_ap   uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_ptid uintptr // *Tpid_t = int32
+		_ctid uintptr // *Tpid_t = int32
+		_tls  uintptr // *void
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ptid = VAuintptr(_ap)
 	_tls = VAuintptr(_ap)
 	_ctid = VAuintptr(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return int32(X__syscall_ret(tls, uint64(X__clone(tls, _func, _stack, _flags, _arg, _ptid, _tls, _ctid))))
+}
+
+type t219__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t219__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking epoll.o
@@ -16436,6 +18722,17 @@ _1:
 // Xepoll_wait is defined at epoll.c:34:5
 func Xepoll_wait(tls TLS, _fd int32, _ev uintptr /* *Sepoll_event */, _cnt int32, _to int32) (r int32) {
 	return Xepoll_pwait(tls, _fd, _ev, _cnt, _to, null)
+}
+
+type t220__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t220__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -16514,6 +18811,17 @@ func Xeventfd_write(tls TLS, _fd int32, avalue uint64) (r int32) {
 	return int32(-1)
 }
 
+type t221__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t221__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x4__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -16539,6 +18847,17 @@ func Xfallocate(tls TLS, _fd int32, _mode int32, _base int64, _len int64) (r int
 	return int32(X__syscall_ret(tls, uint64(x5__syscall4(tls, int64(285), int64(_fd), int64(_mode), _base, _len))))
 }
 
+type t222__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t222__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t22off_t = int64
 
 // x__syscall4 is defined at syscall_arch.h:42:22
@@ -16558,6 +18877,17 @@ func Xfanotify_mark(tls TLS, _fanotify_fd int32, _flags uint32, _mask uint64, _d
 	return int32(X__syscall_ret(tls, uint64(x__syscall5(tls, int64(301), int64(_fanotify_fd), int64(_flags), int64(_mask), int64(_dfd), int64(_pathname)))))
 }
 
+type t223__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t223__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x5__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -16575,6 +18905,17 @@ func Xflock(tls TLS, _fd int32, _op int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x6__syscall2(tls, int64(73), int64(_fd), int64(_op)))))
 }
 
+type t224__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t224__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x6__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -16586,6 +18927,17 @@ func x6__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 func Xgetrandom(tls TLS, _buf uintptr /* *void */, _buflen uint64, _flags uint32) (r int64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1676 /* "src/linux/getran..." */, int32(7), x563__func__)
 	return r
+}
+
+type t225__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t225__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t44size_t = uint64
@@ -16626,6 +18978,17 @@ func Xinotify_rm_watch(tls TLS, _fd int32, _wd int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x7__syscall2(tls, int64(255), int64(_fd), int64(_wd)))))
 }
 
+type t226__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t226__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x8__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -16655,6 +19018,17 @@ func Xioperm(tls TLS, _from uint64, _num uint64, _turn_on int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x14__syscall3(tls, int64(173), int64(_from), int64(_num), int64(_turn_on)))))
 }
 
+type t227__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t227__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall3 is defined at syscall_arch.h:33:22
 func x14__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
@@ -16665,6 +19039,17 @@ func x14__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xiopl is defined at iopl.c:6:5
 func Xiopl(tls TLS, _level int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x9__syscall1(tls, int64(172), int64(_level)))))
+}
+
+type t228__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t228__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -16679,6 +19064,17 @@ func Xklogctl(tls TLS, _type int32, _buf uintptr /* *int8 */, _len int32) (r int
 	return int32(X__syscall_ret(tls, uint64(x15__syscall3(tls, int64(103), int64(_type), int64(_buf), int64(_len)))))
 }
 
+type t229__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t229__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall3 is defined at syscall_arch.h:33:22
 func x15__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
@@ -16689,6 +19085,17 @@ func x15__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xmemfd_create is defined at memfd_create.c:5:5
 func Xmemfd_create(tls TLS, _name uintptr /* *int8 */, _flags uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x8__syscall2(tls, int64(319), int64(_name), int64(_flags)))))
+}
+
+type t230__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t230__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -16710,6 +19117,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x16__syscall3(tls, int64(325), int64(_addr), int64(_len), int64(_flags)))))
 }
 
+type t231__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t231__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t45size_t = uint64
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -16727,6 +19145,17 @@ func Xinit_module(tls TLS, _a uintptr /* *void */, _b uint64, _c uintptr /* *int
 // Xdelete_module is defined at module.c:8:5
 func Xdelete_module(tls TLS, _a uintptr /* *int8 */, _b uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x9__syscall2(tls, int64(176), int64(_a), int64(_b)))))
+}
+
+type t232__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t232__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -16756,6 +19185,17 @@ func Xumount2(tls TLS, _special uintptr /* *int8 */, _flags int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x10__syscall2(tls, int64(166), int64(_special), int64(_flags)))))
 }
 
+type t233__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t233__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall5 is defined at syscall_arch.h:52:22
 func x1__syscall5(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, _a5, int64(0))
@@ -16773,6 +19213,17 @@ func Xpersonality(tls TLS, _persona uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x10__syscall1(tls, int64(135), int64(_persona)))))
 }
 
+type t234__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t234__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x10__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -16783,6 +19234,17 @@ func x10__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xpivot_root is defined at pivot_root.c:3:5
 func Xpivot_root(tls TLS, _new uintptr /* *int8 */, _old uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x11__syscall2(tls, int64(155), int64(_new), int64(_old)))))
+}
+
+type t235__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t235__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -16797,6 +19259,17 @@ func Xppoll(tls TLS, _fds uintptr /* *Spollfd */, _n uint64, _to uintptr /* *Sti
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1700 /* "src/linux/ppoll...." */, int32(9), x564__func__)
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+1700 /* "src/linux/ppoll...." */, int32(11), x564__func__)
 	return r
+}
+
+type t236__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t236__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tnfds_t = uint64
@@ -16825,13 +19298,10 @@ func Xprctl(tls TLS, _op int32, ap ...interface{}) (r int32) {
 	var (
 		_x  = esc // *[4]uint64
 		_i  int32
-		_ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
 	defer Free(esc)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_i = int32(0)
 _1:
 	if _i >= int32(4) {
@@ -16843,8 +19313,19 @@ _1:
 	goto _1
 
 _3:
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return int32(X__syscall_ret(tls, uint64(x2__syscall5(tls, int64(157), int64(_op), int64(*(*uint64)(unsafe.Pointer(_x))), int64(*(*uint64)(unsafe.Pointer(_x + 8))), int64(*(*uint64)(unsafe.Pointer(_x + 16))), int64(*(*uint64)(unsafe.Pointer(_x + 24)))))))
+}
+
+type t237__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t237__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall5 is defined at syscall_arch.h:52:22
@@ -16900,6 +19381,17 @@ _6:
 	return _r
 }
 
+type t238__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t238__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t6pid_t = int32
 
 type s3rlimit = struct {
@@ -16926,6 +19418,17 @@ func Xprocess_vm_readv(tls TLS, _pid int32, _lvec uintptr /* *Siovec */, _liovcn
 	return X__syscall_ret(tls, uint64(x3__syscall6(tls, int64(310), int64(_pid), int64(_lvec), int64(_liovcnt), int64(_rvec), int64(_riovcnt), int64(_flags))))
 }
 
+type t239__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t239__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t7pid_t = int32
 
 type t8ssize_t = int64
@@ -16948,7 +19451,7 @@ type t46size_t = uint64
 func Xptrace(tls TLS, _req int32, ap ...interface{}) (r int64) {
 	esc := MustMalloc(8)
 	var (
-		_ap     *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap     uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_pid    int32
 		_addr   uintptr // *void
 		_data   uintptr // *void
@@ -16958,14 +19461,11 @@ func Xptrace(tls TLS, _req int32, ap ...interface{}) (r int64) {
 	)
 	defer Free(esc)
 	_addr2 = 0
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_pid = VAint32(_ap)
 	_addr = VAuintptr(_ap)
 	_data = VAuintptr(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	if uint32(_req)-uint32(1) >= uint32(3) {
 		goto _1
 	}
@@ -16983,6 +19483,17 @@ _2:
 	return *(*int64)(unsafe.Pointer(_result))
 }
 
+type t240__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t240__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t8pid_t = int32
 
 // x__syscall5 is defined at syscall_arch.h:52:22
@@ -16997,6 +19508,17 @@ func Xquotactl(tls TLS, _cmd int32, _special uintptr /* *int8 */, _id int32, _ad
 	return int32(X__syscall_ret(tls, uint64(x7__syscall4(tls, int64(179), int64(_cmd), int64(_special), int64(_id), int64(_addr)))))
 }
 
+type t241__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t241__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall4 is defined at syscall_arch.h:42:22
 func x7__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, int64(0), int64(0))
@@ -17007,6 +19529,17 @@ func x7__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64)
 // Xreadahead is defined at readahead.c:5:9
 func Xreadahead(tls TLS, _fd int32, _pos int64, _len uint64) (r int64) {
 	return X__syscall_ret(tls, uint64(x18__syscall3(tls, int64(187), int64(_fd), _pos, int64(_len))))
+}
+
+type t242__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t242__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t23off_t = int64
@@ -17027,6 +19560,17 @@ func Xreboot(tls TLS, _type int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x19__syscall3(tls, int64(169), int64(4276215469), int64(672274793), int64(_type)))))
 }
 
+type t243__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t243__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall3 is defined at syscall_arch.h:33:22
 func x19__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
@@ -17037,6 +19581,17 @@ func x19__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xremap_file_pages is defined at remap_file_pages.c:5:5
 func Xremap_file_pages(tls TLS, _addr uintptr /* *void */, _size uint64, _prot int32, _pgoff uint64, _flags int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x4__syscall5(tls, int64(216), int64(_addr), int64(_size), int64(_prot), int64(_pgoff), int64(_flags)))))
+}
+
+type t244__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t244__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t48size_t = uint64
@@ -17060,6 +19615,17 @@ _1:
 	return uintptr(x11__syscall1(tls, int64(12), int64(0)))
 }
 
+type t245__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t245__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Tintptr_t = int64
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -17072,6 +19638,17 @@ func x11__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xsendfile is defined at sendfile.c:5:9
 func Xsendfile(tls TLS, _out_fd int32, _in_fd int32, _ofs uintptr /* *Toff_t = int64 */, _count uint64) (r int64) {
 	return X__syscall_ret(tls, uint64(x8__syscall4(tls, int64(40), int64(_out_fd), int64(_in_fd), int64(_ofs), int64(_count))))
+}
+
+type t246__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t246__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t49size_t = uint64
@@ -17090,6 +19667,17 @@ func Xsetfsgid(tls TLS, _gid uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x12__syscall1(tls, int64(123), int64(_gid)))))
 }
 
+type t247__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t247__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t6gid_t = uint32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -17102,6 +19690,17 @@ func x12__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xsetfsuid is defined at setfsuid.c:5:5
 func Xsetfsuid(tls TLS, _uid uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x13__syscall1(tls, int64(122), int64(_uid)))))
+}
+
+type t248__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t248__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t7uid_t = uint32
@@ -17118,6 +19717,17 @@ func Xsetgroups(tls TLS, _count uint64, _list uintptr /* uintptr */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x12__syscall2(tls, int64(116), int64(_count), int64(_list)))))
 }
 
+type t249__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t249__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t50size_t = uint64
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -17130,6 +19740,17 @@ func x12__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xsethostname is defined at sethostname.c:5:5
 func Xsethostname(tls TLS, _name uintptr /* *int8 */, _len uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x13__syscall2(tls, int64(170), int64(_name), int64(_len)))))
+}
+
+type t250__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t250__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t51size_t = uint64
@@ -17146,6 +19767,17 @@ func Xsetns(tls TLS, _fd int32, _nstype int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x14__syscall2(tls, int64(308), int64(_fd), int64(_nstype)))))
 }
 
+type t251__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t251__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x14__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -17156,6 +19788,17 @@ func x14__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xsettimeofday is defined at settimeofday.c:5:5
 func Xsettimeofday(tls TLS, _tv uintptr /* *Stimeval */, _tz uintptr /* *Stimezone */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x15__syscall2(tls, int64(164), int64(_tv), int64(0)))))
+}
+
+type t252__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t252__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s6timeval = struct {
@@ -17212,6 +19855,17 @@ _2:
 	return int32(X__syscall_ret(tls, uint64(_ret)))
 }
 
+type t253__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t253__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall4 is defined at syscall_arch.h:42:22
 func x9__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, int64(0), int64(0))
@@ -17227,6 +19881,17 @@ func x20__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xsplice is defined at splice.c:5:9
 func Xsplice(tls TLS, _fd_in int32, _off_in uintptr /* *Toff_t = int64 */, _fd_out int32, _off_out uintptr /* *Toff_t = int64 */, _len uint64, _flags uint32) (r int64) {
 	return X__syscall_ret(tls, uint64(x4__syscall6(tls, int64(275), int64(_fd_in), int64(_off_in), int64(_fd_out), int64(_off_out), int64(_len), int64(_flags))))
+}
+
+type t254__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t254__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t52size_t = uint64
@@ -17251,6 +19916,17 @@ func Xstime(tls TLS, _t uintptr /* *Ttime_t = int64 */) (r int32) {
 	return Xsettimeofday(tls, _tv, null)
 }
 
+type t255__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t255__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s7timeval = struct {
 	Ftv_sec  int64
 	Ftv_usec int64
@@ -17272,6 +19948,17 @@ func Xswapoff(tls TLS, _path uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x14__syscall1(tls, int64(168), int64(_path)))))
 }
 
+type t256__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t256__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x16__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -17289,6 +19976,17 @@ func Xsync_file_range(tls TLS, _fd int32, _pos int64, _len int64, _flags uint32)
 	return int32(X__syscall_ret(tls, uint64(x10__syscall4(tls, int64(277), int64(_fd), _pos, _len, int64(_flags)))))
 }
 
+type t257__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t257__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t24off_t = int64
 
 // x__syscall4 is defined at syscall_arch.h:42:22
@@ -17303,6 +20001,17 @@ func Xsyncfs(tls TLS, _fd int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x15__syscall1(tls, int64(306), int64(_fd)))))
 }
 
+type t258__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t258__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x15__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -17313,6 +20022,17 @@ func x15__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // X__lsysinfo is defined at sysinfo.c:5:5
 func X__lsysinfo(tls TLS, _info uintptr /* *Ssysinfo */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x16__syscall1(tls, int64(99), int64(_info)))))
+}
+
+type t259__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t259__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2sysinfo = struct {
@@ -17344,6 +20064,17 @@ func Xtee(tls TLS, _src int32, _dest int32, _len uint64, _flags uint32) (r int64
 	return X__syscall_ret(tls, uint64(x11__syscall4(tls, int64(276), int64(_src), int64(_dest), int64(_len), int64(_flags))))
 }
 
+type t260__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t260__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t53size_t = uint64
 
 type t12ssize_t = int64
@@ -17368,6 +20099,17 @@ func Xtimerfd_settime(tls TLS, _fd int32, _flags int32, _new uintptr /* *Sitimer
 // Xtimerfd_gettime is defined at timerfd.c:14:5
 func Xtimerfd_gettime(tls TLS, _fd int32, _cur uintptr /* *Sitimerspec */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x17__syscall2(tls, int64(287), int64(_fd), int64(_cur)))))
+}
+
+type t261__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t261__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -17399,6 +20141,17 @@ func Xunshare(tls TLS, _flags int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x17__syscall1(tls, int64(272), int64(_flags)))))
 }
 
+type t262__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t262__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x17__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -17409,6 +20162,17 @@ func x17__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xutimes is defined at utimes.c:7:5
 func Xutimes(tls TLS, _path uintptr /* *int8 */, _times uintptr /* [2]Stimeval */) (r int32) {
 	return X__futimesat(tls, int32(-100), _path, _times)
+}
+
+type t263__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t263__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s8timeval = struct {
@@ -17427,6 +20191,17 @@ func Xvhangup(tls TLS) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x1__syscall0(tls, int64(153)))))
 }
 
+type t264__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t264__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall0 is defined at syscall_arch.h:8:22
 func x1__syscall0(tls TLS, _n int64) (r int64) {
 	return X__syscall(tls, _n, int64(0), int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -17437,6 +20212,17 @@ func x1__syscall0(tls TLS, _n int64) (r int64) {
 // Xvmsplice is defined at vmsplice.c:5:9
 func Xvmsplice(tls TLS, _fd int32, _iov uintptr /* *Siovec */, _cnt uint64, _flags uint32) (r int64) {
 	return X__syscall_ret(tls, uint64(x13__syscall4(tls, int64(278), int64(_fd), int64(_iov), int64(_cnt), int64(_flags))))
+}
+
+type t265__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t265__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t54size_t = uint64
@@ -17458,6 +20244,17 @@ func x13__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 // Xwait3 is defined at wait3.c:6:7
 func Xwait3(tls TLS, _status uintptr /* *int32 */, _options int32, _usage uintptr /* *Srusage */) (r int32) {
 	return Xwait4(tls, int32(-1), _status, _options, _usage)
+}
+
+type t266__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t266__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t9pid_t = int32
@@ -17496,6 +20293,17 @@ type t9suseconds_t = int64
 // Xwait4 is defined at wait4.c:6:7
 func Xwait4(tls TLS, _pid int32, _status uintptr /* *int32 */, _options int32, _usage uintptr /* *Srusage */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x14__syscall4(tls, int64(61), int64(_pid), int64(_status), int64(_options), int64(_usage)))))
+}
+
+type t267__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t267__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t10pid_t = int32
@@ -17596,6 +20404,17 @@ func Xfremovexattr(tls TLS, _fd int32, _name uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x18__syscall2(tls, int64(199), int64(_fd), int64(_name)))))
 }
 
+type t268__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t268__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t55size_t = uint64
 
 type t14ssize_t = int64
@@ -17632,6 +20451,17 @@ func X__lctrans_cur(tls TLS, _msg uintptr /* *int8 */) (r uintptr /* *int8 */) {
 	return X__lctrans_impl(tls, _msg, *(*uintptr)(unsafe.Pointer(*(*uintptr)(unsafe.Pointer(x8__pthread_self(tls) + 192)) + 40)))
 }
 
+type t269__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t269__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at __lctrans.c:5:19
 func x6dummy(tls TLS, _msg uintptr /* *int8 */, _lm uintptr /* *S__locale_map */) (r uintptr /* *int8 */) {
 	return _msg
@@ -17644,8 +20474,6 @@ type S__locale_map = struct {
 	Fnext     uintptr // *S__locale_map
 }
 
-type t39locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x8__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 	return uintptr(tls)
@@ -17653,8 +20481,6 @@ func x8__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 }
 
 type t56size_t = uint64
-
-type s43__locale_struct = struct{ Fcat [6]uintptr }
 
 type s12__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -17702,6 +20528,8 @@ type s10__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
+
+type s43__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking __mo_lookup.o
 
@@ -17792,6 +20620,17 @@ _7:
 	return null
 }
 
+type t270__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t270__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t57size_t = uint64
 
 type t21uint32_t = uint32
@@ -17818,10 +20657,21 @@ _1:
 	return null
 }
 
+type t271__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t271__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking c_locale.o
 
 // X__c_dot_utf8 S__locale_map, escapes: true, c_locale.c:6:27
-var X__c_dot_utf8 = bss + 1912 // struct __locale_map
+var X__c_dot_utf8 = bss + 1928 // struct __locale_map
 
 func init() {
 	*(*s1__locale_map)(unsafe.Pointer(X__c_dot_utf8)) = s1__locale_map{
@@ -17832,7 +20682,18 @@ func init() {
 }
 
 // X__c_locale S__locale_struct, escapes: true, c_locale.c:12:30
-var X__c_locale = bss + 1960
+var X__c_locale = bss + 1976
+
+type t272__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t272__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s1__locale_map = struct {
 	Fmap      uintptr // *void
@@ -17857,7 +20718,16 @@ func Xcatclose(tls TLS, _catd uintptr /* Tnl_catd = *void */) (r int32) {
 	return int32(0)
 }
 
-type Tnl_catd = uintptr // Tnl_catd = *void
+type t273__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t273__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking catgets.o
 
@@ -17866,7 +20736,16 @@ func Xcatgets(tls TLS, _catd uintptr /* Tnl_catd = *void */, _set_id int32, _msg
 	return _s
 }
 
-type t1nl_catd = uintptr // Tnl_catd = *void
+type t274__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t274__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking catopen.o
 
@@ -17876,7 +20755,16 @@ func Xcatopen(tls TLS, _name uintptr /* *int8 */, _oflag int32) (r uintptr /* Tn
 	return uintptr(18446744073709551615)
 }
 
-type t2nl_catd = uintptr // Tnl_catd = *void
+type t275__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t275__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking dcngettext.o
 
@@ -17987,11 +20875,22 @@ func Xdgettext(tls TLS, _domainname uintptr /* *int8 */, _msgid uintptr /* *int8
 	return Xdcngettext(tls, _domainname, _msgid, null, uint64(1), int32(5))
 }
 
+type t276__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t276__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [15]int8, escapes: true, dcngettext.c:37:1
 var x565__func__ = ds + 28072
 
 // x2lock [1]int32, escapes: true, dcngettext.c:38:22
-var x566lock = bss + 2008
+var x566lock = bss + 2024
 
 type Sbinding = struct {
 	Fnext       uintptr // *Sbinding
@@ -18005,7 +20904,7 @@ type Sbinding = struct {
 type t59size_t = uint64
 
 // xbindings *void, escapes: true, dcngettext.c:22:13
-var xbindings = bss + 2016
+var xbindings = bss + 2032
 
 // xa_cas_p is defined at atomic_arch.h:14:20
 func xa_cas_p(tls TLS, _p uintptr /* *void */, _t uintptr /* *void */, _s uintptr /* *void */) (r uintptr /* *void */) {
@@ -18053,7 +20952,16 @@ _2:
 	return _new
 }
 
-type t40locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t277__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t277__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s45__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -18071,7 +20979,16 @@ func Xfreelocale(tls TLS, _l uintptr /* Tlocale_t = *S__locale_struct */) {
 _1:
 }
 
-type t41locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t278__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t278__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s46__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -19463,7 +22380,16 @@ lend:
 	return _x
 }
 
-type Ticonv_t = uintptr // Ticonv_t = *void
+type t279__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t279__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type t61size_t = uint64
 
@@ -19538,8 +22464,6 @@ func xcombine_to_from(tls TLS, _t uint64, _f uint64) (r uintptr /* Ticonv_t = *v
 var x571__func__ = ds + 33000
 
 type s47__locale_struct = struct{ Fcat [6]uintptr }
-
-type t42locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type t4wchar_t = int32
 
@@ -19727,7 +22651,16 @@ _1:
 	return int32(0)
 }
 
-type t1iconv_t = uintptr // Ticonv_t = *void
+type t280__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t280__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type t62size_t = uint64
 
@@ -19857,9 +22790,18 @@ func X__nl_langinfo(tls TLS, _item int32) (r uintptr /* *int8 */) {
 	return X__nl_langinfo_l(tls, _item, *(*uintptr)(unsafe.Pointer(x10__pthread_self(tls) + 192)))
 }
 
-type Tnl_item = int32
+type t281__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t43locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t281__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type Tnl_item = int32
 
 type s48__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -20120,6 +23062,17 @@ _25:
 	return _new
 }
 
+type t282__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t282__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s2__locale_map = struct {
 	Fmap      uintptr // *void
 	Fmap_size uint64
@@ -20130,7 +23083,7 @@ type s2__locale_map = struct {
 type t64size_t = uint64
 
 // x1lock [1]int32, escapes: true, locale_map.c:30:22
-var x575lock = bss + 2024
+var x575lock = bss + 2040
 
 // x2loc_head *void, escapes: false, locale_map.c:31:14
 var x574loc_head uintptr
@@ -20143,6 +23096,17 @@ var xenvvars = ds + 34592
 // Xlocaleconv is defined at localeconv.c:31:14
 func Xlocaleconv(tls TLS) (r uintptr /* *Slconv */) {
 	return xposix_lconv
+}
+
+type t283__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t283__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Slconv = struct {
@@ -20173,7 +23137,7 @@ type Slconv = struct {
 }
 
 // xposix_lconv Slconv, escapes: true, localeconv.c:4:27
-var xposix_lconv = bss + 2032 // struct lconv
+var xposix_lconv = bss + 2048 // struct lconv
 
 func init() {
 	*(*Slconv)(unsafe.Pointer(xposix_lconv)) = Slconv{
@@ -20299,7 +23263,16 @@ _13:
 	return _loc
 }
 
-type t44locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t284__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t284__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s49__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -20332,6 +23305,17 @@ func X__pleval(tls TLS, _s uintptr /* *int8 */, _n uint64) (r uint64) {
 	}
 
 	return uint64(18446744073709551615)
+}
+
+type t285__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t285__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sst = struct {
@@ -20762,8 +23746,19 @@ _2:
 	return _ret
 }
 
+type t286__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t286__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1lock [1]int32, escapes: true, setlocale.c:24:22
-var x585lock = bss + 2128
+var x585lock = bss + 2144
 
 type s4__locale_map = struct {
 	Fmap      uintptr // *void
@@ -20798,7 +23793,7 @@ _2:
 }
 
 // xbuf [144]int8, escapes: true, setlocale.c:8:13
-var xbuf = bss + 2136
+var xbuf = bss + 2152
 
 // linking strcoll.o
 
@@ -20812,7 +23807,16 @@ func Xstrcoll(tls TLS, _l uintptr /* *int8 */, _r uintptr /* *int8 */) (r int32)
 	return X__strcoll_l(tls, _l, _r, *(*uintptr)(unsafe.Pointer(x11__pthread_self(tls) + 192)))
 }
 
-type t45locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t287__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t287__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s50__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -20876,36 +23880,39 @@ type s13__ptcb = struct {
 // Xstrfmon_l is defined at strfmon.c:78:9
 func Xstrfmon_l(tls TLS, _s uintptr /* *int8 */, _n uint64, _loc uintptr /* Tlocale_t = *S__locale_struct */, _fmt uintptr /* *int8 */, ap ...interface{}) (r int64) {
 	var (
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_ret int64
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = xvstrfmon_l(tls, _s, _n, _loc, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
 // Xstrfmon is defined at strfmon.c:91:9
 func Xstrfmon(tls TLS, _s uintptr /* *int8 */, _n uint64, _fmt uintptr /* *int8 */, ap ...interface{}) (r int64) {
 	var (
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_ret int64
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = xvstrfmon_l(tls, _s, _n, *(*uintptr)(unsafe.Pointer(x12__pthread_self(tls) + 192)), _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t68size_t = uint64
+type t288__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t46locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t288__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t68size_t = uint64
 
 type t15ssize_t = int64
 
@@ -20916,7 +23923,7 @@ func postinc587(p *uintptr) uintptr { r := *p; *p += 1; return r }
 func preinc588(p *uintptr) uintptr { *p += 1; return *p }
 
 // xvstrfmon_l is defined at strfmon.c:8:16
-func xvstrfmon_l(tls TLS, _s uintptr /* *int8 */, _n uint64, _loc uintptr /* Tlocale_t = *S__locale_struct */, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int64) {
+func xvstrfmon_l(tls TLS, _s uintptr /* *int8 */, _n uint64, _loc uintptr /* Tlocale_t = *S__locale_struct */, _fmt uintptr /* *int8 */, _ap uintptr) (r int64) {
 	var (
 		_l      uint64
 		_x      float64
@@ -21163,9 +24170,18 @@ func Xstrxfrm(tls TLS, _dest uintptr /* *int8 */, _src uintptr /* *int8 */, _n u
 	return X__strxfrm_l(tls, _dest, _src, _n, *(*uintptr)(unsafe.Pointer(x13__pthread_self(tls) + 192)))
 }
 
-type t69size_t = uint64
+type t289__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t47locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t289__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t69size_t = uint64
 
 type s52__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -21280,6 +24296,17 @@ func Xngettext(tls TLS, _msgid1 uintptr /* *int8 */, _msgid2 uintptr /* *int8 */
 	return Xdngettext(tls, null, _msgid1, _msgid2, _n)
 }
 
+type t290__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t290__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xcurrent_domain *int8, escapes: false, textdomain.c:9:13
 var xcurrent_domain uintptr
 
@@ -21315,11 +24342,18 @@ _1:
 	return _old
 }
 
-type t48locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t291__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t291__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s53__locale_struct = struct{ Fcat [6]uintptr }
-
-type t6pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s18__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -21388,7 +24422,16 @@ func Xwcscoll(tls TLS, _l uintptr /* *Twchar_t = int32 */, _r uintptr /* *Twchar
 	return X__wcscoll_l(tls, _l, _r, *(*uintptr)(unsafe.Pointer(x15__pthread_self(tls) + 192)))
 }
 
-type t49locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t292__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t292__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s54__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -21478,9 +24521,18 @@ func Xwcsxfrm(tls TLS, _dest uintptr /* *Twchar_t = int32 */, _src uintptr /* *T
 	return X__wcsxfrm_l(tls, _dest, _src, _n, *(*uintptr)(unsafe.Pointer(x16__pthread_self(tls) + 192)))
 }
 
-type t73size_t = uint64
+type t293__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t50locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t293__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t73size_t = uint64
 
 type s55__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -21541,6 +24593,17 @@ type s18__ptcb = struct {
 
 // linking aligned_alloc.o
 
+type t294__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t294__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking expand_heap.o
 
 // X__expand_heap is defined at expand_heap.c:40:6
@@ -21594,6 +24657,17 @@ _5:
 	*(*uint64)(unsafe.Pointer(_pn)) = _n
 	x590mmap_step++
 	return _area
+}
+
+type t295__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t295__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1brk Tuintptr_t = uint64, escapes: false, expand_heap.c:42:19
@@ -21656,6 +24730,17 @@ type t25off_t = int64
 
 // linking lite_malloc.o
 
+type t296__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t296__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking malloc.o
 
 // Xmalloc is defined at malloc.c:292:6
@@ -21695,13 +24780,57 @@ func Xfree(tls TLS, _p uintptr /* *void */) {
 	}
 }
 
+type t297__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t297__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t75size_t = uint64
 
 // linking malloc_usable_size.o
 
+type t298__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t298__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking memalign.o
 
+type t299__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t299__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking posix_memalign.o
+
+type t300__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t300__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking __cos.o
 
@@ -21719,6 +24848,17 @@ func X__cos(tls TLS, _x float64, _y float64) (r float64) {
 	_hz = float64(0.5) * _z
 	_w = float64(1) - _hz
 	return _w + float64(float64(float64(float64(1)-_w)-_hz)+float64(float64(_z*_r)-float64(_x*_y)))
+}
+
+type t301__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t301__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tdouble_t = float64
@@ -21756,6 +24896,17 @@ func X__cosdf(tls TLS, _x float64) (r float32) {
 	return float32(float64(float64(float64(1)+float64(_z*xC0))+float64(_w*x1C1)) + float64(float64(_w*_z)*_r))
 }
 
+type t302__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t302__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1double_t = float64
 
 // xC2 float64, escapes: false, __cosdf.c:23:1
@@ -21772,6 +24923,17 @@ var x1C1 = float64(0.04166662332373906)
 
 // linking __cosl.o
 
+type t303__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t303__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking __expo2.o
 
 // X__expo2 is defined at __expo2.c:8:8
@@ -21785,6 +24947,17 @@ func X__expo2(tls TLS, _x float64) (r float64) {
 	*(*uint64)(unsafe.Pointer(___u)) = uint64(uint32(int32(0x3ff)+x2k/int32(2))<<(uint(20)%32))<<(uint(32)%64) | uint64(0)
 	_scale = *(*float64)(unsafe.Pointer(___u))
 	return float64(Xexp(tls, _x-x2kln2)*_scale) * _scale
+}
+
+type t304__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t304__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t15uint64_t = uint64
@@ -21810,6 +24983,17 @@ func X__expo2f(tls TLS, _x float32) (r float32) {
 	*(*uint32)(unsafe.Pointer(___u)) = uint32(int32(0x7f)+x3k/int32(2)) << (uint(23) % 32)
 	_scale = *(*float32)(unsafe.Pointer(___u))
 	return float32(Xexpf(tls, _x-x3kln2)*_scale) * _scale
+}
+
+type t305__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t305__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t24uint32_t = uint32
@@ -21865,6 +25049,17 @@ _2:
 	return int32(4)
 }
 
+type t306__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t306__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t16uint64_t = uint64
 
 // linking __fpclassifyf.o
@@ -21912,6 +25107,17 @@ _2:
 	return int32(4)
 }
 
+type t307__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t307__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t25uint32_t = uint32
 
 // linking __fpclassifyl.o
@@ -21921,9 +25127,42 @@ func X__fpclassifyl(tls TLS, _x float64) (r int32) {
 	return X__fpclassify(tls, _x)
 }
 
+type t308__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t308__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking __invtrigl.o
 
+type t309__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t309__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking __polevll.o
+
+type t310__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t310__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking __rem_pio2.o
 
@@ -22172,6 +25411,17 @@ _27:
 	*(*float64)(unsafe.Pointer(_y)) = *(*float64)(unsafe.Pointer(_ty))
 	*(*float64)(unsafe.Pointer(_y + 8)) = *(*float64)(unsafe.Pointer(_ty + 8))
 	return _n
+}
+
+type t311__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t311__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t17uint64_t = uint64
@@ -22681,6 +25931,17 @@ _61:
 	return _n & int32(7)
 }
 
+type t312__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t312__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t7int32_t = int32
 
 // xinit_jk [4]int32, escapes: true, __rem_pio2_large.c:127:18
@@ -22753,6 +26014,17 @@ _3:
 	return _n
 }
 
+type t313__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t313__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t27uint32_t = uint32
 
 type t3double_t = float64
@@ -22773,6 +26045,17 @@ var x1pio2_1t = float64(1.5893254773528196e-08)
 
 // linking __rem_pio2l.o
 
+type t314__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t314__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking __signbit.o
 
 // X__signbit is defined at __signbit.c:4:5
@@ -22790,6 +26073,17 @@ func X__signbit(tls TLS, _x float64) (r int32) {
 		F  int64
 	})(unsafe.Pointer(&struct{ f float64 }{_x}))
 	return int32(*(*uint64)(unsafe.Pointer(_y)) >> (uint(63) % 64))
+}
+
+type t315__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t315__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t18uint64_t = uint64
@@ -22813,6 +26107,17 @@ func X__signbitf(tls TLS, _x float32) (r int32) {
 	return int32(*(*uint32)(unsafe.Pointer(_y)) >> (uint(31) % 32))
 }
 
+type t316__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t316__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t28uint32_t = uint32
 
 // linking __signbitl.o
@@ -22820,6 +26125,17 @@ type t28uint32_t = uint32
 // X__signbitl is defined at __signbitl.c:10:5
 func X__signbitl(tls TLS, _x float64) (r int32) {
 	return X__signbit(tls, _x)
+}
+
+type t317__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t317__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking __sin.o
@@ -22849,6 +26165,17 @@ _1:
 
 _2:
 	return r
+}
+
+type t318__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t318__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t4double_t = float64
@@ -22888,6 +26215,17 @@ func X__sindf(tls TLS, _x float64) (r float32) {
 	return float32(float64(_x+float64(_s*float64(x1S1+float64(_z*x1S2)))) + float64(float64(_s*_w)*_r))
 }
 
+type t319__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t319__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t5double_t = float64
 
 // xS3 float64, escapes: false, __sindf.c:23:1
@@ -22903,6 +26241,17 @@ var x1S1 = float64(-0.16666666641626524)
 var x1S2 = float64(0.008333329385889463)
 
 // linking __sinl.o
+
+type t320__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t320__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking __tan.o
 
@@ -22999,6 +26348,17 @@ _5:
 	return _a0 + float64(_a*float64(float64(float64(1)+float64(_a0*_w0))+float64(_a0*_v)))
 }
 
+type t321__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t321__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t6double_t = float64
 
 type t29uint32_t = uint32
@@ -23040,12 +26400,34 @@ func X__tandf(tls TLS, _x float64, _odd int32) (r float32) {
 	return float32(_r)
 }
 
+type t322__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t322__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t7double_t = float64
 
 // xT [6]float64, escapes: true, __tandf.c:19:21
 var x1T = ds + 35192
 
 // linking __tanl.o
+
+type t323__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t323__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking acos.o
 
@@ -23132,6 +26514,17 @@ _8:
 	_c = float64(_z-float64(_df*_df)) / float64(_s+_df)
 	_w = float64(xR(tls, _z)*_s) + _c
 	return float64(2) * float64(_df+_w)
+}
+
+type t324__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t324__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t30uint32_t = uint32
@@ -23264,6 +26657,17 @@ _7:
 	return float32(2) * float32(_df+_w)
 }
 
+type t325__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t325__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t31uint32_t = uint32
 
 // xpio2_hi float32, escapes: false, acosf.c:19:1
@@ -23334,6 +26738,17 @@ _2:
 	return Xlog(tls, _x) + float64(0.6931471805599453)
 }
 
+type t326__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t326__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t21uint64_t = uint64
 
 // linking acoshf.o
@@ -23373,6 +26788,17 @@ _2:
 	return Xlogf(tls, _x) + float32(0.6931472)
 }
 
+type t327__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t327__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t32uint32_t = uint32
 
 // linking acoshl.o
@@ -23382,11 +26808,33 @@ func Xacoshl(tls TLS, _x float64) (r float64) {
 	return Xacosh(tls, _x)
 }
 
+type t328__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t328__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking acosl.o
 
 // Xacosl is defined at acosl.c:20:13
 func Xacosl(tls TLS, _x float64) (r float64) {
 	return Xacos(tls, _x)
+}
+
+type t329__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t329__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking asin.o
@@ -23474,6 +26922,17 @@ _8:
 
 _10:
 	return _x
+}
+
+type t330__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t330__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t33uint32_t = uint32
@@ -23586,6 +27045,17 @@ _6:
 	return _x
 }
 
+type t331__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t331__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t34uint32_t = uint32
 
 // xpio2 float64, escapes: false, asinf.c:18:1
@@ -23695,6 +27165,17 @@ _2:
 	return _x
 }
 
+type t332__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t332__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t23uint64_t = uint64
 
 // linking asinhf.o
@@ -23773,6 +27254,17 @@ _2:
 	return _x
 }
 
+type t333__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t333__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t35uint32_t = uint32
 
 // linking asinhl.o
@@ -23782,11 +27274,33 @@ func Xasinhl(tls TLS, _x float64) (r float64) {
 	return Xasinh(tls, _x)
 }
 
+type t334__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t334__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking asinl.o
 
 // Xasinl is defined at asinl.c:20:13
 func Xasinl(tls TLS, _x float64) (r float64) {
 	return Xasin(tls, _x)
+}
+
+type t335__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t335__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking atan.o
@@ -23917,6 +27431,17 @@ _18:
 	}
 
 	return _z
+}
+
+type t336__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t336__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t10double_t = float64
@@ -24129,6 +27654,17 @@ _32:
 	return r
 }
 
+type t337__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t337__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t37uint32_t = uint32
 
 type t25uint64_t = uint64
@@ -24330,6 +27866,17 @@ _32:
 	return r
 }
 
+type t338__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t338__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t38uint32_t = uint32
 
 // x__FLOAT_BITS is defined at math.h:43:26
@@ -24352,6 +27899,17 @@ var x1pi_lo = float32(-8.742278e-08)
 // Xatan2l is defined at atan2l.c:21:13
 func Xatan2l(tls TLS, _y float64, _x float64) (r float64) {
 	return Xatan2(tls, _y, _x)
+}
+
+type t339__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t339__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking atanf.o
@@ -24484,6 +28042,17 @@ _18:
 	return _z
 }
 
+type t340__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t340__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t2float_t = float32
 
 type t39uint32_t = uint32
@@ -24582,6 +28151,17 @@ _2:
 	return _y
 }
 
+type t341__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t341__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t26uint64_t = uint64
 
 type t11double_t = float64
@@ -24660,6 +28240,17 @@ _2:
 	return _y
 }
 
+type t342__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t342__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t40uint32_t = uint32
 
 type t3float_t = float32
@@ -24671,11 +28262,33 @@ func Xatanhl(tls TLS, _x float64) (r float64) {
 	return Xatanh(tls, _x)
 }
 
+type t343__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t343__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking atanl.o
 
 // Xatanl is defined at atanl.c:20:13
 func Xatanl(tls TLS, _x float64) (r float64) {
 	return Xatan(tls, _x)
+}
+
+type t344__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t344__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cbrt.o
@@ -24748,6 +28361,17 @@ _3:
 	_r = float64(_r-_t) / float64(_w+_r)
 	_t = _t + float64(_t*_r)
 	return _t
+}
+
+type t345__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t345__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t27uint64_t = uint64
@@ -24841,6 +28465,17 @@ _3:
 	return float32(_T)
 }
 
+type t346__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t346__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t13double_t = float64
 
 type t42uint32_t = uint32
@@ -24856,6 +28491,17 @@ var x1B1 = uint32(709958130)
 // Xcbrtl is defined at cbrtl.c:21:13
 func Xcbrtl(tls TLS, _x float64) (r float64) {
 	return Xcbrt(tls, _x)
+}
+
+type t347__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t347__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ceil.o
@@ -24933,6 +28579,17 @@ _4:
 
 _9:
 	return _x + _y
+}
+
+type t348__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t348__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t28uint64_t = uint64
@@ -25053,6 +28710,17 @@ _3:
 	return *(*float32)(unsafe.Pointer(_u))
 }
 
+type t349__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t349__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t43uint32_t = uint32
 
 // linking ceill.o
@@ -25060,6 +28728,17 @@ type t43uint32_t = uint32
 // Xceill is defined at ceill.c:4:13
 func Xceill(tls TLS, _x float64) (r float64) {
 	return Xceil(tls, _x)
+}
+
+type t350__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t350__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking copysign.o
@@ -25099,6 +28778,17 @@ func Xcopysign(tls TLS, _x float64, _y float64) (r float64) {
 		*p = *p | *(*uint64)(unsafe.Pointer(_uy))&uint64(9223372036854775808)
 	}
 	return *(*float64)(unsafe.Pointer(_ux))
+}
+
+type t351__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t351__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t29uint64_t = uint64
@@ -25142,6 +28832,17 @@ func Xcopysignf(tls TLS, _x float32, _y float32) (r float32) {
 	return *(*float32)(unsafe.Pointer(_ux))
 }
 
+type t352__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t352__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t44uint32_t = uint32
 
 // linking copysignl.o
@@ -25149,6 +28850,17 @@ type t44uint32_t = uint32
 // Xcopysignl is defined at copysignl.c:4:13
 func Xcopysignl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xcopysign(tls, _x, _y)
+}
+
+type t353__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t353__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cos.o
@@ -25228,6 +28940,17 @@ _12:
 _13:
 	return X__sin(tls, *(*float64)(unsafe.Pointer(_y)), *(*float64)(unsafe.Pointer(_y + 8)), int32(1))
 	return r
+}
+
+type t354__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t354__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t45uint32_t = uint32
@@ -25379,6 +29102,17 @@ _23:
 	return r
 }
 
+type t355__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t355__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t46uint32_t = uint32
 
 // xc2pio2 float64, escapes: false, cosf.c:22:1
@@ -25464,6 +29198,17 @@ _7:
 	return _t
 }
 
+type t356__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t356__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t31uint64_t = uint64
 
 type t47uint32_t = uint32
@@ -25539,6 +29284,17 @@ _7:
 	return _t
 }
 
+type t357__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t357__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t48uint32_t = uint32
 
 // linking coshl.o
@@ -25548,11 +29304,33 @@ func Xcoshl(tls TLS, _x float64) (r float64) {
 	return Xcosh(tls, _x)
 }
 
+type t358__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t358__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cosl.o
 
 // Xcosl is defined at cosl.c:4:13
 func Xcosl(tls TLS, _x float64) (r float64) {
 	return Xcos(tls, _x)
+}
+
+type t359__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t359__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking erf.o
@@ -25681,6 +29459,17 @@ _6:
 	}
 
 	return float64(0)
+}
+
+type t360__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t360__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t49uint32_t = uint32
@@ -26041,6 +29830,17 @@ _6:
 	return float32(0)
 }
 
+type t361__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t361__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t50uint32_t = uint32
 
 // xefx8 float32, escapes: false, erff.c:23:1
@@ -26275,6 +30075,17 @@ func Xerfcl(tls TLS, _x float64) (r float64) {
 	return Xerfc(tls, _x)
 }
 
+type t362__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t362__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking exp.o
 
 // Xexp is defined at exp.c:81:8
@@ -26411,6 +30222,17 @@ _21:
 	return Xscalbn(tls, _y, _k)
 }
 
+type t363__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t363__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t16double_t = float64
 
 type t51uint32_t = uint32
@@ -26492,6 +30314,17 @@ _1:
 	return Xpow(tls, float64(10), _x)
 }
 
+type t364__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t364__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1p10 [31]float64, escapes: true, exp10.c:8:22
 var x593p10 = ds + 35464
 
@@ -26536,6 +30369,17 @@ _1:
 	return float32(Xexp2(tls, float64(3.321928094887362)*float64(_x)))
 }
 
+type t365__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t365__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1p10 [15]float32, escapes: true, exp10f.c:8:21
 var x594p10 = ds + 35712
 
@@ -26546,6 +30390,17 @@ type t52uint32_t = uint32
 // Xexp10l is defined at exp10l.c:8:13
 func Xexp10l(tls TLS, _x float64) (r float64) {
 	return Xexp10(tls, _x)
+}
+
+type t366__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t366__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking exp2.o
@@ -26656,6 +30511,17 @@ _2:
 	_z = _z - *(*float64)(unsafe.Pointer(xtbl + 8*uintptr(uint32(2)*_i0+uint32(1))))
 	_r = _t + float64(float64(_t*_z)*float64(x2P1+float64(_z*float64(x2P2+float64(_z*float64(x2P3+float64(_z*float64(x2P4+float64(_z*x1P5)))))))))
 	return Xscalbn(tls, _r, *(*int32)(unsafe.Pointer(_k)))
+}
+
+type t367__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t367__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t17double_t = float64
@@ -26795,6 +30661,17 @@ _2:
 	return float32(_r * *(*float64)(unsafe.Pointer(_uk)))
 }
 
+type t368__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t368__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t18double_t = float64
 
 type t54uint32_t = uint32
@@ -26824,6 +30701,17 @@ var x3P4 = float32(0.009618355)
 // Xexp2l is defined at exp2l.c:31:13
 func Xexp2l(tls TLS, _x float64) (r float64) {
 	return Xexp2(tls, _x)
+}
+
+type t369__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t369__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking expf.o
@@ -26962,6 +30850,17 @@ _21:
 	return Xscalbnf(tls, _y, _k)
 }
 
+type t370__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t370__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t5float_t = float32
 
 type t55uint32_t = uint32
@@ -26989,6 +30888,17 @@ var x4P2 = float32(-0.0027667333)
 // Xexpl is defined at expl.c:71:13
 func Xexpl(tls TLS, _x float64) (r float64) {
 	return Xexp(tls, _x)
+}
+
+type t371__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t371__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking expm1.o
@@ -27193,6 +31103,17 @@ _25:
 	_y = float64(float64(_x-float64(_e+*(*float64)(unsafe.Pointer(_u))))+float64(1)) * _twopk
 _26:
 	return _y
+}
+
+type t372__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t372__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t19double_t = float64
@@ -27441,6 +31362,17 @@ _26:
 	return _y
 }
 
+type t373__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t373__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t6float_t = float32
 
 type t57uint32_t = uint32
@@ -27470,6 +31402,17 @@ func Xexpm1l(tls TLS, _x float64) (r float64) {
 	return Xexpm1(tls, _x)
 }
 
+type t374__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t374__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking fabs.o
 
 // Xfabs is defined at fabs.c:4:8
@@ -27491,6 +31434,17 @@ func Xfabs(tls TLS, _x float64) (r float64) {
 		*p = *p & uint64(9223372036854775807)
 	}
 	return *(*float64)(unsafe.Pointer(_u))
+}
+
+type t375__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t375__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t38uint64_t = uint64
@@ -27518,6 +31472,17 @@ func Xfabsf(tls TLS, _x float32) (r float32) {
 	return *(*float32)(unsafe.Pointer(_u))
 }
 
+type t376__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t376__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t58uint32_t = uint32
 
 // linking fabsl.o
@@ -27525,6 +31490,17 @@ type t58uint32_t = uint32
 // Xfabsl is defined at fabsl.c:3:13
 func Xfabsl(tls TLS, _x float64) (r float64) {
 	return Xfabs(tls, _x)
+}
+
+type t377__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t377__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking fdim.o
@@ -27550,6 +31526,17 @@ _2:
 	}
 
 	return float64(0)
+}
+
+type t378__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t378__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -27586,6 +31573,17 @@ _2:
 	return float32(0)
 }
 
+type t379__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t379__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__FLOAT_BITS is defined at math.h:43:26
 func x5__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 	esc := MustMalloc(4)
@@ -27602,11 +31600,33 @@ func Xfdiml(tls TLS, _x float64, _y float64) (r float64) {
 	return Xfdim(tls, _x, _y)
 }
 
+type t380__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t380__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking finite.o
 
 // Xfinite is defined at finite.c:4:5
 func Xfinite(tls TLS, _x float64) (r int32) {
 	return bool2int(x8__DOUBLE_BITS(tls, _x)&uint64(9223372036854775807) < uint64(9218868437227405312))
+}
+
+type t381__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t381__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -27623,6 +31643,17 @@ func x8__DOUBLE_BITS(tls TLS, ___f float64) (r uint64) {
 // Xfinitef is defined at finitef.c:4:5
 func Xfinitef(tls TLS, _x float32) (r int32) {
 	return bool2int(x6__FLOAT_BITS(tls, _x)&uint32(0x7fffffff) < uint32(0x7f800000))
+}
+
+type t382__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t382__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__FLOAT_BITS is defined at math.h:43:26
@@ -27709,6 +31740,17 @@ _4:
 
 _9:
 	return _x + _y
+}
+
+type t383__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t383__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t39uint64_t = uint64
@@ -27829,6 +31871,17 @@ _3:
 	return *(*float32)(unsafe.Pointer(_u))
 }
 
+type t384__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t384__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t59uint32_t = uint32
 
 // linking floorl.o
@@ -27836,6 +31889,17 @@ type t59uint32_t = uint32
 // Xfloorl is defined at floorl.c:4:13
 func Xfloorl(tls TLS, _x float64) (r float64) {
 	return Xfloor(tls, _x)
+}
+
+type t385__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t385__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking fma.o
@@ -28076,6 +32140,17 @@ _26:
 	return Xscalbn(tls, _r, _e)
 }
 
+type t386__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t386__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Snum = struct {
 	Fm    uint64
 	Fe    int32
@@ -28249,6 +32324,17 @@ _5:
 	return _z
 }
 
+type t387__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t387__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t41uint64_t = uint64
 
 // linking fmal.o
@@ -28256,6 +32342,17 @@ type t41uint64_t = uint64
 // Xfmal is defined at fmal.c:31:13
 func Xfmal(tls TLS, _x float64, _y float64, _z float64) (r float64) {
 	return Xfma(tls, _x, _y, _z)
+}
+
+type t388__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t388__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking fmax.o
@@ -28292,6 +32389,17 @@ _3:
 	}
 
 	return _x
+}
+
+type t389__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t389__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -28339,6 +32447,17 @@ _3:
 	return _x
 }
 
+type t390__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t390__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__FLOAT_BITS is defined at math.h:43:26
 func x7__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 	esc := MustMalloc(4)
@@ -28353,6 +32472,17 @@ func x7__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 // Xfmaxl is defined at fmaxl.c:5:13
 func Xfmaxl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xfmax(tls, _x, _y)
+}
+
+type t391__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t391__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking fmin.o
@@ -28389,6 +32519,17 @@ _3:
 	}
 
 	return _y
+}
+
+type t392__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t392__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -28436,6 +32577,17 @@ _3:
 	return _y
 }
 
+type t393__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t393__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__FLOAT_BITS is defined at math.h:43:26
 func x8__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 	esc := MustMalloc(4)
@@ -28450,6 +32602,17 @@ func x8__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 // Xfminl is defined at fminl.c:5:13
 func Xfminl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xfmin(tls, _x, _y)
+}
+
+type t394__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t394__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking fmod.o
@@ -28625,6 +32788,17 @@ _25:
 	_uxi = _uxi | uint64(_sx)<<(uint(63)%64)
 	*(*uint64)(unsafe.Pointer(_ux)) = _uxi
 	return *(*float64)(unsafe.Pointer(_ux))
+}
+
+type t395__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t395__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t42uint64_t = uint64
@@ -28813,6 +32987,17 @@ _25:
 	return *(*float32)(unsafe.Pointer(_ux))
 }
 
+type t396__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t396__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t61uint32_t = uint32
 
 // x__FLOAT_BITS is defined at math.h:43:26
@@ -28829,6 +33014,17 @@ func x9__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 // Xfmodl is defined at fmodl.c:4:13
 func Xfmodl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xfmod(tls, _x, _y)
+}
+
+type t397__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t397__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking frexp.o
@@ -28892,6 +33088,17 @@ _2:
 		*p = *p | uint64(0x3fe0000000000000)
 	}
 	return *(*float64)(unsafe.Pointer(_y))
+}
+
+type t398__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t398__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t43uint64_t = uint64
@@ -28959,6 +33166,17 @@ _2:
 	return *(*float32)(unsafe.Pointer(_y))
 }
 
+type t399__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t399__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t62uint32_t = uint32
 
 // linking frexpl.o
@@ -28966,6 +33184,17 @@ type t62uint32_t = uint32
 // Xfrexpl is defined at frexpl.c:4:13
 func Xfrexpl(tls TLS, _x float64, _e uintptr /* *int32 */) (r float64) {
 	return Xfrexp(tls, _x, _e)
+}
+
+type t400__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t400__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking hypot.o
@@ -29088,6 +33317,17 @@ _6:
 	xsq(tls, _hx, _lx, _x)
 	xsq(tls, _hy, _ly, _y)
 	return _z * Xsqrt(tls, float64(float64(*(*float64)(unsafe.Pointer(_ly))+*(*float64)(unsafe.Pointer(_lx)))+*(*float64)(unsafe.Pointer(_hy)))+*(*float64)(unsafe.Pointer(_hx)))
+}
+
+type t401__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t401__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t44uint64_t = uint64
@@ -29213,6 +33453,17 @@ _5:
 	return _z * Xsqrtf(tls, float32(float64(float64(_x)*float64(_x))+float64(float64(_y)*float64(_y))))
 }
 
+type t402__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t402__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t63uint32_t = uint32
 
 type t7float_t = float32
@@ -29222,6 +33473,17 @@ type t7float_t = float32
 // Xhypotl is defined at hypotl.c:4:13
 func Xhypotl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xhypot(tls, _x, _y)
+}
+
+type t403__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t403__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ilogb.o
@@ -29320,6 +33582,17 @@ _12:
 
 _10:
 	return _e - int32(0x3ff)
+}
+
+type t404__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t404__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t45uint64_t = uint64
@@ -29422,6 +33695,17 @@ _10:
 	return _e - int32(0x7f)
 }
 
+type t405__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t405__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t64uint32_t = uint32
 
 // linking ilogbl.o
@@ -29429,6 +33713,17 @@ type t64uint32_t = uint32
 // Xilogbl is defined at ilogbl.c:5:5
 func Xilogbl(tls TLS, _x float64) (r int32) {
 	return Xilogb(tls, _x)
+}
+
+type t406__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t406__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking j0.o
@@ -29535,6 +33830,17 @@ _5:
 
 _6:
 	return xu00 + float64(xtpi*Xlog(tls, _x))
+}
+
+type t407__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t407__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t65uint32_t = uint32
@@ -29916,6 +34222,17 @@ _6:
 	return x1u00 + float32(x1tpi*Xlogf(tls, _x))
 }
 
+type t408__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t408__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t66uint32_t = uint32
 
 // xcommon is defined at j0f.c:25:14
@@ -30293,6 +34610,17 @@ _6:
 	return float64(_x*float64(_u/_v)) + float64(x2tpi*float64(float64(Xj1(tls, _x)*Xlog(tls, _x))-float64(float64(1)/_x)))
 }
 
+type t409__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t409__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t67uint32_t = uint32
 
 type t47uint64_t = uint64
@@ -30650,6 +34978,17 @@ _6:
 	_u = *(*float32)(unsafe.Pointer(x1U0)) + float32(_z*float32(*(*float32)(unsafe.Pointer(x1U0 + 4))+float32(_z*float32(*(*float32)(unsafe.Pointer(x1U0 + 8))+float32(_z*float32(*(*float32)(unsafe.Pointer(x1U0 + 12))+float32(_z**(*float32)(unsafe.Pointer(x1U0 + 16)))))))))
 	_v = float32(1) + float32(_z*float32(*(*float32)(unsafe.Pointer(x1V0))+float32(_z*float32(*(*float32)(unsafe.Pointer(x1V0 + 4))+float32(_z*float32(*(*float32)(unsafe.Pointer(x1V0 + 8))+float32(_z*float32(*(*float32)(unsafe.Pointer(x1V0 + 12))+float32(_z**(*float32)(unsafe.Pointer(x1V0 + 16)))))))))))
 	return float32(_x*float32(_u/_v)) + float32(x3tpi*float32(float32(Xj1f(tls, _x)*Xlogf(tls, _x))-float32(float32(1)/_x)))
+}
+
+type t410__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t410__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t68uint32_t = uint32
@@ -31314,6 +35653,17 @@ _10:
 	return _b
 }
 
+type t411__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t411__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t69uint32_t = uint32
 
 type t48uint64_t = uint64
@@ -31641,6 +35991,17 @@ _12:
 	return _b
 }
 
+type t412__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t412__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t70uint32_t = uint32
 
 // linking ldexp.o
@@ -31650,11 +36011,33 @@ func Xldexp(tls TLS, _x float64, _n int32) (r float64) {
 	return Xscalbn(tls, _x, _n)
 }
 
+type t413__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t413__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking ldexpf.o
 
 // Xldexpf is defined at ldexpf.c:3:7
 func Xldexpf(tls TLS, _x float32, _n int32) (r float32) {
 	return Xscalbnf(tls, _x, _n)
+}
+
+type t414__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t414__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ldexpl.o
@@ -31664,11 +36047,33 @@ func Xldexpl(tls TLS, _x float64, _n int32) (r float64) {
 	return Xscalbnl(tls, _x, _n)
 }
 
+type t415__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t415__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lgamma.o
 
 // Xlgamma is defined at lgamma.c:6:8
 func Xlgamma(tls TLS, _x float64) (r float64) {
 	return X__lgamma_r(tls, _x, X__signgam)
+}
+
+type t416__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t416__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking lgamma_r.o
@@ -31921,6 +36326,17 @@ _36:
 	return _r
 }
 
+type t417__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t417__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t49uint64_t = uint64
 
 type t25double_t = float64
@@ -32155,6 +36571,17 @@ var xw6 = float64(-0.0016309293409657527)
 // Xlgammaf is defined at lgammaf.c:6:7
 func Xlgammaf(tls TLS, _x float32) (r float32) {
 	return X__lgammaf_r(tls, _x, X__signgam)
+}
+
+type t418__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t418__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking lgammaf_r.o
@@ -32407,6 +36834,17 @@ _36:
 	return _r
 }
 
+type t419__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t419__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t72uint32_t = uint32
 
 // xsin_pi is defined at lgammaf_r.c:85:14
@@ -32648,11 +37086,33 @@ func Xlgammal(tls TLS, _x float64) (r float64) {
 	return X__lgammal_r(tls, _x, X__signgam)
 }
 
+type t420__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t420__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking llrint.o
 
 // Xllrint is defined at llrint.c:5:11
 func Xllrint(tls TLS, _x float64) (r int64) {
 	return int64(Xrint(tls, _x))
+}
+
+type t421__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t421__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking llrintf.o
@@ -32662,11 +37122,33 @@ func Xllrintf(tls TLS, _x float32) (r int64) {
 	return int64(Xrintf(tls, _x))
 }
 
+type t422__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t422__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking llrintl.o
 
 // Xllrintl is defined at llrintl.c:7:11
 func Xllrintl(tls TLS, _x float64) (r int64) {
 	return Xllrint(tls, _x)
+}
+
+type t423__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t423__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking llround.o
@@ -32676,6 +37158,17 @@ func Xllround(tls TLS, _x float64) (r int64) {
 	return int64(Xround(tls, _x))
 }
 
+type t424__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t424__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking llroundf.o
 
 // Xllroundf is defined at llroundf.c:3:11
@@ -32683,11 +37176,33 @@ func Xllroundf(tls TLS, _x float32) (r int64) {
 	return int64(Xroundf(tls, _x))
 }
 
+type t425__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t425__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking llroundl.o
 
 // Xllroundl is defined at llroundl.c:3:11
 func Xllroundl(tls TLS, _x float64) (r int64) {
 	return int64(Xroundl(tls, _x))
+}
+
+type t426__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t426__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking log.o
@@ -32779,6 +37294,17 @@ _2:
 	_R = _t2 + _t1
 	_dk = float64(_k)
 	return float64(float64(float64(float64(_s*float64(_hfsq+_R))+float64(_dk*x2ln2_lo))-_hfsq)+_f) + float64(_dk*x2ln2_hi)
+}
+
+type t427__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t427__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t50uint64_t = uint64
@@ -32924,6 +37450,17 @@ _2:
 	return _val_lo + _val_hi
 }
 
+type t428__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t428__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t51uint64_t = uint64
 
 type t28double_t = float64
@@ -33064,6 +37601,17 @@ _2:
 	return float32(float32(float32(float32(_dk*x1log10_2lo)+float32(float32(_lo+_hi)*x1ivln10lo))+float32(_lo*x1ivln10hi))+float32(_hi*x1ivln10hi)) + float32(_dk*x1log10_2hi)
 }
 
+type t429__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t429__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t75uint32_t = uint32
 
 type t10float_t = float32
@@ -33097,6 +37645,17 @@ var x1log10_2hi = float32(0.3010292)
 // Xlog10l is defined at log10l.c:63:13
 func Xlog10l(tls TLS, _x float64) (r float64) {
 	return Xlog10(tls, _x)
+}
+
+type t430__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t430__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking log1p.o
@@ -33236,6 +37795,17 @@ _13:
 	_R = _t2 + _t1
 	_dk = float64(_k)
 	return float64(float64(float64(float64(_s*float64(_hfsq+_R))+float64(float64(_dk*x3ln2_lo)+_c))-_hfsq)+_f) + float64(_dk*x3ln2_hi)
+}
+
+type t431__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t431__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t52uint64_t = uint64
@@ -33410,6 +37980,17 @@ _13:
 	return float32(float32(float32(float32(_s*float32(_hfsq+_R))+float32(float32(_dk*x4ln2_lo)+_c))-_hfsq)+_f) + float32(_dk*x4ln2_hi)
 }
 
+type t432__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t432__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t77uint32_t = uint32
 
 type t11float_t = float32
@@ -33437,6 +38018,17 @@ var x4ln2_hi = float32(0.6931381)
 // Xlog1pl is defined at log1pl.c:54:13
 func Xlog1pl(tls TLS, _x float64) (r float64) {
 	return Xlog1p(tls, _x)
+}
+
+type t433__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t433__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking log2.o
@@ -33545,6 +38137,17 @@ _2:
 	_val_lo = _val_lo + float64(float64(_y-_w)+_val_hi)
 	_val_hi = _w
 	return _val_lo + _val_hi
+}
+
+type t434__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t434__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t53uint64_t = uint64
@@ -33679,6 +38282,17 @@ _2:
 	return float32(float32(float32(float32(_lo+_hi)*x1ivln2lo)+float32(_lo*x1ivln2hi))+float32(_hi*x1ivln2hi)) + float32(_k)
 }
 
+type t435__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t435__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t79uint32_t = uint32
 
 type t12float_t = float32
@@ -33708,6 +38322,17 @@ func Xlog2l(tls TLS, _x float64) (r float64) {
 	return Xlog2(tls, _x)
 }
 
+type t436__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t436__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking logb.o
 
 // Xlogb is defined at logb.c:10:8
@@ -33727,6 +38352,17 @@ _1:
 
 _2:
 	return float64(Xilogb(tls, _x))
+}
+
+type t437__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t437__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -33759,6 +38395,17 @@ _2:
 	return float32(Xilogbf(tls, _x))
 }
 
+type t438__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t438__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__FLOAT_BITS is defined at math.h:43:26
 func x10__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 	esc := MustMalloc(4)
@@ -33787,6 +38434,17 @@ _1:
 
 _2:
 	return float64(Xilogbl(tls, _x))
+}
+
+type t439__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t439__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -33889,6 +38547,17 @@ _2:
 	return float32(float32(float32(float32(_s*float32(_hfsq+_R))+float32(_dk*x5ln2_lo))-_hfsq)+_f) + float32(_dk*x5ln2_hi)
 }
 
+type t440__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t440__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t80uint32_t = uint32
 
 type t13float_t = float32
@@ -33918,11 +38587,33 @@ func Xlogl(tls TLS, _x float64) (r float64) {
 	return Xlog(tls, _x)
 }
 
+type t441__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t441__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lrint.o
 
 // Xlrint is defined at lrint.c:42:6
 func Xlrint(tls TLS, _x float64) (r int64) {
 	return int64(Xrint(tls, _x))
+}
+
+type t442__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t442__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking lrintf.o
@@ -33932,11 +38623,33 @@ func Xlrintf(tls TLS, _x float32) (r int64) {
 	return int64(Xrintf(tls, _x))
 }
 
+type t443__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t443__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lrintl.o
 
 // Xlrintl is defined at lrintl.c:7:6
 func Xlrintl(tls TLS, _x float64) (r int64) {
 	return Xlrint(tls, _x)
+}
+
+type t444__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t444__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking lround.o
@@ -33946,6 +38659,17 @@ func Xlround(tls TLS, _x float64) (r int64) {
 	return int64(Xround(tls, _x))
 }
 
+type t445__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t445__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lroundf.o
 
 // Xlroundf is defined at lroundf.c:3:6
@@ -33953,11 +38677,33 @@ func Xlroundf(tls TLS, _x float32) (r int64) {
 	return int64(Xroundf(tls, _x))
 }
 
+type t446__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t446__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lroundl.o
 
 // Xlroundl is defined at lroundl.c:3:6
 func Xlroundl(tls TLS, _x float64) (r int64) {
 	return int64(Xroundl(tls, _x))
+}
+
+type t447__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t447__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking modf.o
@@ -34031,6 +38777,17 @@ _4:
 	}
 	*(*float64)(unsafe.Pointer(_iptr)) = *(*float64)(unsafe.Pointer(_u))
 	return _x - *(*float64)(unsafe.Pointer(_u))
+}
+
+type t448__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t448__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t54uint64_t = uint64
@@ -34108,6 +38865,17 @@ _4:
 	return _x - *(*float32)(unsafe.Pointer(_u))
 }
 
+type t449__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t449__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t81uint32_t = uint32
 
 // linking modfl.o
@@ -34125,11 +38893,33 @@ func Xmodfl(tls TLS, _x float64, _iptr uintptr /* *float64 */) (r float64) {
 	return _r
 }
 
+type t450__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t450__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking nan.o
 
 // Xnan is defined at nan.c:3:8
 func Xnan(tls TLS, _s uintptr /* *int8 */) (r float64) {
 	return math.NaN()
+}
+
+type t451__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t451__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking nanf.o
@@ -34139,11 +38929,33 @@ func Xnanf(tls TLS, _s uintptr /* *int8 */) (r float32) {
 	return float32(math.NaN())
 }
 
+type t452__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t452__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking nanl.o
 
 // Xnanl is defined at nanl.c:3:13
 func Xnanl(tls TLS, _s uintptr /* *int8 */) (r float64) {
 	return math.NaN()
+}
+
+type t453__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t453__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking nearbyint.o
@@ -34163,6 +38975,17 @@ _1:
 	return _x
 }
 
+type t454__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t454__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking nearbyintf.o
 
 // Xnearbyintf is defined at nearbyintf.c:4:7
@@ -34180,11 +39003,33 @@ _1:
 	return _x
 }
 
+type t455__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t455__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking nearbyintl.o
 
 // Xnearbyintl is defined at nearbyintl.c:5:13
 func Xnearbyintl(tls TLS, _x float64) (r float64) {
 	return Xnearbyint(tls, _x)
+}
+
+type t456__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t456__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking nextafter.o
@@ -34308,6 +39153,17 @@ _17:
 _16:
 _13:
 	return *(*float64)(unsafe.Pointer(_ux))
+}
+
+type t457__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t457__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t55uint64_t = uint64
@@ -34444,6 +39300,17 @@ _13:
 	return *(*float32)(unsafe.Pointer(_ux))
 }
 
+type t458__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t458__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t82uint32_t = uint32
 
 // x__FLOAT_BITS is defined at math.h:43:26
@@ -34462,11 +39329,33 @@ func Xnextafterl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xnextafter(tls, _x, _y)
 }
 
+type t459__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t459__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking nexttoward.o
 
 // Xnexttoward is defined at nexttoward.c:4:8
 func Xnexttoward(tls TLS, _x float64, _y float64) (r float64) {
 	return Xnextafter(tls, _x, _y)
+}
+
+type t460__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t460__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking nexttowardf.o
@@ -34598,6 +39487,17 @@ _17:
 	return *(*float32)(unsafe.Pointer(_ux))
 }
 
+type t461__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t461__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t83uint32_t = uint32
 
 // x__FLOAT_BITS is defined at math.h:43:26
@@ -34623,6 +39523,17 @@ func x15__DOUBLE_BITS(tls TLS, ___f float64) (r uint64) {
 // Xnexttowardl is defined at nexttowardl.c:3:13
 func Xnexttowardl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xnextafterl(tls, _x, _y)
+}
+
+type t462__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t462__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pow.o
@@ -35213,6 +40124,17 @@ _71:
 	return _s * _z
 }
 
+type t463__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t463__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t10int32_t = int32
 
 type t84uint32_t = uint32
@@ -35758,6 +40680,17 @@ _70:
 	return _sn * _z
 }
 
+type t464__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t464__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t11int32_t = int32
 
 type t85uint32_t = uint32
@@ -35850,6 +40783,17 @@ func Xpowl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xpow(tls, _x, _y)
 }
 
+type t465__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t465__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking remainder.o
 
 // Xremainder is defined at remainder.c:4:8
@@ -35858,6 +40802,17 @@ func Xremainder(tls TLS, _x float64, _y float64) (r float64) {
 	var _q = esc // *int32
 	defer Free(esc)
 	return Xremquo(tls, _x, _y, _q)
+}
+
+type t466__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t466__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking remainderf.o
@@ -35870,11 +40825,33 @@ func Xremainderf(tls TLS, _x float32, _y float32) (r float32) {
 	return Xremquof(tls, _x, _y, _q)
 }
 
+type t467__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t467__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking remainderl.o
 
 // Xremainderl is defined at remainderl.c:5:13
 func Xremainderl(tls TLS, _x float64, _y float64) (r float64) {
 	return Xremainder(tls, _x, _y)
+}
+
+type t468__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t468__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking remquo.o
@@ -36086,6 +41063,17 @@ _28:
 	}
 
 	return _x
+}
+
+type t469__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t469__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t57uint64_t = uint64
@@ -36312,6 +41300,17 @@ _28:
 	return _x
 }
 
+type t470__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t470__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t87uint32_t = uint32
 
 // x__FLOAT_BITS is defined at math.h:43:26
@@ -36328,6 +41327,17 @@ func x13__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 // Xremquol is defined at remquol.c:4:13
 func Xremquol(tls TLS, _x float64, _y float64, _quo uintptr /* *int32 */) (r float64) {
 	return Xremquo(tls, _x, _y, _quo)
+}
+
+type t471__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t471__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking rint.o
@@ -36382,6 +41392,17 @@ _3:
 
 _4:
 	return _y
+}
+
+type t472__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t472__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t58uint64_t = uint64
@@ -36445,6 +41466,17 @@ _4:
 	return _y
 }
 
+type t473__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t473__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t88uint32_t = uint32
 
 type t14float_t = float32
@@ -36457,6 +41489,17 @@ var x5toint = float32(8.388608e+06)
 // Xrintl is defined at rintl.c:4:13
 func Xrintl(tls TLS, _x float64) (r float64) {
 	return Xrint(tls, _x)
+}
+
+type t474__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t474__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking round.o
@@ -36545,6 +41588,17 @@ _9:
 	_y = -_y
 _12:
 	return _y
+}
+
+type t475__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t475__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t59uint64_t = uint64
@@ -36642,6 +41696,17 @@ _12:
 	return _y
 }
 
+type t476__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t476__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t89uint32_t = uint32
 
 type t15float_t = float32
@@ -36654,6 +41719,17 @@ var x7toint = float32(8.388608e+06)
 // Xroundl is defined at roundl.c:4:13
 func Xroundl(tls TLS, _x float64) (r float64) {
 	return Xround(tls, _x)
+}
+
+type t477__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t477__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking scalb.o
@@ -36706,6 +41782,17 @@ _6:
 
 _7:
 	return Xscalbn(tls, _x, int32(_fn))
+}
+
+type t478__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t478__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__DOUBLE_BITS is defined at math.h:49:36
@@ -36769,6 +41856,17 @@ _7:
 	return Xscalbnf(tls, _x, int32(_fn))
 }
 
+type t479__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t479__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__FLOAT_BITS is defined at math.h:43:26
 func x14__FLOAT_BITS(tls TLS, ___f float32) (r uint32) {
 	esc := MustMalloc(4)
@@ -36800,6 +41898,17 @@ _2:
 	return Xscalbn(tls, _x, int32(_n))
 }
 
+type t480__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t480__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking scalblnf.o
 
 // Xscalblnf is defined at scalblnf.c:4:7
@@ -36822,11 +41931,33 @@ _2:
 	return Xscalbnf(tls, _x, int32(_n))
 }
 
+type t481__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t481__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking scalblnl.o
 
 // Xscalblnl is defined at scalblnl.c:6:13
 func Xscalblnl(tls TLS, _x float64, _n int64) (r float64) {
 	return Xscalbln(tls, _x, _n)
+}
+
+type t482__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t482__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking scalbn.o
@@ -36886,6 +42017,17 @@ _2:
 	*(*uint64)(unsafe.Pointer(_u)) = uint64(int32(0x3ff)+_n) << (uint(52) % 64)
 	_x = _y * *(*float64)(unsafe.Pointer(_u))
 	return _x
+}
+
+type t483__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t483__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t60uint64_t = uint64
@@ -36951,6 +42093,17 @@ _2:
 	return _x
 }
 
+type t484__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t484__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t90uint32_t = uint32
 
 type t16float_t = float32
@@ -36962,10 +42115,32 @@ func Xscalbnl(tls TLS, _x float64, _n int32) (r float64) {
 	return Xscalbn(tls, _x, _n)
 }
 
+type t485__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t485__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking signgam.o
 
 // X__signgam int32, escapes: true, signgam.c:4:5
-var X__signgam = bss + 2280
+var X__signgam = bss + 2296
+
+type t486__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t486__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking significand.o
 
@@ -36974,11 +42149,33 @@ func Xsignificand(tls TLS, _x float64) (r float64) {
 	return Xscalbn(tls, _x, -Xilogb(tls, _x))
 }
 
+type t487__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t487__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking significandf.o
 
 // Xsignificandf is defined at significandf.c:4:7
 func Xsignificandf(tls TLS, _x float32) (r float32) {
 	return Xscalbnf(tls, _x, -Xilogbf(tls, _x))
+}
+
+type t488__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t488__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sin.o
@@ -37073,6 +42270,17 @@ _12:
 _13:
 	return -X__cos(tls, *(*float64)(unsafe.Pointer(_y)), *(*float64)(unsafe.Pointer(_y + 8)))
 	return r
+}
+
+type t489__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t489__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t91uint32_t = uint32
@@ -37194,6 +42402,17 @@ _14:
 	goto _9
 
 _9:
+}
+
+type t490__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t490__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t92uint32_t = uint32
@@ -37395,6 +42614,17 @@ _22:
 _17:
 }
 
+type t491__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t491__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t17float_t = float32
 
 type t93uint32_t = uint32
@@ -37424,6 +42654,17 @@ func Xsincosl(tls TLS, _x float64, _sin uintptr /* *float64 */, _cos uintptr /* 
 	Xsincos(tls, _x, _sind, _cosd)
 	*(*float64)(unsafe.Pointer(_sin)) = *(*float64)(unsafe.Pointer(_sind))
 	*(*float64)(unsafe.Pointer(_cos)) = *(*float64)(unsafe.Pointer(_cosd))
+}
+
+type t492__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t492__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sinf.o
@@ -37580,6 +42821,17 @@ _21:
 	return r
 }
 
+type t493__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t493__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t94uint32_t = uint32
 
 // xs1pio2 float64, escapes: false, sinf.c:21:1
@@ -37655,6 +42907,17 @@ _2:
 	return _t
 }
 
+type t494__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t494__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t63uint64_t = uint64
 
 type t95uint32_t = uint32
@@ -37720,6 +42983,17 @@ _2:
 	return _t
 }
 
+type t495__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t495__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t96uint32_t = uint32
 
 // linking sinhl.o
@@ -37729,11 +43003,33 @@ func Xsinhl(tls TLS, _x float64) (r float64) {
 	return Xsinh(tls, _x)
 }
 
+type t496__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t496__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sinl.o
 
 // Xsinl is defined at sinl.c:4:13
 func Xsinl(tls TLS, _x float64) (r float64) {
 	return Xsin(tls, _x)
+}
+
+type t497__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t497__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sqrt.o
@@ -37945,6 +43241,17 @@ _28:
 	return _z
 }
 
+type t498__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t498__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t12int32_t = int32
 
 type t97uint32_t = uint32
@@ -38082,6 +43389,17 @@ _14:
 	return _z
 }
 
+type t499__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t499__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t13int32_t = int32
 
 type t98uint32_t = uint32
@@ -38094,6 +43412,17 @@ var x3tiny = float32(1e-30)
 // Xsqrtl is defined at sqrtl.c:3:13
 func Xsqrtl(tls TLS, _x float64) (r float64) {
 	return Xsqrt(tls, _x)
+}
+
+type t500__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t500__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking tan.o
@@ -38167,6 +43496,17 @@ _2:
 _8:
 	_n = uint32(X__rem_pio2(tls, _x, _y))
 	return X__tan(tls, *(*float64)(unsafe.Pointer(_y)), *(*float64)(unsafe.Pointer(_y + 8)), int32(_n&uint32(1)))
+}
+
+type t501__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t501__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t99uint32_t = uint32
@@ -38302,6 +43642,17 @@ _14:
 	return X__tandf(tls, *(*float64)(unsafe.Pointer(_y)), int32(_n&uint32(1)))
 }
 
+type t502__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t502__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t100uint32_t = uint32
 
 // xt1pio2 float64, escapes: false, tanf.c:21:1
@@ -38409,6 +43760,17 @@ _2:
 	return _t
 }
 
+type t503__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t503__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t66uint64_t = uint64
 
 type t101uint32_t = uint32
@@ -38508,6 +43870,17 @@ _2:
 	return _t
 }
 
+type t504__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t504__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t102uint32_t = uint32
 
 // linking tanhl.o
@@ -38517,11 +43890,33 @@ func Xtanhl(tls TLS, _x float64) (r float64) {
 	return Xtanh(tls, _x)
 }
 
+type t505__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t505__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking tanl.o
 
 // Xtanl is defined at tanl.c:4:13
 func Xtanl(tls TLS, _x float64) (r float64) {
 	return Xtan(tls, _x)
+}
+
+type t506__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t506__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking tgamma.o
@@ -38659,6 +44054,17 @@ _15:
 	return _y
 }
 
+type t507__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t507__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t67uint64_t = uint64
 
 type t35double_t = float64
@@ -38769,11 +44175,33 @@ func Xtgammaf(tls TLS, _x float32) (r float32) {
 	return float32(Xtgamma(tls, float64(_x)))
 }
 
+type t508__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t508__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking tgammal.o
 
 // Xtgammal is defined at tgammal.c:54:13
 func Xtgammal(tls TLS, _x float64) (r float64) {
 	return Xtgamma(tls, _x)
+}
+
+type t509__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t509__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking trunc.o
@@ -38841,6 +44269,17 @@ _6:
 		*p = *p & ^_m
 	}
 	return *(*float64)(unsafe.Pointer(_u))
+}
+
+type t510__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t510__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t68uint64_t = uint64
@@ -38912,6 +44351,17 @@ _5:
 	return *(*float32)(unsafe.Pointer(_u))
 }
 
+type t511__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t511__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t104uint32_t = uint32
 
 // linking truncl.o
@@ -38919,6 +44369,17 @@ type t104uint32_t = uint32
 // Xtruncl is defined at truncl.c:4:13
 func Xtruncl(tls TLS, _x float64) (r float64) {
 	return Xtrunc(tls, _x)
+}
+
+type t512__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t512__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking a64l.o
@@ -38977,6 +44438,17 @@ _3:
 	return x601s
 }
 
+type t513__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t513__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t105uint32_t = uint32
 
 // xdigits [65]int8, escapes: true, a64l.c:5:19
@@ -38985,7 +44457,7 @@ var xdigits = ds + 42856
 type t14int32_t = int32
 
 // x2s [7]int8, escapes: true, a64l.c:22:14
-var x601s = bss + 2288
+var x601s = bss + 2304
 
 // linking basename.o
 
@@ -39022,6 +44494,17 @@ _5:
 
 _7:
 	return _s + uintptr(_i)
+}
+
+type t514__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t514__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t76size_t = uint64
@@ -39093,6 +44576,17 @@ _12:
 	return _s
 }
 
+type t515__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t515__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t77size_t = uint64
 
 // linking ffs.o
@@ -39104,6 +44598,17 @@ func Xffs(tls TLS, _i int32) (r int32) {
 	}
 
 	return int32(0)
+}
+
+type t516__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t516__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_ctz_l is defined at atomic.h:292:19
@@ -39130,6 +44635,17 @@ func Xffsl(tls TLS, _i int64) (r int32) {
 	return int32(0)
 }
 
+type t517__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t517__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_ctz_l is defined at atomic.h:292:19
 func x1a_ctz_l(tls TLS, _x uint64) (r int32) {
 	return x1a_ctz_64(tls, _x)
@@ -39152,6 +44668,17 @@ func Xffsll(tls TLS, _i int64) (r int32) {
 	}
 
 	return int32(0)
+}
+
+type t518__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t518__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_ctz_64 is defined at atomic_arch.h:128:19
@@ -39396,6 +44923,17 @@ _24:
 	return _ret
 }
 
+type t519__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t519__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x_strcolcmp is defined at fmtmsg.c:16:12
 func x_strcolcmp(tls TLS, _lstr uintptr /* *int8 */, _bstr uintptr /* *int8 */) (r int32) {
 	var _i uint64
@@ -39507,6 +45045,17 @@ _7:
 	return _pid
 }
 
+type t520__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t520__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1termios = struct {
 	Fc_iflag    uint32
 	Fc_oflag    uint32
@@ -39557,6 +45106,17 @@ func Xget_current_dir_name(tls TLS) (r uintptr /* *int8 */) {
 
 _1:
 	return Xgetcwd(tls, null, uint64(0))
+}
+
+type t521__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t521__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2stat = struct {
@@ -39638,6 +45198,17 @@ _4:
 	return uint64(0)
 }
 
+type t522__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t522__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t81size_t = uint64
 
 // linking getdomainname.o
@@ -39658,6 +45229,17 @@ func Xgetdomainname(tls TLS, _name uintptr /* *int8 */, _len uint64) (r int32) {
 _1:
 	Xstrcpy(tls, _name, _temp+325)
 	return int32(0)
+}
+
+type t523__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t523__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t82size_t = uint64
@@ -39725,6 +45307,17 @@ _3:
 	return _ret
 }
 
+type t524__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t524__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t83size_t = uint64
 
 type t17ssize_t = int64
@@ -39736,10 +45329,21 @@ func Xgethostid(tls TLS) (r int64) {
 	return int64(0)
 }
 
+type t525__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t525__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking getopt.o
 
 // Xoptarg *int8, escapes: true, getopt.c:9:6
-var Xoptarg = bss + 2296
+var Xoptarg = bss + 2312
 
 // Xoptind int32, escapes: true, getopt.c:10:5
 var Xoptind = ds + 42928
@@ -39748,13 +45352,13 @@ var Xoptind = ds + 42928
 var Xopterr = ds + 42936
 
 // Xoptopt int32, escapes: true, getopt.c:10:25
-var Xoptopt = bss + 2304
+var Xoptopt = bss + 2320
 
 // X__optpos int32, escapes: true, getopt.c:10:33
-var X__optpos = bss + 2312
+var X__optpos = bss + 2328
 
 // X__optreset int32, escapes: true, getopt.c:10:43
-var X__optreset = bss + 2320
+var X__optreset = bss + 2336
 
 // X__getopt_msg is defined at getopt.c:15:6
 func X__getopt_msg(tls TLS, _a uintptr /* *int8 */, _b uintptr /* *int8 */, _c uintptr /* *int8 */, _l uint64) {
@@ -39934,6 +45538,17 @@ _18:
 	return *(*int32)(unsafe.Pointer(_c))
 }
 
+type t526__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t526__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t84size_t = uint64
 
 type t6wchar_t = int32
@@ -39950,6 +45565,17 @@ func Xgetopt_long(tls TLS, _argc int32, _argv uintptr /* **int8 */, _optstring u
 // Xgetopt_long_only is defined at getopt_long.c:146:5
 func Xgetopt_long_only(tls TLS, _argc int32, _argv uintptr /* **int8 */, _optstring uintptr /* *int8 */, _longopts uintptr /* *Soption */, _idx uintptr /* *int32 */) (r int32) {
 	return x__getopt_long(tls, _argc, _argv, _optstring, _longopts, _idx, int32(1))
+}
+
+type t527__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t527__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Soption = struct {
@@ -40285,6 +45911,17 @@ _1:
 	return int32(20) - _ret
 }
 
+type t528__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t528__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Tid_t = uint32
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -40299,6 +45936,17 @@ func Xgetresgid(tls TLS, _rgid uintptr /* *Tgid_t = uint32 */, _egid uintptr /* 
 	return int32(X__syscall_ret(tls, uint64(x22__syscall3(tls, int64(120), int64(_rgid), int64(_egid), int64(_sgid)))))
 }
 
+type t529__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t529__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall3 is defined at syscall_arch.h:33:22
 func x22__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
@@ -40309,6 +45957,17 @@ func x22__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xgetresuid is defined at getresuid.c:5:5
 func Xgetresuid(tls TLS, _ruid uintptr /* *Tuid_t = uint32 */, _euid uintptr /* *Tuid_t = uint32 */, _suid uintptr /* *Tuid_t = uint32 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x23__syscall3(tls, int64(118), int64(_ruid), int64(_euid), int64(_suid)))))
+}
+
+type t530__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t530__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -40385,6 +46044,17 @@ _11:
 	return int32(0)
 }
 
+type t531__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t531__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s4rlimit = struct {
 	Frlim_cur uint64
 	Frlim_max uint64
@@ -40407,6 +46077,17 @@ func x20__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xgetrusage is defined at getrusage.c:4:5
 func Xgetrusage(tls TLS, _who int32, _ru uintptr /* *Srusage */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x21__syscall2(tls, int64(98), int64(_who), int64(_ru)))))
+}
+
+type t532__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t532__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2rusage = struct {
@@ -40507,6 +46188,17 @@ _5:
 	return int32(-1)
 }
 
+type t533__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t533__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t86size_t = uint64
 
 // linking initgroups.o
@@ -40530,6 +46222,17 @@ _1:
 	return Xsetgroups(tls, uint64(*(*int32)(unsafe.Pointer(_count))), _groups)
 }
 
+type t534__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t534__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t8gid_t = uint32
 
 type t87size_t = uint64
@@ -40539,16 +46242,24 @@ type t87size_t = uint64
 // Xioctl is defined at ioctl.c:5:5
 func Xioctl(tls TLS, _fd int32, _req int32, ap ...interface{}) (r int32) {
 	var (
-		_arg uintptr        // *void
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_arg uintptr // *void
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_arg = VAuintptr(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return int32(X__syscall_ret(tls, uint64(x24__syscall3(tls, int64(16), int64(_fd), int64(_req), int64(_arg)))))
+}
+
+type t535__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t535__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -40561,6 +46272,17 @@ func x24__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xissetugid is defined at issetugid.c:4:5
 func Xissetugid(tls TLS) (r int32) {
 	return *(*int32)(unsafe.Pointer(X__libc + 8))
+}
+
+type t536__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t536__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking lockf.o
@@ -40619,6 +46341,17 @@ _1:
 	return int32(-1)
 }
 
+type t537__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t537__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t27off_t = int64
 
 type Sflock = struct {
@@ -40653,6 +46386,17 @@ _1:
 	Xclose(tls, _fd)
 _2:
 	return int32(0)
+}
+
+type t538__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t538__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t13pid_t = int32
@@ -40753,6 +46497,17 @@ func Xhasmntopt(tls TLS, _mnt uintptr /* *Smntent */, _opt uintptr /* *int8 */) 
 	return Xstrstr(tls, *(*uintptr)(unsafe.Pointer(_mnt + 24)), _opt)
 }
 
+type t539__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t539__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Smntent = struct {
 	Fmnt_fsname uintptr // *int8
 	Fmnt_dir    uintptr // *int8
@@ -40763,13 +46518,13 @@ type Smntent = struct {
 }
 
 // xinternal_buf *int8, escapes: true, mntent.c:6:13
-var xinternal_buf = bss + 2328
+var xinternal_buf = bss + 2344
 
 // xinternal_bufsize Tsize_t = uint64, escapes: true, mntent.c:7:15
-var xinternal_bufsize = bss + 2336
+var xinternal_bufsize = bss + 2352
 
 // x3mnt Smntent, escapes: true, mntent.c:62:23
-var x607mnt = bss + 2344
+var x607mnt = bss + 2360
 
 type t18ssize_t = int64
 
@@ -40808,6 +46563,17 @@ _2:
 	_r = xdo_nftw(tls, _pathbuf, _fn, _fd_limit, _flags, null)
 	Xpthread_setcancelstate(tls, *(*int32)(unsafe.Pointer(_cs)), null)
 	return _r
+}
+
+type t540__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t540__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t88size_t = uint64
@@ -41195,6 +46961,17 @@ lfail:
 	return int32(-1)
 }
 
+type t541__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t541__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s2termios = struct {
 	Fc_iflag    uint32
 	Fc_oflag    uint32
@@ -41239,8 +47016,19 @@ _1:
 	return x612buf
 }
 
+type t542__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t542__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1buf [22]int8, escapes: true, ptsname.c:8:14
-var x612buf = bss + 2384
+var x612buf = bss + 2400
 
 type t90size_t = uint64
 
@@ -41296,6 +47084,17 @@ _2:
 
 _3:
 	return int32(0)
+}
+
+type t543__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t543__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t91size_t = uint64
@@ -41373,6 +47172,17 @@ lerr:
 	return null
 }
 
+type t544__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t544__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t19ssize_t = int64
 
 type s4stat = struct {
@@ -41437,6 +47247,17 @@ func Xsetdomainname(tls TLS, _name uintptr /* *int8 */, _len uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x23__syscall2(tls, int64(171), int64(_name), int64(_len)))))
 }
 
+type t545__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t545__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t93size_t = uint64
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -41449,6 +47270,17 @@ func x23__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xsetpriority is defined at setpriority.c:4:5
 func Xsetpriority(tls TLS, _which int32, _who uint32, _prio int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x26__syscall3(tls, int64(141), int64(_which), int64(_who), int64(_prio)))))
+}
+
+type t546__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t546__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1id_t = uint32
@@ -41539,6 +47371,17 @@ _1:
 	return int32(0)
 }
 
+type t547__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t547__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s5rlimit = struct {
 	Frlim_cur uint64
 	Frlim_max uint64
@@ -41582,7 +47425,7 @@ _1:
 // Xsyscall is defined at syscall.c:6:6
 func Xsyscall(tls TLS, _n int64, ap ...interface{}) (r int64) {
 	var (
-		_ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_a  int64
 		_b  int64
 		_c  int64
@@ -41590,18 +47433,26 @@ func Xsyscall(tls TLS, _n int64, ap ...interface{}) (r int64) {
 		_e  int64
 		_f  int64
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_a = VAint64(_ap)
 	_b = VAint64(_ap)
 	_c = VAint64(_ap)
 	_d = VAint64(_ap)
 	_e = VAint64(_ap)
 	_f = VAint64(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return X__syscall_ret(tls, uint64(x5__syscall6(tls, _n, _a, _b, _c, _d, _e, _f)))
+}
+
+type t548__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t548__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t3syscall_arg_t = int64
@@ -41677,7 +47528,7 @@ _3:
 }
 
 // X__vsyslog is defined at syslog.c:125:6
-func X__vsyslog(tls TLS, _priority int32, _message uintptr /* *int8 */, _ap *[]interface{}) {
+func X__vsyslog(tls TLS, _priority int32, _message uintptr /* *int8 */, _ap uintptr) {
 	esc := MustMalloc(4)
 	var _cs = esc // *int32
 	defer Free(esc)
@@ -41697,18 +47548,26 @@ _1:
 
 // Xsyslog is defined at syslog.c:136:6
 func Xsyslog(tls TLS, _priority int32, _message uintptr /* *int8 */, ap ...interface{}) {
-	var _ap *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+	var _ap uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	X__vsyslog(tls, _priority, _message, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
+}
+
+type t549__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t549__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xlock [1]int32, escapes: true, syslog.c:14:21
-var x2lock = bss + 2408
+var x2lock = bss + 2424
 
 // xlog_mask int32, escapes: false, syslog.c:18:12
 var xlog_mask = int32(0xff)
@@ -41719,7 +47578,7 @@ var xlog_fd = int32(-1)
 type t94size_t = uint64
 
 // xlog_ident [32]int8, escapes: true, syslog.c:15:13
-var xlog_ident = bss + 2416
+var xlog_ident = bss + 2432
 
 // xlog_opt int32, escapes: false, syslog.c:16:12
 var xlog_opt int32
@@ -41741,7 +47600,7 @@ _1:
 func postinc615(p *int32) int32 { r := *p; *p += 1; return r }
 
 // x_vsyslog is defined at syslog.c:82:13
-func x_vsyslog(tls TLS, _priority int32, _message uintptr /* *int8 */, _ap *[]interface{}) {
+func x_vsyslog(tls TLS, _priority int32, _message uintptr /* *int8 */, _ap uintptr) {
 	esc := MustMalloc(1124)
 	var (
 		_timebuf    = esc      // *[16]int8
@@ -41853,15 +47712,22 @@ func xis_lost_conn(tls TLS, _e int32) (r int32) {
 
 type Tsocklen_t = uint32
 
-type t2__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t2__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
-
 // linking uname.o
 
 // Xuname is defined at uname.c:4:5
 func Xuname(tls TLS, _uts uintptr /* *Sutsname */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x20__syscall1(tls, int64(63), int64(_uts)))))
+}
+
+type t550__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t550__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1utsname = struct {
@@ -41919,6 +47785,17 @@ _4:
 	Xfree(tls, *(*uintptr)(unsafe.Pointer(_we + 8)))
 	*(*uintptr)(unsafe.Pointer(_we + 8)) = null
 	*(*uint64)(unsafe.Pointer(_we)) = uint64(0)
+}
+
+type t551__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t551__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t95size_t = uint64
@@ -42320,6 +48197,17 @@ func X__madvise(tls TLS, _addr uintptr /* *void */, _len uint64, _advice int32) 
 	return int32(X__syscall_ret(tls, uint64(x27__syscall3(tls, int64(28), int64(_addr), int64(_len), int64(_advice)))))
 }
 
+type t552__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t552__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t96size_t = uint64
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -42332,6 +48220,17 @@ func x27__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xmincore is defined at mincore.c:5:5
 func Xmincore(tls TLS, _addr uintptr /* *void */, _len uint64, _vec uintptr /* *uint8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x28__syscall3(tls, int64(27), int64(_addr), int64(_len), int64(_vec)))))
+}
+
+type t553__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t553__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t97size_t = uint64
@@ -42348,6 +48247,17 @@ func Xmlock(tls TLS, _addr uintptr /* *void */, _len uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x25__syscall2(tls, int64(149), int64(_addr), int64(_len)))))
 }
 
+type t554__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t554__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t98size_t = uint64
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -42360,6 +48270,17 @@ func x25__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xmlockall is defined at mlockall.c:4:5
 func Xmlockall(tls TLS, _flags int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x21__syscall1(tls, int64(151), int64(_flags)))))
+}
+
+type t555__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t555__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -42405,6 +48326,17 @@ _4:
 	return uintptr(X__syscall_ret(tls, uint64(_ret)))
 }
 
+type t556__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t556__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at mmap.c:9:13
 func x7dummy(tls TLS) {
 }
@@ -42431,6 +48363,17 @@ func X__mprotect(tls TLS, _addr uintptr /* *void */, _len uint64, _prot int32) (
 	return int32(X__syscall_ret(tls, uint64(x29__syscall3(tls, int64(10), int64(_start), int64(_end-_start), int64(_prot)))))
 }
 
+type t557__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t557__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t100size_t = uint64
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -42443,8 +48386,8 @@ func x29__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // X__mremap is defined at mremap.c:13:6
 func X__mremap(tls TLS, _old_addr uintptr /* *void */, _old_len uint64, _new_len uint64, _flags int32, ap ...interface{}) (r uintptr /* *void */) {
 	var (
-		_ap       *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-		_new_addr uintptr        // *void
+		_ap       uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_new_addr uintptr // *void
 	)
 	_new_addr = 0
 	if _new_len < uint64(0x7fffffffffffffff) {
@@ -42460,14 +48403,22 @@ _1:
 	}
 
 	X__vm_wait(tls)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_new_addr = VAuintptr(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 _2:
 	return uintptr(X__syscall_ret(tls, uint64(x6__syscall5(tls, int64(25), int64(_old_addr), int64(_old_len), int64(_new_len), int64(_flags), int64(_new_addr)))))
+}
+
+type t558__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t558__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xdummy is defined at mremap.c:10:13
@@ -42489,6 +48440,17 @@ func Xmsync(tls TLS, _start uintptr /* *void */, _len uint64, _flags int32) (r i
 	return r
 }
 
+type t559__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t559__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t102size_t = uint64
 
 // x1__func__ [6]int8, escapes: true, msync.c:6:1
@@ -42499,6 +48461,17 @@ var x619__func__ = ds + 42968
 // Xmunlock is defined at munlock.c:4:5
 func Xmunlock(tls TLS, _addr uintptr /* *void */, _len uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x26__syscall2(tls, int64(150), int64(_addr), int64(_len)))))
+}
+
+type t560__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t560__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t103size_t = uint64
@@ -42515,6 +48488,17 @@ func Xmunlockall(tls TLS) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x2__syscall0(tls, int64(152)))))
 }
 
+type t561__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t561__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall0 is defined at syscall_arch.h:8:22
 func x2__syscall0(tls TLS, _n int64) (r int64) {
 	return X__syscall(tls, _n, int64(0), int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -42526,6 +48510,17 @@ func x2__syscall0(tls TLS, _n int64) (r int64) {
 func X__munmap(tls TLS, _start uintptr /* *void */, _len uint64) (r int32) {
 	X__vm_wait(tls)
 	return int32(X__syscall_ret(tls, uint64(x27__syscall2(tls, int64(11), int64(_start), int64(_len)))))
+}
+
+type t562__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t562__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xdummy is defined at munmap.c:5:13
@@ -42551,6 +48546,17 @@ func Xposix_madvise(tls TLS, _addr uintptr /* *void */, _len uint64, _advice int
 
 _1:
 	return int32(-x30__syscall3(tls, int64(28), int64(_addr), int64(_len), int64(_advice)))
+}
+
+type t563__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t563__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t105size_t = uint64
@@ -42635,6 +48641,17 @@ _1:
 	return Xunlink(tls, _name)
 }
 
+type t564__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t564__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t11mode_t = uint32
 
 type t106size_t = uint64
@@ -42644,6 +48661,17 @@ type t106size_t = uint64
 // Xmq_close is defined at mq_close.c:4:5
 func Xmq_close(tls TLS, _mqd int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x22__syscall1(tls, int64(3), int64(_mqd)))))
+}
+
+type t565__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t565__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tmqd_t = int32
@@ -42658,6 +48686,17 @@ func x22__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xmq_getattr is defined at mq_getattr.c:4:5
 func Xmq_getattr(tls TLS, _mqd int32, _attr uintptr /* *Smq_attr */) (r int32) {
 	return Xmq_setattr(tls, _mqd, null, _attr)
+}
+
+type t566__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t566__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1mqd_t = int32
@@ -42756,6 +48795,17 @@ _6:
 	return int32(0)
 }
 
+type t567__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t567__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t2mqd_t = int32
 
 type s3sigevent = struct {
@@ -42768,7 +48818,7 @@ type s3sigevent = struct {
 }
 
 // x1zeros [32]int8, escapes: true, mq_notify.c:41:20
-var x622zeros = bss + 2448
+var x622zeros = bss + 2464
 
 type Sargs = struct {
 	Fbarrier struct {
@@ -42839,8 +48889,6 @@ type Tpthread_barrier_t = struct {
 // x5__func__ [6]int8, escapes: true, mq_notify.c:17:1
 var x623__func__ = ds + 42976
 
-type t7pthread_t = uintptr // Tpthread_t = *S__pthread
-
 type s21__pthread struct{ uintptr }
 
 // linking mq_open.o
@@ -42849,8 +48897,8 @@ type s21__pthread struct{ uintptr }
 func Xmq_open(tls TLS, _name uintptr /* *int8 */, _flags int32, ap ...interface{}) (r int32) {
 	var (
 		_mode uint32
-		_attr uintptr        // *Smq_attr
-		_ap   *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_attr uintptr // *Smq_attr
+		_ap   uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
 	_mode = uint32(0)
 	_attr = 0
@@ -42864,15 +48912,23 @@ _1:
 		goto _2
 	}
 
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_mode = VAuint32(_ap)
 	_attr = VAuintptr(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 _2:
 	return int32(X__syscall_ret(tls, uint64(x18__syscall4(tls, int64(240), int64(_name), int64(_flags), int64(_mode), int64(_attr)))))
+}
+
+type t568__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t568__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t3mqd_t = int32
@@ -42899,6 +48955,17 @@ func Xmq_receive(tls TLS, _mqd int32, _msg uintptr /* *int8 */, _len uint64, _pr
 	return Xmq_timedreceive(tls, _mqd, _msg, _len, _prio, null)
 }
 
+type t569__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t569__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t4mqd_t = int32
 
 type t107size_t = uint64
@@ -42912,6 +48979,17 @@ func Xmq_send(tls TLS, _mqd int32, _msg uintptr /* *int8 */, _len uint64, _prio 
 	return Xmq_timedsend(tls, _mqd, _msg, _len, _prio, null)
 }
 
+type t570__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t570__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t5mqd_t = int32
 
 type t108size_t = uint64
@@ -42921,6 +48999,17 @@ type t108size_t = uint64
 // Xmq_setattr is defined at mq_setattr.c:4:5
 func Xmq_setattr(tls TLS, _mqd int32, _new uintptr /* *Smq_attr */, _old uintptr /* *Smq_attr */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x31__syscall3(tls, int64(245), int64(_mqd), int64(_new), int64(_old)))))
+}
+
+type t571__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t571__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t6mqd_t = int32
@@ -42946,6 +49035,17 @@ func Xmq_timedreceive(tls TLS, _mqd int32, _msg uintptr /* *int8 */, _len uint64
 	return r
 }
 
+type t572__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t572__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t7mqd_t = int32
 
 type t109size_t = uint64
@@ -42968,6 +49068,17 @@ type t25time_t = int64
 func Xmq_timedsend(tls TLS, _mqd int32, _msg uintptr /* *int8 */, _len uint64, _prio uint32, _at uintptr /* *Stimespec */) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+2476 /* "src/mq/mq_timeds..." */, int32(7), x625__func__)
 	return r
+}
+
+type t573__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t573__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t8mqd_t = int32
@@ -43014,6 +49125,17 @@ _2:
 	return _ret
 }
 
+type t574__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t574__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x24__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -43043,17 +49165,24 @@ func Xbtowc(tls TLS, _c int32) (r uint32) {
 	}()
 }
 
-type t15wint_t = uint32
+type t575__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t51locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t575__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t15wint_t = uint32
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x17__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 	return uintptr(tls)
 	return r
 }
-
-type s56__locale_struct = struct{ Fcat [6]uintptr }
 
 type s22__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -43103,6 +49232,8 @@ type s19__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
+
+type s56__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking c16rtomb.o
 
@@ -43171,12 +49302,23 @@ lilseq:
 	return uint64(18446744073709551615)
 }
 
+type t576__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t576__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Tchar16_t = uint16
 
 type t112size_t = uint64
 
 // x1internal_state uint32, escapes: true, c16rtomb.c:7:18
-var x626internal_state = bss + 2480
+var x626internal_state = bss + 2496
 
 type t7wchar_t = int32
 
@@ -43185,6 +49327,17 @@ type t7wchar_t = int32
 // Xc32rtomb is defined at c32rtomb.c:4:8
 func Xc32rtomb(tls TLS, _s uintptr /* *int8 */, _c32 uint32, _ps uintptr /* *Tmbstate_t = struct{F__opaque1 uint32;F__opaque2 uint32;} */) (r uint64) {
 	return Xwcrtomb(tls, _s, int32(_c32), _ps)
+}
+
+type t577__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t577__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tchar32_t = uint32
@@ -43198,6 +49351,17 @@ type t8wchar_t = int32
 // X__fsmu8 [51]uint32, escapes: true, internal.c:18:16
 var X__fsmu8 = ds + 43016
 
+type t578__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t578__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t106uint32_t = uint32
 
 // linking mblen.o
@@ -43205,6 +49369,17 @@ type t106uint32_t = uint32
 // Xmblen is defined at mblen.c:3:5
 func Xmblen(tls TLS, _s uintptr /* *int8 */, _n uint64) (r int32) {
 	return Xmbtowc(tls, null, _s, _n)
+}
+
+type t579__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t579__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t114size_t = uint64
@@ -43221,10 +49396,21 @@ func Xmbrlen(tls TLS, _s uintptr /* *int8 */, _n uint64, _st uintptr /* *Tmbstat
 	}())
 }
 
+type t580__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t580__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t115size_t = uint64
 
 // x1internal uint32, escapes: true, mbrlen.c:5:18
-var x627internal = bss + 2488
+var x627internal = bss + 2504
 
 // linking mbrtoc16.o
 
@@ -43287,10 +49473,21 @@ _5:
 	return _ret
 }
 
+type t581__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t581__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t116size_t = uint64
 
 // x1internal_state uint32, escapes: true, mbrtoc16.c:6:18
-var x628internal_state = bss + 2496
+var x628internal_state = bss + 2512
 
 type t1char16_t = uint16
 
@@ -43329,10 +49526,21 @@ _3:
 	return _ret
 }
 
+type t582__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t582__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t117size_t = uint64
 
 // x1internal_state uint32, escapes: true, mbrtoc32.c:6:18
-var x629internal_state = bss + 2504
+var x629internal_state = bss + 2520
 
 type t1char32_t = uint32
 
@@ -43478,14 +49686,23 @@ lilseq:
 	return uint64(18446744073709551615)
 }
 
+type t583__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t583__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t118size_t = uint64
 
 // x1internal_state uint32, escapes: true, mbrtowc.c:8:18
-var x632internal_state = bss + 2512
+var x632internal_state = bss + 2528
 
 type t11wchar_t = int32
-
-type t52locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x18__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
@@ -43496,8 +49713,6 @@ func x18__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 type t107uint32_t = uint32
 
 type t15int32_t = int32
-
-type s57__locale_struct = struct{ Fcat [6]uintptr }
 
 type s23__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -43546,11 +49761,24 @@ type s20__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
+type s57__locale_struct = struct{ Fcat [6]uintptr }
+
 // linking mbsinit.o
 
 // Xmbsinit is defined at mbsinit.c:3:5
 func Xmbsinit(tls TLS, _st uintptr /* *Tmbstate_t = struct{F__opaque1 uint32;F__opaque2 uint32;} */) (r int32) {
 	return bool2int((_st == 0) || (*(*uint32)(unsafe.Pointer(_st)) == 0))
+}
+
+type t584__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t584__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking mbsnrtowcs.o
@@ -43672,6 +49900,17 @@ _8:
 	*(*uintptr)(unsafe.Pointer(_src)) = *(*uintptr)(unsafe.Pointer(_s))
 _14:
 	return _cnt
+}
+
+type t585__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t585__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t119size_t = uint64
@@ -43957,9 +50196,18 @@ _42:
 	return uint64(18446744073709551615)
 }
 
-type t120size_t = uint64
+type t586__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t53locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t586__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t120size_t = uint64
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x19__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
@@ -43974,8 +50222,6 @@ type t25uintptr_t = uint64
 type t108uint32_t = uint32
 
 type t16int32_t = int32
-
-type s58__locale_struct = struct{ Fcat [6]uintptr }
 
 type s24__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -44022,6 +50268,8 @@ type s21__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
+type s58__locale_struct = struct{ Fcat [6]uintptr }
+
 // linking mbstowcs.o
 
 // Xmbstowcs is defined at mbstowcs.c:4:8
@@ -44031,6 +50279,17 @@ func Xmbstowcs(tls TLS, _ws uintptr /* *Twchar_t = int32 */, as uintptr, _wn uin
 	defer Free(esc)
 	*(*uintptr)(unsafe.Pointer(_s)) = as
 	return Xmbsrtowcs(tls, _ws, _s, _wn, null)
+}
+
+type t587__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t587__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t121size_t = uint64
@@ -44156,11 +50415,20 @@ lilseq:
 	return int32(-1)
 }
 
+type t588__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t588__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t122size_t = uint64
 
 type t14wchar_t = int32
-
-type t54locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x20__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
@@ -44171,8 +50439,6 @@ func x20__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 type t109uint32_t = uint32
 
 type t17int32_t = int32
-
-type s59__locale_struct = struct{ Fcat [6]uintptr }
 
 type s25__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -44220,6 +50486,8 @@ type s22__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
+
+type s59__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking wcrtomb.o
 
@@ -44309,19 +50577,26 @@ _3:
 	return uint64(18446744073709551615)
 }
 
+type t589__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t589__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t15wchar_t = int32
 
 type t123size_t = uint64
-
-type t55locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x21__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 	return uintptr(tls)
 	return r
 }
-
-type s60__locale_struct = struct{ Fcat [6]uintptr }
 
 type s26__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -44369,6 +50644,8 @@ type s23__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
+
+type s60__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking wcsnrtombs.o
 
@@ -44482,6 +50759,17 @@ _8:
 	*(*uintptr)(unsafe.Pointer(_wcs)) = *(*uintptr)(unsafe.Pointer(_ws))
 _14:
 	return _cnt
+}
+
+type t590__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t590__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t124size_t = uint64
@@ -44626,6 +50914,17 @@ _15:
 	return _N
 }
 
+type t591__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t591__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t125size_t = uint64
 
 type t17wchar_t = int32
@@ -44636,6 +50935,17 @@ type t17wchar_t = int32
 func Xwcstombs(tls TLS, _s uintptr /* *int8 */, _ws uintptr /* *Twchar_t = int32 */, _n uint64) (r uint64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+2500 /* "src/multibyte/wc..." */, int32(7), x642__func__)
 	return r
+}
+
+type t592__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t592__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t126size_t = uint64
@@ -44669,17 +50979,24 @@ _2:
 	return int32(-1)
 }
 
-type t16wint_t = uint32
+type t593__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t56locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t593__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t16wint_t = uint32
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x22__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 	return uintptr(tls)
 	return r
 }
-
-type s61__locale_struct = struct{ Fcat [6]uintptr }
 
 type s27__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -44730,6 +51047,8 @@ type s24__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
+type s61__locale_struct = struct{ Fcat [6]uintptr }
+
 // linking wctomb.o
 
 // Xwctomb is defined at wctomb.c:4:5
@@ -44744,6 +51063,17 @@ _1:
 	return int32(Xwcrtomb(tls, _s, _wc, null))
 }
 
+type t594__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t594__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t18wchar_t = int32
 
 type t128size_t = uint64
@@ -44754,6 +51084,17 @@ type t128size_t = uint64
 func Xaccept(tls TLS, _fd int32, _addr uintptr /* *Ssockaddr */, _len uintptr /* *Tsocklen_t = uint32 */) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+2528 /* "src/network/acce..." */, int32(8), x643__func__)
 	return r
+}
+
+type t595__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t595__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Ssockaddr = struct {
@@ -44781,6 +51122,17 @@ _1:
 	return r
 }
 
+type t596__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t596__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1sockaddr = struct {
 	Fsa_family uint16
 	Fsa_data   [14]int8
@@ -44796,6 +51148,17 @@ type t1sa_family_t = uint16
 // Xbind is defined at bind.c:4:5
 func Xbind(tls TLS, _fd int32, _addr uintptr /* *Ssockaddr */, _len uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x7__syscall6(tls, int64(49), int64(_fd), int64(_addr), int64(_len), int64(0), int64(0), int64(0)))))
+}
+
+type t597__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t597__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1socklen_t = uint32
@@ -44818,6 +51181,17 @@ type t2sa_family_t = uint16
 func Xconnect(tls TLS, _fd int32, _addr uintptr /* *Ssockaddr */, _len uint32) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+2576 /* "src/network/conn..." */, int32(8), x645__func__)
 	return r
+}
+
+type t598__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t598__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t2socklen_t = uint32
@@ -44973,6 +51347,17 @@ _19:
 _20:
 _17:
 	return _i
+}
+
+type t599__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t599__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t129size_t = uint64
@@ -45231,6 +51616,17 @@ _4:
 	return int32(-1)
 }
 
+type t600__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t600__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking dn_skipname.o
 
 // Xdn_skipname is defined at dn_skipname.c:3:5
@@ -45275,6 +51671,17 @@ _5:
 
 _3:
 	return int32(-1)
+}
+
+type t601__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t601__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking dns_parse.o
@@ -45386,6 +51793,17 @@ _10:
 	return int32(0)
 }
 
+type t602__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t602__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking ent.o
 
 // Xsethostent is defined at ent.c:3:6
@@ -45399,6 +51817,17 @@ func Xgethostent(tls TLS) (r uintptr /* *void */) {
 
 // Xendhostent is defined at ent.c:12:6
 func Xendhostent(tls TLS) {
+}
+
+type t603__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t603__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ether.o
@@ -45513,21 +51942,43 @@ func Xether_hostton(tls TLS, _hostname uintptr /* *int8 */, _e uintptr /* *Sethe
 	return int32(-1)
 }
 
+type t604__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t604__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sether_addr = struct{ Fether_addr_octet [6]uint8 }
 
 type t3uint8_t = uint8
 
 // x1a Sether_addr, escapes: true, ether.c:27:27
-var x655a = bss + 2520
+var x655a = bss + 2536
 
 // x2x [18]int8, escapes: true, ether.c:41:14
-var x656x = bss + 2528
+var x656x = bss + 2544
 
 // linking freeaddrinfo.o
 
 // Xfreeaddrinfo is defined at freeaddrinfo.c:4:6
 func Xfreeaddrinfo(tls TLS, _p uintptr /* *Saddrinfo */) {
 	Xfree(tls, _p)
+}
+
+type t605__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t605__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Saddrinfo = struct {
@@ -45584,6 +52035,17 @@ _3:
 	_s++
 _7:
 	return X__lctrans_cur(tls, _s)
+}
+
+type t606__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t606__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xmsgs [239]int8, escapes: true, gai_strerror.c:4:19
@@ -45653,6 +52115,17 @@ _2:
 	return r
 }
 
+type t607__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t607__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1addrinfo = struct {
 	Fai_flags     int32
 	Fai_family    int32
@@ -45713,6 +52186,17 @@ _4:
 	return x659h
 }
 
+type t608__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t608__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t5socklen_t = uint32
 
 type Shostent = struct {
@@ -45736,6 +52220,17 @@ func Xgethostbyaddr_r(tls TLS, _a uintptr /* *void */, _l uint32, _af int32, _h 
 	return r
 }
 
+type t609__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t609__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t6socklen_t = uint32
 
 type t131size_t = uint64
@@ -45756,6 +52251,17 @@ var x660__func__ = ds + 43520
 // Xgethostbyname is defined at gethostbyname.c:8:16
 func Xgethostbyname(tls TLS, _name uintptr /* *int8 */) (r uintptr /* *Shostent */) {
 	return Xgethostbyname2(tls, _name, int32(2))
+}
+
+type t610__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t610__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2hostent = struct {
@@ -45803,6 +52309,17 @@ _4:
 	return x662h
 }
 
+type t611__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t611__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s3hostent = struct {
 	Fh_name      uintptr // *int8
 	Fh_aliases   uintptr // **int8
@@ -45825,6 +52342,17 @@ func Xgethostbyname2_r(tls TLS, _name uintptr /* *int8 */, _af int32, _h uintptr
 	return r
 }
 
+type t612__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t612__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t133size_t = uint64
 
 type s4hostent = struct {
@@ -45843,6 +52371,17 @@ var x663__func__ = ds + 43536
 // Xgethostbyname_r is defined at gethostbyname_r.c:6:5
 func Xgethostbyname_r(tls TLS, _name uintptr /* *int8 */, _h uintptr /* *Shostent */, _buf uintptr /* *int8 */, _buflen uint64, _res uintptr /* **Shostent */, _err uintptr /* *int32 */) (r int32) {
 	return Xgethostbyname2_r(tls, _name, int32(2), _h, _buf, _buflen, _res, _err)
+}
+
+type t613__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t613__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t134size_t = uint64
@@ -45899,6 +52438,17 @@ _1:
 	Xfreeifaddrs(tls, *(*uintptr)(unsafe.Pointer(_ctx)))
 _2:
 	return _r
+}
+
+type t614__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t614__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sifaddrs = struct {
@@ -46527,6 +53077,17 @@ _19:
 	return int32(0)
 }
 
+type t615__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t615__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t7socklen_t = uint32
 
 type s7sockaddr = struct {
@@ -46866,6 +53427,17 @@ func Xgetpeername(tls TLS, _fd int32, _addr uintptr /* *Ssockaddr */, _len uintp
 	return int32(X__syscall_ret(tls, uint64(x8__syscall6(tls, int64(52), int64(_fd), int64(_addr), int64(_len), int64(0), int64(0), int64(0)))))
 }
 
+type t616__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t616__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s8sockaddr = struct {
 	Fsa_family uint16
 	Fsa_data   [14]int8
@@ -46895,6 +53467,17 @@ _1:
 	return x672se
 }
 
+type t617__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t617__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sservent = struct {
 	Fs_name    uintptr // *int8
 	Fs_aliases uintptr // **int8
@@ -46903,10 +53486,10 @@ type Sservent = struct {
 }
 
 // x1se Sservent, escapes: true, getservbyname.c:6:24
-var x672se = bss + 2552
+var x672se = bss + 2568
 
 // x2buf [2]*int8, escapes: true, getservbyname.c:7:14
-var x673buf = bss + 2584
+var x673buf = bss + 2600
 
 type t137size_t = uint64
 
@@ -46974,6 +53557,17 @@ _4:
 	return r
 }
 
+type t618__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t618__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t138size_t = uint64
 
 type s1servent = struct {
@@ -47005,6 +53599,17 @@ _1:
 	return x675se
 }
 
+type t619__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t619__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s2servent = struct {
 	Fs_name    uintptr // *int8
 	Fs_aliases uintptr // **int8
@@ -47013,10 +53618,10 @@ type s2servent = struct {
 }
 
 // x1se Sservent, escapes: true, getservbyport.c:6:24
-var x675se = bss + 2600
+var x675se = bss + 2616
 
 // x2buf [4]int64, escapes: true, getservbyport.c:7:14
-var x676buf = bss + 2632
+var x676buf = bss + 2648
 
 type t139size_t = uint64
 
@@ -47120,6 +53725,17 @@ _11:
 	return int32(0)
 }
 
+type t620__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t620__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t140size_t = uint64
 
 type s3servent = struct {
@@ -47161,6 +53777,17 @@ func Xgetsockname(tls TLS, _fd int32, _addr uintptr /* *Ssockaddr */, _len uintp
 	return int32(X__syscall_ret(tls, uint64(x9__syscall6(tls, int64(51), int64(_fd), int64(_addr), int64(_len), int64(0), int64(0), int64(0)))))
 }
 
+type t621__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t621__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s9sockaddr = struct {
 	Fsa_family uint16
 	Fsa_data   [14]int8
@@ -47180,6 +53807,17 @@ func Xgetsockopt(tls TLS, _fd int32, _level int32, _optname int32, _optval uintp
 	return int32(X__syscall_ret(tls, uint64(x10__syscall6(tls, int64(55), int64(_fd), int64(_level), int64(_optname), int64(_optval), int64(_optlen), int64(0)))))
 }
 
+type t622__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t622__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall6 is defined at syscall_arch.h:63:22
 func x10__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64, _a6 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, _a5, _a6)
@@ -47188,11 +53826,22 @@ func x10__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 // linking h_errno.o
 
 // Xh_errno int32, escapes: true, h_errno.c:4:5
-var Xh_errno = bss + 2664
+var Xh_errno = bss + 2680
 
 // X__h_errno_location is defined at h_errno.c:6:5
 func X__h_errno_location(tls TLS) (r uintptr /* *int32 */) {
 	return Xh_errno
+}
+
+type t623__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t623__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking herror.o
@@ -47210,6 +53859,17 @@ func Xherror(tls TLS, _msg uintptr /* *int8 */) {
 		}
 		return ts + 112 /* "" */
 	}(), Xhstrerror(tls, *(*int32)(unsafe.Pointer(X__h_errno_location(tls)))))
+}
+
+type t624__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t624__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking hstrerror.o
@@ -47248,6 +53908,17 @@ _7:
 	return X__lctrans_cur(tls, _s)
 }
 
+type t625__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t625__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xmsgs [84]int8, escapes: true, hstrerror.c:5:19
 var x1msgs = ds + 43616
 
@@ -47264,6 +53935,17 @@ func Xhtonl(tls TLS, _n uint32) (r uint32) {
 	}
 
 	return _n
+}
+
+type t626__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t626__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t113uint32_t = uint32
@@ -47288,6 +53970,17 @@ func Xhtons(tls TLS, _n uint16) (r uint16) {
 	return _n
 }
 
+type t627__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t627__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t5uint16_t = uint16
 
 // x__bswap_16 is defined at byteswap.h:7:26
@@ -47300,6 +53993,17 @@ func x__bswap_16(tls TLS, ___x uint16) (r uint16) {
 // Xif_freenameindex is defined at if_freenameindex.c:4:6
 func Xif_freenameindex(tls TLS, _idx uintptr /* *Sif_nameindex */) {
 	Xfree(tls, _idx)
+}
+
+type t628__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t628__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sif_nameindex = struct {
@@ -47344,6 +54048,17 @@ _3:
 
 _2:
 	return Xstrncpy(tls, _name, _ifr, uint64(16))
+}
+
+type t629__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t629__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sifreq = struct {
@@ -47401,6 +54116,17 @@ func Xif_nameindex(tls TLS) (r uintptr /* *Sif_nameindex */) {
 	return r
 }
 
+type t630__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t630__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1if_nameindex = struct {
 	Fif_index uint32
 	Fif_name  uintptr // *int8
@@ -47437,6 +54163,17 @@ _1:
 	}
 
 	return uint32(*(*int32)(unsafe.Pointer(_ifr + 16)))
+}
+
+type t631__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t631__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1ifreq = struct {
@@ -47489,7 +54226,18 @@ type t12sa_family_t = uint16
 // linking in6addr_any.o
 
 // Xin6addr_any Sin6_addr, escapes: true, in6addr_any.c:3:23
-var Xin6addr_any = bss + 2672
+var Xin6addr_any = bss + 2688
+
+type t632__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t632__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s1in6_addr = struct {
 	F__in6_union struct {
@@ -47511,6 +54259,17 @@ type t114uint32_t = uint32
 
 // Xin6addr_loopback Sin6_addr, escapes: true, in6addr_loopback.c:3:23
 var Xin6addr_loopback = ds + 43720
+
+type t633__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t633__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s2in6_addr = struct {
 	F__in6_union struct {
@@ -47543,6 +54302,17 @@ func Xinet_addr(tls TLS, _p uintptr /* *int8 */) (r uint32) {
 
 _1:
 	return *(*uint32)(unsafe.Pointer(_a))
+}
+
+type t634__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t634__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t2in_addr_t = uint32
@@ -47650,6 +54420,17 @@ _13:
 	return int32(1)
 }
 
+type t635__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t635__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s3in_addr = struct{ Fs_addr uint32 }
 
 type t3in_addr_t = uint32
@@ -47743,6 +54524,17 @@ _2:
 	return _h >> (uint(8) % 32)
 }
 
+type t636__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t636__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t4in_addr_t = uint32
 
 type t118uint32_t = uint32
@@ -47765,6 +54557,17 @@ func Xinet_ntoa(tls TLS, ain struct{ Fs_addr uint32 }) (r uintptr /* *int8 */) {
 	return x681buf
 }
 
+type t637__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t637__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s5in_addr = struct{ Fs_addr uint32 }
 
 type t5in_addr_t = uint32
@@ -47772,7 +54575,7 @@ type t5in_addr_t = uint32
 type t119uint32_t = uint32
 
 // x1buf [16]int8, escapes: true, inet_ntoa.c:6:14
-var x681buf = bss + 2688
+var x681buf = bss + 2704
 
 type t143size_t = uint64
 
@@ -47875,6 +54678,17 @@ _4:
 _1:
 	*(*int32)(unsafe.Pointer(X__errno_location(tls))) = int32(28)
 	return null
+}
+
+type t638__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t638__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t9socklen_t = uint32
@@ -48095,6 +54909,17 @@ _35:
 	return int32(1)
 }
 
+type t639__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t639__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t8uint16_t = uint16
 
 // xhexval is defined at inet_pton.c:7:12
@@ -48126,6 +54951,17 @@ func Xlisten(tls TLS, _fd int32, _backlog int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x11__syscall6(tls, int64(50), int64(_fd), int64(_backlog), int64(0), int64(0), int64(0), int64(0)))))
 }
 
+type t640__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t640__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall6 is defined at syscall_arch.h:63:22
 func x11__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64, _a6 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, _a5, _a6)
@@ -48133,9 +54969,42 @@ func x11__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 
 // linking lookup_ipliteral.o
 
+type t641__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t641__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lookup_name.o
 
+type t642__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t642__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking lookup_serv.o
+
+type t643__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t643__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking netlink.o
 
@@ -48162,6 +55031,17 @@ _1:
 _2:
 	x27__syscall1(tls, int64(3), int64(_fd))
 	return _r
+}
+
+type t644__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t644__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 func fn687(p uintptr) func(TLS, uintptr, uintptr) int32 {
@@ -48272,6 +55152,17 @@ func Xgetnetbyaddr(tls TLS, _net uint32, _type int32) (r uintptr /* *Snetent */)
 // Xgetnetbyname is defined at netname.c:8:15
 func Xgetnetbyname(tls TLS, _name uintptr /* *int8 */) (r uintptr /* *Snetent */) {
 	return null
+}
+
+type t645__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t645__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t121uint32_t = uint32
@@ -48598,6 +55489,17 @@ _1:
 	return _r
 }
 
+type t646__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t646__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type S_ns_flagdata = struct {
 	Fmask  int32
 	Fshift int32
@@ -48640,6 +55542,17 @@ func Xntohl(tls TLS, _n uint32) (r uint32) {
 	return _n
 }
 
+type t647__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t647__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t123uint32_t = uint32
 
 // x__bswap_32 is defined at byteswap.h:12:26
@@ -48660,6 +55573,17 @@ func Xntohs(tls TLS, _n uint16) (r uint16) {
 	}
 
 	return _n
+}
+
+type t648__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t648__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t11uint16_t = uint16
@@ -48715,6 +55639,17 @@ _1:
 	return _p
 }
 
+type t649__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t649__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xidx int32, escapes: false, proto.c:7:12
 var xidx int32
 
@@ -48734,6 +55669,17 @@ func Xrecv(tls TLS, _fd int32, _buf uintptr /* *void */, _len uint64, _flags int
 	return Xrecvfrom(tls, _fd, _buf, _len, _flags, null, null)
 }
 
+type t650__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t650__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t148size_t = uint64
 
 type t24ssize_t = int64
@@ -48744,6 +55690,17 @@ type t24ssize_t = int64
 func Xrecvfrom(tls TLS, _fd int32, _buf uintptr /* *void */, _len uint64, _flags int32, _addr uintptr /* *Ssockaddr */, _alen uintptr /* *Tsocklen_t = uint32 */) (r int64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+3068 /* "src/network/recv..." */, int32(8), x691__func__)
 	return r
+}
+
+type t651__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t651__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t149size_t = uint64
@@ -48785,6 +55742,17 @@ _1:
 _3:
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+3092 /* "src/network/recv..." */, int32(15), x693__func__)
 	return r
+}
+
+type t652__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t652__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Smmsghdr = struct {
@@ -48850,6 +55818,17 @@ _2:
 	return _r
 }
 
+type t653__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t653__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t26ssize_t = int64
 
 type s1msghdr = struct {
@@ -48881,6 +55860,17 @@ type t151size_t = uint64
 // Xres_init is defined at res_init.c:3:5
 func Xres_init(tls TLS) (r int32) {
 	return int32(0)
+}
+
+type t654__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t654__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking res_mkquery.o
@@ -48955,6 +55945,17 @@ _5:
 	return _n
 }
 
+type t655__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t655__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s14timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -48987,6 +55988,17 @@ func X__res_msend(tls TLS, _nqueries int32, _queries uintptr /* **uint8 */, _qle
 
 _1:
 	return X__res_msend_rc(tls, _nqueries, _queries, _qlens, _answers, _alens, _asize, _conf)
+}
+
+type t656__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t656__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sresolvconf = struct {
@@ -49032,6 +56044,17 @@ _1:
 	return X__res_send(tls, _q, _ql, _dest, _len)
 }
 
+type t657__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t657__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking res_querydomain.o
 
 // Xres_querydomain is defined at res_querydomain.c:4:5
@@ -49056,6 +56079,17 @@ _1:
 	*(*int8)(unsafe.Pointer(_tmp + uintptr(_nl))) = int8('.')
 	Xmemcpy(tls, (_tmp+uintptr(_nl))+uintptr(1), _domain, _dl+uint64(1))
 	return Xres_query(tls, _tmp, _class, _type, _dest, _len)
+}
+
+type t658__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t658__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t154size_t = uint64
@@ -49085,11 +56119,33 @@ func X__res_send(tls TLS, amsg uintptr, amsglen int32, aanswer uintptr, aanslen 
 	return *(*int32)(unsafe.Pointer(_anslen))
 }
 
+type t659__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t659__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking res_state.o
 
 // X__res_state is defined at res_state.c:5:20
 func X__res_state(tls TLS) (r uintptr /* *S__res_state */) {
 	return x697res
+}
+
+type t660__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t660__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type S__res_state = struct {
@@ -49129,7 +56185,7 @@ type S__res_state = struct {
 }
 
 // x1res S__res_state, escapes: true, res_state.c:7:28
-var x697res = bss + 2704
+var x697res = bss + 2720
 
 type s2sockaddr_in = struct {
 	Fsin_family uint16
@@ -49375,6 +56431,17 @@ _35:
 	return int32(0)
 }
 
+type t661__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t661__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t155size_t = uint64
 
 type s1resolvconf = struct {
@@ -49449,6 +56516,17 @@ func Xsend(tls TLS, _fd int32, _buf uintptr /* *void */, _len uint64, _flags int
 	return Xsendto(tls, _fd, _buf, _len, _flags, null, uint32(0))
 }
 
+type t662__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t662__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t156size_t = uint64
 
 type t27ssize_t = int64
@@ -49502,6 +56580,17 @@ lerror:
 	}
 
 	return int32(-1)
+}
+
+type t663__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t663__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1mmsghdr = struct {
@@ -49593,6 +56682,17 @@ _1:
 	return r
 }
 
+type t664__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t664__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t29ssize_t = int64
 
 type s3msghdr = struct {
@@ -49634,6 +56734,17 @@ func Xsendto(tls TLS, _fd int32, _buf uintptr /* *void */, _len uint64, _flags i
 	return r
 }
 
+type t665__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t665__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t159size_t = uint64
 
 type t15socklen_t = uint32
@@ -49665,6 +56776,17 @@ func Xgetservent(tls TLS) (r uintptr /* *Sservent */) {
 	return null
 }
 
+type t666__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t666__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s4servent = struct {
 	Fs_name    uintptr // *int8
 	Fs_aliases uintptr // **int8
@@ -49679,6 +56801,17 @@ func Xsetsockopt(tls TLS, _fd int32, _level int32, _optname int32, _optval uintp
 	return int32(X__syscall_ret(tls, uint64(x12__syscall6(tls, int64(54), int64(_fd), int64(_level), int64(_optname), int64(_optval), int64(_optlen), int64(0)))))
 }
 
+type t667__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t667__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t16socklen_t = uint32
 
 // x__syscall6 is defined at syscall_arch.h:63:22
@@ -49691,6 +56824,17 @@ func x12__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 // Xshutdown is defined at shutdown.c:4:5
 func Xshutdown(tls TLS, _fd int32, _how int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x13__syscall6(tls, int64(48), int64(_fd), int64(_how), int64(0), int64(0), int64(0), int64(0)))))
+}
+
+type t668__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t668__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall6 is defined at syscall_arch.h:63:22
@@ -49713,6 +56857,17 @@ func Xsockatmark(tls TLS, _s int32) (r int32) {
 
 _1:
 	return *(*int32)(unsafe.Pointer(_ret))
+}
+
+type t669__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t669__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking socket.o
@@ -49748,6 +56903,17 @@ _3:
 _4:
 _1:
 	return _s
+}
+
+type t670__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t670__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall6 is defined at syscall_arch.h:63:22
@@ -49797,6 +56963,17 @@ _1:
 	return _r
 }
 
+type t671__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t671__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall6 is defined at syscall_arch.h:63:22
 func x15__syscall6(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64, _a6 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, _a5, _a6)
@@ -49824,6 +57001,17 @@ func Xfgetgrent(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r uintptr /* *Sgr
 	return *(*uintptr)(unsafe.Pointer(_res))
 }
 
+type t672__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t672__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sgroup = struct {
 	Fgr_name   uintptr // *int8
 	Fgr_passwd uintptr // *int8
@@ -49832,13 +57020,13 @@ type Sgroup = struct {
 }
 
 // x1line *int8, escapes: true, fgetgrent.c:6:14
-var x703line = bss + 3272
+var x703line = bss + 3288
 
 // x2mem **int8, escapes: true, fgetgrent.c:6:21
-var x704mem = bss + 3280
+var x704mem = bss + 3296
 
 // x3gr Sgroup, escapes: true, fgetgrent.c:7:22
-var x702gr = bss + 3288
+var x702gr = bss + 3304
 
 type t160size_t = uint64
 
@@ -49861,6 +57049,17 @@ func Xfgetpwent(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r uintptr /* *Spa
 	return *(*uintptr)(unsafe.Pointer(_res))
 }
 
+type t673__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t673__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1passwd = struct {
 	Fpw_name   uintptr // *int8
 	Fpw_passwd uintptr // *int8
@@ -49872,10 +57071,10 @@ type s1passwd = struct {
 }
 
 // x1line *int8, escapes: true, fgetpwent.c:6:14
-var x706line = bss + 3320
+var x706line = bss + 3336
 
 // x2pw Spasswd, escapes: true, fgetpwent.c:7:23
-var x705pw = bss + 3328
+var x705pw = bss + 3344
 
 type t161size_t = uint64
 
@@ -49909,6 +57108,17 @@ _1:
 	return _res
 }
 
+type t674__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t674__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sspwd = struct {
 	Fsp_namp   uintptr // *int8
 	Fsp_pwdp   uintptr // *int8
@@ -49922,10 +57132,10 @@ type Sspwd = struct {
 }
 
 // x1line *int8, escapes: true, fgetspent.c:6:14
-var x707line = bss + 3376
+var x707line = bss + 3392
 
 // x2sp Sspwd, escapes: true, fgetspent.c:7:21
-var x708sp = bss + 3384
+var x708sp = bss + 3400
 
 type t162size_t = uint64
 
@@ -50222,6 +57432,17 @@ _34:
 	return _rv
 }
 
+type t675__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t675__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t13gid_t = uint32
 
 type s1group = struct {
@@ -50270,6 +57491,17 @@ func Xgetgrnam_r(tls TLS, _name uintptr /* *int8 */, _gr uintptr /* *Sgroup */, 
 // Xgetgrgid_r is defined at getgr_r.c:46:5
 func Xgetgrgid_r(tls TLS, _gid uint32, _gr uintptr /* *Sgroup */, _buf uintptr /* *int8 */, _size uint64, _res uintptr /* **Sgroup */) (r int32) {
 	return xgetgr_r(tls, null, _gid, _gr, _buf, _size, _res)
+}
+
+type t676__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t676__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t164size_t = uint64
@@ -50418,6 +57650,17 @@ func Xgetgrnam(tls TLS, _name uintptr /* *int8 */) (r uintptr /* *Sgroup */) {
 	return *(*uintptr)(unsafe.Pointer(_res))
 }
 
+type t677__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t677__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xf *TFILE = S_IO_FILE, escapes: false, getgrent.c:3:13
 var x1f uintptr
 
@@ -50431,13 +57674,13 @@ type s3group = struct {
 type t165size_t = uint64
 
 // xgr Sgroup, escapes: true, getgrent.c:5:21
-var xgr = bss + 3456
+var xgr = bss + 3472
 
 // xline *int8, escapes: true, getgrent.c:4:13
-var x1line = bss + 3488
+var x1line = bss + 3504
 
 // xmem **int8, escapes: true, getgrent.c:4:20
-var xmem = bss + 3496
+var xmem = bss + 3512
 
 type t15gid_t = uint32
 
@@ -50591,6 +57834,17 @@ lend:
 	*(*int32)(unsafe.Pointer(X__errno_location(tls))) = _rv
 _19:
 	return _rv
+}
+
+type t678__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t678__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s4group = struct {
@@ -50840,6 +58094,17 @@ _32:
 	return _ret
 }
 
+type t679__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t679__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t17gid_t = uint32
 
 type t33ssize_t = int64
@@ -51049,6 +58314,17 @@ _18:
 	return _rv
 }
 
+type t680__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t680__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t12uid_t = uint32
 
 type s2passwd = struct {
@@ -51100,6 +58376,17 @@ func Xgetpwnam_r(tls TLS, _name uintptr /* *int8 */, _pw uintptr /* *Spasswd */,
 // Xgetpwuid_r is defined at getpw_r.c:39:5
 func Xgetpwuid_r(tls TLS, _uid uint32, _pw uintptr /* *Spasswd */, _buf uintptr /* *int8 */, _size uint64, _res uintptr /* **Spasswd */) (r int32) {
 	return xgetpw_r(tls, null, _uid, _pw, _buf, _size, _res)
+}
+
+type t681__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t681__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t169size_t = uint64
@@ -51215,6 +58502,17 @@ func Xgetpwnam(tls TLS, _name uintptr /* *int8 */) (r uintptr /* *Spasswd */) {
 	return *(*uintptr)(unsafe.Pointer(_res))
 }
 
+type t682__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t682__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xf *TFILE = S_IO_FILE, escapes: false, getpwent.c:3:13
 var x2f uintptr
 
@@ -51229,13 +58527,13 @@ type s4passwd = struct {
 }
 
 // xpw Spasswd, escapes: true, getpwent.c:5:22
-var xpw = bss + 3504
+var xpw = bss + 3520
 
 // xline *int8, escapes: true, getpwent.c:4:13
-var x2line = bss + 3552
+var x2line = bss + 3568
 
 // xsize Tsize_t = uint64, escapes: true, getpwent.c:6:15
-var xsize = bss + 3560
+var xsize = bss + 3576
 
 type t14uid_t = uint32
 
@@ -51355,6 +58653,17 @@ _11:
 	return _rv
 }
 
+type t683__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t683__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s5passwd = struct {
 	Fpw_name   uintptr // *int8
 	Fpw_passwd uintptr // *int8
@@ -51406,6 +58715,17 @@ func Xgetspent(tls TLS) (r uintptr /* *Sspwd */) {
 	return null
 }
 
+type t684__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t684__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1spwd = struct {
 	Fsp_namp   uintptr // *int8
 	Fsp_pwdp   uintptr // *int8
@@ -51451,6 +58771,17 @@ _3:
 	return *(*uintptr)(unsafe.Pointer(_res))
 }
 
+type t685__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t685__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s2spwd = struct {
 	Fsp_namp   uintptr // *int8
 	Fsp_pwdp   uintptr // *int8
@@ -51464,7 +58795,7 @@ type s2spwd = struct {
 }
 
 // x1sp Sspwd, escapes: true, getspnam.c:7:21
-var x726sp = bss + 3568
+var x726sp = bss + 3584
 
 // x2line *int8, escapes: false, getspnam.c:8:14
 var x725line uintptr
@@ -51689,6 +59020,17 @@ _14:
 	return _rv
 }
 
+type t686__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t686__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s3spwd = struct {
 	Fsp_namp   uintptr // *int8
 	Fsp_pwdp   uintptr // *int8
@@ -51796,6 +59138,17 @@ func Xulckpwdf(tls TLS) (r int32) {
 	return int32(0)
 }
 
+type t687__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t687__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking nscd_query.o
 
 // X__nscd_query is defined at nscd_query.c:19:6
@@ -51815,6 +59168,17 @@ func X__nscd_query(tls TLS, _req int32, _key uintptr /* *int8 */, _buf uintptr /
 	}
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+3636 /* "src/passwd/nscd_..." */, int32(29), x732__func__)
 	return r
+}
+
+type t688__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t688__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t21int32_t = int32
@@ -51882,6 +59246,17 @@ ldone:
 	return int32(0)
 }
 
+type t689__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t689__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s6group = struct {
 	Fgr_name   uintptr // *int8
 	Fgr_passwd uintptr // *int8
@@ -51904,6 +59279,17 @@ func Xputpwent(tls TLS, _pw uintptr /* *Spasswd */, _f uintptr /* *TFILE = S_IO_
 	}
 
 	return int32(0)
+}
+
+type t690__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t690__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s6passwd = struct {
@@ -52013,6 +59399,17 @@ func Xputspent(tls TLS, _sp uintptr /* *Sspwd */, _f uintptr /* *TFILE = S_IO_FI
 	return int32(0)
 }
 
+type t691__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t691__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s4spwd = struct {
 	Fsp_namp   uintptr // *int8
 	Fsp_pwdp   uintptr // *int8
@@ -52044,12 +59441,34 @@ func X__rand48_step(tls TLS, _xi uintptr /* *uint16 */, _lc uintptr /* *uint16 *
 	return _x & uint64(0xffffffffffff)
 }
 
+type t692__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t692__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t69uint64_t = uint64
 
 // linking __seed48.o
 
 // X__seed48 [7]uint16, escapes: true, __seed48.c:1:16
 var X__seed48 = ds + 44008
+
+type t693__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t693__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking drand48.o
 
@@ -52075,6 +59494,17 @@ func Xdrand48(tls TLS) (r float64) {
 	return Xerand48(tls, X__seed48)
 }
 
+type t694__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t694__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t70uint64_t = uint64
 
 // linking lcong48.o
@@ -52082,6 +59512,17 @@ type t70uint64_t = uint64
 // Xlcong48 is defined at lcong48.c:6:6
 func Xlcong48(tls TLS, _p uintptr /* [7]uint16 */) {
 	Xmemcpy(tls, X__seed48, _p, uint64(14))
+}
+
+type t695__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t695__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t174size_t = uint64
@@ -52098,6 +59539,17 @@ func Xlrand48(tls TLS) (r int64) {
 	return Xnrand48(tls, X__seed48)
 }
 
+type t696__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t696__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t71uint64_t = uint64
 
 // linking mrand48.o
@@ -52110,6 +59562,17 @@ func Xjrand48(tls TLS, _s uintptr /* [3]uint16 */) (r int64) {
 // Xmrand48 is defined at mrand48.c:12:6
 func Xmrand48(tls TLS) (r int64) {
 	return Xjrand48(tls, X__seed48)
+}
+
+type t697__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t697__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t22int32_t = int32
@@ -52129,6 +59592,17 @@ func Xrand(tls TLS) (r int32) {
 	return int32(xseed >> (uint(33) % 64))
 }
 
+type t698__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t698__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xseed Tuint64_t = uint64, escapes: false, rand.c:4:17
 var xseed uint64
 
@@ -52141,6 +59615,17 @@ func set734(p *uint32, v uint32) uint32 { *p = v; return v }
 // Xrand_r is defined at rand_r.c:12:5
 func Xrand_r(tls TLS, _seed uintptr /* *uint32 */) (r int32) {
 	return int32(xtemper(tls, set734((*uint32)(unsafe.Pointer(_seed)), *(*uint32)(unsafe.Pointer(_seed))*uint32(1103515245)+uint32(12345))) / uint32(2))
+}
+
+type t699__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t699__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xtemper is defined at rand_r.c:3:17
@@ -52269,8 +59754,19 @@ lend:
 	return _k
 }
 
+type t700__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t700__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xlock [1]int32, escapes: true, random.c:25:21
-var x3lock = bss + 3640
+var x3lock = bss + 3656
 
 // x__srandom is defined at random.c:47:13
 func x__srandom(tls TLS, _seed uint32) {
@@ -52368,8 +59864,19 @@ func Xseed48(tls TLS, _s uintptr /* *uint16 */) (r uintptr /* *uint16 */) {
 	return x737p
 }
 
+type t701__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t701__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1p [3]uint16, escapes: true, seed48.c:8:24
-var x737p = bss + 3648
+var x737p = bss + 3664
 
 type t176size_t = uint64
 
@@ -52378,6 +59885,17 @@ type t176size_t = uint64
 // Xsrand48 is defined at srand48.c:4:6
 func Xsrand48(tls TLS, _seed int64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+3760 /* "src/prng/srand48..." */, int32(6), x738__func__)
+}
+
+type t702__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t702__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [8]int8, escapes: true, srand48.c:5:1
@@ -52391,6 +59909,17 @@ func Xexecl(tls TLS, _path uintptr /* *int8 */, _argv0 uintptr /* *int8 */, ap .
 	return r
 }
 
+type t703__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t703__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [6]int8, escapes: true, execl.c:6:1
 var x739__func__ = ds + 44160
 
@@ -52400,6 +59929,17 @@ var x739__func__ = ds + 44160
 func Xexecle(tls TLS, _path uintptr /* *int8 */, _argv0 uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+3800 /* "src/process/exec..." */, int32(7), x740__func__)
 	return r
+}
+
+type t704__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t704__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [7]int8, escapes: true, execle.c:6:1
@@ -52413,6 +59953,17 @@ func Xexeclp(tls TLS, _file uintptr /* *int8 */, _argv0 uintptr /* *int8 */, ap 
 	return r
 }
 
+type t705__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t705__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [7]int8, escapes: true, execlp.c:6:1
 var x741__func__ = ds + 44176
 
@@ -52423,11 +59974,33 @@ func Xexecv(tls TLS, _path uintptr /* *int8 */, _argv uintptr /* uintptr */) (r 
 	return Xexecve(tls, _path, _argv, *(*uintptr)(unsafe.Pointer(X__environ)))
 }
 
+type t706__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t706__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking execve.o
 
 // Xexecve is defined at execve.c:4:5
 func Xexecve(tls TLS, _path uintptr /* *int8 */, _argv uintptr /* uintptr */, _envp uintptr /* uintptr */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x34__syscall3(tls, int64(59), int64(_path), int64(_argv), int64(_envp)))))
+}
+
+type t707__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t707__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -52446,6 +60019,17 @@ func X__execvpe(tls TLS, _file uintptr /* *int8 */, _argv uintptr /* uintptr */,
 // Xexecvp is defined at execvp.c:59:5
 func Xexecvp(tls TLS, _file uintptr /* *int8 */, _argv uintptr /* uintptr */) (r int32) {
 	return X__execvpe(tls, _file, _argv, *(*uintptr)(unsafe.Pointer(X__environ)))
+}
+
+type t708__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t708__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [10]int8, escapes: true, execvp.c:12:1
@@ -52467,6 +60051,17 @@ func Xfexecve(tls TLS, _fd int32, _argv uintptr /* uintptr */, _envp uintptr /* 
 	*(*int32)(unsafe.Pointer(X__errno_location(tls))) = int32(9)
 _1:
 	return int32(-1)
+}
+
+type t709__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t709__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking fork.o
@@ -52498,13 +60093,22 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(_ret)))
 }
 
+type t710__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t710__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at fork.c:8:13
 func x10dummy(tls TLS, _x int32) {
 }
 
 type t16pid_t = int32
-
-type t8pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s28__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -52565,8 +60169,6 @@ type s26__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t57locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s64__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -52669,6 +60271,17 @@ func fp744(f func(TLS, uintptr, uintptr, uintptr) int32) uintptr {
 // Xposix_spawn is defined at posix_spawn.c:203:5
 func Xposix_spawn(tls TLS, _res uintptr /* *Tpid_t = int32 */, _path uintptr /* *int8 */, _fa uintptr /* *Tposix_spawn_file_actions_t = s...tions uintptr;F__pad [16]int32;} */, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */, _argv uintptr /* uintptr */, _envp uintptr /* uintptr */) (r int32) {
 	return X__posix_spawnx(tls, _res, _path, fp744(Xexecve), _fa, _attr, _argv, _envp)
+}
+
+type t711__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t711__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t17pid_t = int32
@@ -53028,6 +60641,17 @@ _2:
 	return int32(0)
 }
 
+type t712__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t712__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1fdop = struct {
 	Fnext  uintptr // *Sfdop
 	Fprev  uintptr // *Sfdop
@@ -53071,6 +60695,17 @@ _2:
 	*(*uintptr)(unsafe.Pointer(_op + 8)) = null
 	*(*uintptr)(unsafe.Pointer(_fa + 8)) = _op
 	return int32(0)
+}
+
+type t713__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t713__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2fdop = struct {
@@ -53120,6 +60755,17 @@ _2:
 	return int32(0)
 }
 
+type t714__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t714__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t17mode_t = uint32
 
 type s3fdop = struct {
@@ -53158,6 +60804,17 @@ _2:
 	return int32(0)
 }
 
+type t715__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t715__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s4fdop = struct {
 	Fnext  uintptr // *Sfdop
 	Fprev  uintptr // *Sfdop
@@ -53179,11 +60836,33 @@ func Xposix_spawn_file_actions_init(tls TLS, _fa uintptr /* *Tposix_spawn_file_a
 	return int32(0)
 }
 
+type t716__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t716__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking posix_spawnattr_destroy.o
 
 // Xposix_spawnattr_destroy is defined at posix_spawnattr_destroy.c:3:5
 func Xposix_spawnattr_destroy(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */) (r int32) {
 	return int32(0)
+}
+
+type t717__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t717__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t18pid_t = int32
@@ -53198,6 +60877,17 @@ func Xposix_spawnattr_getflags(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = s
 	return int32(0)
 }
 
+type t718__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t718__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t19pid_t = int32
 
 type t2sigset_t = struct{ F__bits [16]uint64 }
@@ -53208,6 +60898,17 @@ type t2sigset_t = struct{ F__bits [16]uint64 }
 func Xposix_spawnattr_getpgroup(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */, _pgrp uintptr /* *Tpid_t = int32 */) (r int32) {
 	*(*int32)(unsafe.Pointer(_pgrp)) = *(*int32)(unsafe.Pointer(_attr + 4))
 	return int32(0)
+}
+
+type t719__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t719__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t20pid_t = int32
@@ -53222,6 +60923,17 @@ func Xposix_spawnattr_getsigdefault(tls TLS, _attr uintptr /* *Tposix_spawnattr_
 	return int32(0)
 }
 
+type t720__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t720__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t21pid_t = int32
 
 type t4sigset_t = struct{ F__bits [16]uint64 }
@@ -53232,6 +60944,17 @@ type t4sigset_t = struct{ F__bits [16]uint64 }
 func Xposix_spawnattr_getsigmask(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */, _mask uintptr /* *Tsigset_t = struct{F__bits [16]uint64;} */) (r int32) {
 	*(*struct{ F__bits [16]uint64 })(unsafe.Pointer(_mask)) = *(*struct{ F__bits [16]uint64 })(unsafe.Pointer(_attr + 136))
 	return int32(0)
+}
+
+type t721__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t721__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t22pid_t = int32
@@ -53272,6 +60995,17 @@ func Xposix_spawnattr_init(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = struc
 	return int32(0)
 }
 
+type t722__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t722__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t23pid_t = int32
 
 type t6sigset_t = struct{ F__bits [16]uint64 }
@@ -53306,6 +61040,17 @@ func Xposix_spawnattr_getschedpolicy(tls TLS, _attr uintptr /* *Tposix_spawnattr
 // Xposix_spawnattr_setschedpolicy is defined at posix_spawnattr_sched.c:22:5
 func Xposix_spawnattr_setschedpolicy(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */, _policy int32) (r int32) {
 	return int32(38)
+}
+
+type t723__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t723__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t24pid_t = int32
@@ -53345,6 +61090,17 @@ _1:
 	return int32(0)
 }
 
+type t724__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t724__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t25pid_t = int32
 
 type t8sigset_t = struct{ F__bits [16]uint64 }
@@ -53355,6 +61111,17 @@ type t8sigset_t = struct{ F__bits [16]uint64 }
 func Xposix_spawnattr_setpgroup(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */, _pgrp int32) (r int32) {
 	*(*int32)(unsafe.Pointer(_attr + 4)) = _pgrp
 	return int32(0)
+}
+
+type t725__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t725__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t26pid_t = int32
@@ -53369,6 +61136,17 @@ func Xposix_spawnattr_setsigdefault(tls TLS, _attr uintptr /* *Tposix_spawnattr_
 	return int32(0)
 }
 
+type t726__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t726__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t27pid_t = int32
 
 type t10sigset_t = struct{ F__bits [16]uint64 }
@@ -53379,6 +61157,17 @@ type t10sigset_t = struct{ F__bits [16]uint64 }
 func Xposix_spawnattr_setsigmask(tls TLS, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */, _mask uintptr /* *Tsigset_t = struct{F__bits [16]uint64;} */) (r int32) {
 	*(*struct{ F__bits [16]uint64 })(unsafe.Pointer(_attr + 136)) = *(*struct{ F__bits [16]uint64 })(unsafe.Pointer(_mask))
 	return int32(0)
+}
+
+type t727__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t727__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t28pid_t = int32
@@ -53394,6 +61183,17 @@ func fp750(f func(TLS, uintptr, uintptr, uintptr) int32) uintptr {
 // Xposix_spawnp is defined at posix_spawnp.c:11:5
 func Xposix_spawnp(tls TLS, _res uintptr /* *Tpid_t = int32 */, _file uintptr /* *int8 */, _fa uintptr /* *Tposix_spawn_file_actions_t = s...tions uintptr;F__pad [16]int32;} */, _attr uintptr /* *Tposix_spawnattr_t = struct{F__...;F__pol int32;F__pad [16]int32;} */, _argv uintptr /* uintptr */, _envp uintptr /* uintptr */) (r int32) {
 	return X__posix_spawnx(tls, _res, _file, fp750(X__execvpe), _fa, _attr, _argv, _envp)
+}
+
+type t728__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t728__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t29pid_t = int32
@@ -53479,6 +61279,17 @@ _7:
 	return *(*int32)(unsafe.Pointer(_status))
 }
 
+type t729__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t729__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1sigaction = struct {
 	F__sa_handler struct {
 		Fsa_handler   [0]uintptr
@@ -53501,6 +61312,17 @@ func Xwait(tls TLS, _status uintptr /* *int32 */) (r int32) {
 	return Xwaitpid(tls, int32(-1), _status, int32(0))
 }
 
+type t730__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t730__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t31pid_t = int32
 
 // linking waitid.o
@@ -53509,6 +61331,17 @@ type t31pid_t = int32
 func Xwaitid(tls TLS, _type int32, _id uint32, _info uintptr /* *Tsiginfo_t = struct{Fsi_signo i...uint32;};F int64; _ [104]byte};} */, _options int32) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+4048 /* "src/process/wait..." */, int32(8), x751__func__)
 	return r
+}
+
+type t731__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t731__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tidtype_t = int32
@@ -53535,6 +61368,17 @@ var x751__func__ = ds + 44200
 // Xwaitpid is defined at waitpid.c:6:7
 func Xwaitpid(tls TLS, _pid int32, _status uintptr /* *int32 */, _options int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(61), int64(_pid), int64(_status), int64(_options), int64(0), int64(0), int64(0)))))
+}
+
+type t732__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t732__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t33pid_t = int32
@@ -53657,6 +61501,17 @@ _18:
 _15:
 _2:
 	return xfnmatch_internal(tls, _pat, uint64(18446744073709551615), _str, uint64(18446744073709551615), _flags)
+}
+
+type t733__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t733__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xpat_next is defined at fnmatch.c:49:12
@@ -54343,8 +62198,6 @@ _9:
 	return _inv
 }
 
-type t58locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x24__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 	return uintptr(tls)
@@ -54352,8 +62205,6 @@ func x24__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 }
 
 type t1wctype_t = uint64
-
-type s65__locale_struct = struct{ Fcat [6]uintptr }
 
 type s29__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -54403,6 +62254,8 @@ type s27__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
+
+type s65__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking glob.o
 
@@ -54609,6 +62462,17 @@ _3:
 	Xfree(tls, *(*uintptr)(unsafe.Pointer(_g + 8)))
 	*(*uint64)(unsafe.Pointer(_g)) = uint64(0)
 	*(*uintptr)(unsafe.Pointer(_g + 8)) = null
+}
+
+type t734__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t734__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t183size_t = uint64
@@ -55161,6 +63025,17 @@ _21:
 	Xfree(tls, _tnfa)
 }
 
+type t735__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t735__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t184size_t = uint64
 
 type Stre_stack_rec = struct {
@@ -55231,12 +63106,12 @@ type Stre_submatch_data = struct {
 
 type Treg_errcode_t = int32
 
-type Ttre_mem_t = uintptr // Ttre_mem_t = *struct{Fblocks *st...ailed int32;Fprovided *uintptr;}
-
 type Ttre_list_t = struct {
 	Fdata uintptr // *void
 	Fnext uintptr // *Stre_list
 }
+
+type Ttre_mem_t = uintptr // Ttre_mem_t = *struct{Fblocks *st...ailed int32;Fprovided *uintptr;}
 
 type Ttre_stack_t = Stre_stack_rec
 
@@ -59508,7 +67383,7 @@ func xtre_compare_lit(tls TLS, _a uintptr /* *void */, _b uintptr /* *void */) (
 }
 
 // xtre_macros [13]struct{Fc int8;Fexpansion *int8;}, escapes: true, regcomp.c:420:3
-var xtre_macros = bss + 3656 // array of 13 struct{c char; expansion pointer to char}
+var xtre_macros = bss + 3672 // array of 13 struct{c char; expansion pointer to char}
 
 func init() {
 	*(*[13]struct {
@@ -59725,6 +67600,17 @@ _4:
 	return uint64(int32(1) + Xsnprintf(tls, _buf, _size, ts+132 /* "%s" */, _s))
 }
 
+type t736__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t736__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t185size_t = uint64
 
 // xmessages [286]int8, escapes: true, regerror.c:12:19
@@ -59786,6 +67672,17 @@ _6:
 	Xfree(tls, _tags)
 _7:
 	return _status
+}
+
+type t737__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t737__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t186size_t = uint64
@@ -61122,14 +69019,10 @@ type Ttre_char_t = int32
 
 type t21wchar_t = int32
 
-type t1tre_mem_t = uintptr // Ttre_mem_t = *struct{Fblocks *st...ailed int32;Fprovided *uintptr;}
-
 type t1tre_list_t = struct {
 	Fdata uintptr // *void
 	Fnext uintptr // *Stre_list
 }
-
-type Ttre_backtrack_t = uintptr // Ttre_backtrack_t = *struct{Fitem...t;Fnext *Stre_backtrack_struct;}
 
 type Ttre_backtrack_item_t = struct {
 	Fpos      int64
@@ -61396,7 +69289,16 @@ _12:
 	return _ptr
 }
 
-type t2tre_mem_t = uintptr // Ttre_mem_t = *struct{Fblocks *st...ailed int32;Fprovided *uintptr;}
+type t738__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t738__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type t2tre_list_t = struct {
 	Fdata uintptr // *void
@@ -61432,6 +69334,17 @@ func Xpthread_getaffinity_np(tls TLS, _td uintptr /* Tpthread_t = *S__pthread */
 	return -xdo_getaffinity(tls, *(*int32)(unsafe.Pointer(_td + 56)), _size, _set)
 }
 
+type t739__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t739__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t34pid_t = int32
 
 type t188size_t = uint64
@@ -61440,8 +69353,6 @@ type t188size_t = uint64
 func x36__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
 }
-
-type t9pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s30__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -61511,8 +69422,6 @@ type s28__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t59locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s66__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking sched_cpucount.o
@@ -61556,6 +69465,17 @@ _3:
 	return int32(_cnt)
 }
 
+type t740__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t740__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t189size_t = uint64
 
 // linking sched_get_priority_max.o
@@ -61568,6 +69488,17 @@ func Xsched_get_priority_max(tls TLS, _policy int32) (r int32) {
 // Xsched_get_priority_min is defined at sched_get_priority_max.c:9:5
 func Xsched_get_priority_min(tls TLS, _policy int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x29__syscall1(tls, int64(147), int64(_policy)))))
+}
+
+type t741__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t741__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -61622,7 +69553,16 @@ _4:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
 
-type Tgetcpu_f = uintptr // Tgetcpu_f = *func(TLS, uintptr, uintptr, uintptr) int64
+type t742__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t742__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 func fp769(f func(TLS, uintptr, uintptr, uintptr) int64) uintptr {
 	return *(*uintptr)(unsafe.Pointer(&f))
@@ -61667,6 +69607,17 @@ func Xsched_getparam(tls TLS, _pid int32, _param uintptr /* *Ssched_param */) (r
 	return int32(X__syscall_ret(tls, uint64(18446744073709551578)))
 }
 
+type t743__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t743__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t35pid_t = int32
 
 type s1sched_param = struct {
@@ -61691,6 +69642,17 @@ func Xsched_getscheduler(tls TLS, _pid int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(18446744073709551578)))
 }
 
+type t744__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t744__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t36pid_t = int32
 
 // linking sched_rr_get_interval.o
@@ -61698,6 +69660,17 @@ type t36pid_t = int32
 // Xsched_rr_get_interval is defined at sched_rr_get_interval.c:4:5
 func Xsched_rr_get_interval(tls TLS, _pid int32, _ts uintptr /* *Stimespec */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x30__syscall2(tls, int64(148), int64(_pid), int64(_ts)))))
+}
+
+type t745__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t745__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t37pid_t = int32
@@ -61719,6 +69692,17 @@ type t31time_t = int64
 // Xsched_setparam is defined at sched_setparam.c:5:5
 func Xsched_setparam(tls TLS, _pid int32, _param uintptr /* *Ssched_param */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(18446744073709551578)))
+}
+
+type t746__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t746__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t38pid_t = int32
@@ -61745,6 +69729,17 @@ func Xsched_setscheduler(tls TLS, _pid int32, _sched int32, _param uintptr /* *S
 	return int32(X__syscall_ret(tls, uint64(18446744073709551578)))
 }
 
+type t747__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t747__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t39pid_t = int32
 
 type s3sched_param = struct {
@@ -61767,6 +69762,17 @@ type t33time_t = int64
 // Xsched_yield is defined at sched_yield.c:4:5
 func Xsched_yield(tls TLS) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x5__syscall0(tls, int64(24)))))
+}
+
+type t748__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t748__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall0 is defined at syscall_arch.h:8:22
@@ -61896,10 +69902,21 @@ _3:
 	return int32(1)
 }
 
+type t749__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t749__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t190size_t = uint64
 
 // xhtab Shsearch_data, escapes: true, hsearch.c:25:28
-var xhtab = bss + 3864
+var xhtab = bss + 3880
 
 type TENTRY = struct {
 	Fkey  uintptr // *int8
@@ -62106,6 +70123,17 @@ _1:
 _2:
 }
 
+type t750__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t750__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Snode = struct {
 	Fnext uintptr // *Snode
 	Fprev uintptr // *Snode
@@ -62123,6 +70151,17 @@ func Xlsearch(tls TLS, _key uintptr /* *void */, _base uintptr /* *void */, _nel
 func Xlfind(tls TLS, _key uintptr /* *void */, _base uintptr /* *void */, _nelp uintptr /* *Tsize_t = uint64 */, _width uint64, _compar uintptr /* *func(TLS, uintptr, uintptr) int32 */) (r uintptr /* *void */) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+4228 /* "src/search/lsear..." */, int32(23), x775__func__)
 	return r
+}
+
+type t751__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t751__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t191size_t = uint64
@@ -62158,6 +70197,17 @@ _1:
 	fn776(_freekey)(tls, *(*uintptr)(unsafe.Pointer(_r)))
 _2:
 	Xfree(tls, _r)
+}
+
+type t752__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t752__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1node = struct {
@@ -62229,6 +70279,17 @@ _2:
 // Xtwalk is defined at tsearch_avl.c:201:6
 func Xtwalk(tls TLS, _root uintptr /* *void */, _action uintptr /* *func(TLS, uintptr, int32, int32) */) {
 	xwalk(tls, _root, _action, int32(0))
+}
+
+type t753__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t753__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2node = struct {
@@ -62540,6 +70601,17 @@ func Xpoll(tls TLS, _fds uintptr /* *Spollfd */, _n uint64, _timeout int32) (r i
 	return r
 }
 
+type t754__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t754__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1nfds_t = uint64
 
 type s2pollfd = struct {
@@ -62576,6 +70648,17 @@ _1:
 	return r
 }
 
+type t755__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t755__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s21timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -62595,6 +70678,17 @@ type t34time_t = int64
 // Xselect is defined at select.c:9:5
 func Xselect(tls TLS, _n int32, _rfds uintptr /* *Tfd_set = struct{Ffds_bits [16]uint64;} */, _wfds uintptr /* *Tfd_set = struct{Ffds_bits [16]uint64;} */, _efds uintptr /* *Tfd_set = struct{Ffds_bits [16]uint64;} */, _tv uintptr /* *Stimeval */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(23), int64(_n), int64(_rfds), int64(_wfds), int64(_efds), int64(_tv), int64(0)))))
+}
+
+type t756__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t756__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s12timeval = struct {
@@ -62679,6 +70773,17 @@ func X__restore_sigs(tls TLS, _set uintptr /* *void */) {
 	x19__syscall4(tls, int64(14), int64(2), int64(_set), int64(0), int64(8))
 }
 
+type t757__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t757__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall4 is defined at syscall_arch.h:42:22
 func x19__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, int64(0), int64(0))
@@ -62695,6 +70800,17 @@ var xapp_mask = ds + 44552
 // Xgetitimer is defined at getitimer.c:4:5
 func Xgetitimer(tls TLS, _which int32, _old uintptr /* *Sitimerval */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x31__syscall2(tls, int64(36), int64(_which), int64(_old)))))
+}
+
+type t758__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t758__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sitimerval = struct {
@@ -62723,6 +70839,17 @@ func Xkill(tls TLS, _pid int32, _sig int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x32__syscall2(tls, int64(62), int64(_pid), int64(_sig)))))
 }
 
+type t759__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t759__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t40pid_t = int32
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -62745,6 +70872,17 @@ _1:
 	return Xkill(tls, -_pgid, _sig)
 }
 
+type t760__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t760__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t41pid_t = int32
 
 // linking psiginfo.o
@@ -62764,6 +70902,17 @@ func Xpsiginfo(tls TLS, _si uintptr /* *Tsiginfo_t = struct{Fsi_signo i...uint32
 _1:
 	Xfprintf(tls, *(*uintptr)(unsafe.Pointer(Xstderr)), ts+4304 /* "%s\n" */, _s)
 _2:
+}
+
+type t761__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t761__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t42pid_t = int32
@@ -62797,6 +70946,17 @@ _1:
 _2:
 }
 
+type t762__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t762__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking raise.o
 
 // Xraise is defined at raise.c:6:5
@@ -62815,6 +70975,17 @@ func Xraise(tls TLS, _sig int32) (r int32) {
 	return _ret
 }
 
+type t763__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t763__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall0 is defined at syscall_arch.h:8:22
 func x6__syscall0(tls TLS, _n int64) (r int64) {
 	return X__syscall(tls, _n, int64(0), int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -62830,6 +71001,17 @@ func x33__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xsetitimer is defined at setitimer.c:4:5
 func Xsetitimer(tls TLS, _which int32, _new uintptr /* *Sitimerval */, _old uintptr /* *Sitimerval */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x38__syscall3(tls, int64(38), int64(_which), int64(_new), int64(_old)))))
+}
+
+type t764__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t764__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s1itimerval = struct {
@@ -62940,8 +71122,19 @@ _1:
 	return X__libc_sigaction(tls, _sig, _sa, _old)
 }
 
+type t765__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t765__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xhandler_set [1]uint64, escapes: true, sigaction.c:10:22
-var xhandler_set = bss + 3880
+var xhandler_set = bss + 3896
 
 type s2sigaction = struct {
 	F__sa_handler struct {
@@ -63022,6 +71215,17 @@ _1:
 	return int32(0)
 }
 
+type t766__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t766__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigaltstack.o
 
 // Xsigaltstack is defined at sigaltstack.c:5:5
@@ -63048,6 +71252,17 @@ _2:
 _3:
 _1:
 	return int32(X__syscall_ret(tls, uint64(x34__syscall2(tls, int64(131), int64(_ss), int64(_old)))))
+}
+
+type t767__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t767__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Ssigaltstack = struct {
@@ -63091,6 +71306,17 @@ _3:
 	return int32(0)
 }
 
+type t768__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t768__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigdelset.o
 
 // Xsigdelset is defined at sigdelset.c:4:5
@@ -63113,6 +71339,17 @@ _1:
 	return int32(0)
 }
 
+type t769__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t769__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigemptyset.o
 
 // Xsigemptyset is defined at sigemptyset.c:4:5
@@ -63131,6 +71368,17 @@ _2:
 	return int32(0)
 }
 
+type t770__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t770__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigfillset.o
 
 // Xsigfillset is defined at sigfillset.c:4:5
@@ -63142,6 +71390,17 @@ func Xsigfillset(tls TLS, _set uintptr /* *Tsigset_t = struct{F__bits [16]uint64
 	*(*uint64)(unsafe.Pointer(_set + 8)) = uint64(0xffffffffffffffff)
 _1:
 	return int32(0)
+}
+
+type t771__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t771__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sighold.o
@@ -63162,6 +71421,17 @@ _1:
 	return Xsigprocmask(tls, int32(0), _mask, null)
 }
 
+type t772__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t772__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigignore.o
 
 // Xsigignore is defined at sigignore.c:3:5
@@ -63173,6 +71443,17 @@ func Xsigignore(tls TLS, _sig int32) (r int32) {
 	*(*uintptr)(unsafe.Pointer(_sa)) = uintptr(1)
 	*(*int32)(unsafe.Pointer(_sa + 136)) = int32(0)
 	return Xsigaction(tls, _sig, _sa, null)
+}
+
+type t773__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t773__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s3sigaction = struct {
@@ -63215,6 +71496,17 @@ _2:
 	return Xsigaction(tls, _sig, _sa, null)
 }
 
+type t774__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t774__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s4sigaction = struct {
 	F__sa_handler struct {
 		Fsa_handler   [0]uintptr
@@ -63254,6 +71546,17 @@ _3:
 	return int32(1)
 }
 
+type t775__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t775__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t195size_t = uint64
 
 // linking sigismember.o
@@ -63273,11 +71576,33 @@ _1:
 	return bool2int(*(*uint64)(unsafe.Pointer(_set + 8*uintptr(uint64(_s/uint32(8))/uint64(8))))&(uint64(1)<<(uint(uint64(_s)&uint64(63))%64)) != 0)
 }
 
+type t776__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t776__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking siglongjmp.o
 
 // Xsiglongjmp is defined at siglongjmp.c:7:16
 func Xsiglongjmp(tls TLS, _buf uintptr /* [1]struct{F__jb [8]uint64;F__fl uint64;F__ss [16]uint64;} */, _ret int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+4308 /* "src/signal/siglo..." */, int32(9), x784__func__)
+}
+
+type t777__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t777__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tsigjmp_buf = [1]struct {
@@ -63317,6 +71642,17 @@ func Xsignal(tls TLS, _sig int32, _func uintptr /* *func(TLS, int32) */) (r uint
 
 _1:
 	return *(*uintptr)(unsafe.Pointer(_sa_old))
+}
+
+type t778__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t778__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s5sigaction = struct {
@@ -63360,6 +71696,17 @@ _3:
 	return int32(0)
 }
 
+type t779__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t779__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigpause.o
 
 // Xsigpause is defined at sigpause.c:3:5
@@ -63372,11 +71719,33 @@ func Xsigpause(tls TLS, _sig int32) (r int32) {
 	return Xsigsuspend(tls, _mask)
 }
 
+type t780__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t780__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigpending.o
 
 // Xsigpending is defined at sigpending.c:4:5
 func Xsigpending(tls TLS, _set uintptr /* *Tsigset_t = struct{F__bits [16]uint64;} */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x35__syscall2(tls, int64(127), int64(_set), int64(8)))))
+}
+
+type t781__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t781__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -63400,6 +71769,17 @@ func Xsigprocmask(tls TLS, _how int32, _set uintptr /* *Tsigset_t = struct{F__bi
 _1:
 	*(*int32)(unsafe.Pointer(X__errno_location(tls))) = _r
 	return int32(-1)
+}
+
+type t782__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t782__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sigqueue.o
@@ -63427,6 +71807,17 @@ func Xsigqueue(tls TLS, _pid int32, _sig int32, _value struct {
 	_r = int32(X__syscall_ret(tls, uint64(x39__syscall3(tls, int64(129), int64(_pid), int64(_sig), int64(_si)))))
 	X__restore_sigs(tls, _set)
 	return _r
+}
+
+type t783__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t783__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t43pid_t = int32
@@ -63466,6 +71857,17 @@ _1:
 	return Xsigprocmask(tls, int32(1), _mask, null)
 }
 
+type t784__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t784__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigrtmax.o
 
 // X__libc_current_sigrtmax is defined at sigrtmax.c:3:5
@@ -63473,11 +71875,33 @@ func X__libc_current_sigrtmax(tls TLS) (r int32) {
 	return int32(64)
 }
 
+type t785__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t785__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sigrtmin.o
 
 // X__libc_current_sigrtmin is defined at sigrtmin.c:3:5
 func X__libc_current_sigrtmin(tls TLS) (r int32) {
 	return int32(35)
+}
+
+type t786__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t786__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sigset.o
@@ -63545,6 +71969,17 @@ _3:
 	return *(*uintptr)(unsafe.Pointer(_sa_old))
 }
 
+type t787__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t787__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s6sigaction = struct {
 	F__sa_handler struct {
 		Fsa_handler   [0]uintptr
@@ -63579,6 +72014,17 @@ func X__sigsetjmp_tail(tls TLS, _jb uintptr /* [1]struct{F__jb [8]uint64;F__fl u
 	return _ret
 }
 
+type t788__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t788__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1sigjmp_buf = [1]struct {
 	F__jb [8]uint64
 	F__fl uint64
@@ -63606,6 +72052,17 @@ func Xsigsuspend(tls TLS, _mask uintptr /* *Tsigset_t = struct{F__bits [16]uint6
 	return r
 }
 
+type t789__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t789__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [11]int8, escapes: true, sigsuspend.c:7:1
 var x785__func__ = ds + 44584
 
@@ -63626,6 +72083,17 @@ _1:
 
 _2:
 	return _ret
+}
+
+type t790__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t790__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t44pid_t = int32
@@ -63668,6 +72136,17 @@ _1:
 	return int32(0)
 }
 
+type t791__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t791__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t45pid_t = int32
 
 type t22uid_t = uint32
@@ -63685,6 +72164,17 @@ type t5clock_t = int64
 // Xsigwaitinfo is defined at sigwaitinfo.c:3:5
 func Xsigwaitinfo(tls TLS, _mask uintptr /* *Tsigset_t = struct{F__bits [16]uint64;} */, _si uintptr /* *Tsiginfo_t = struct{Fsi_signo i...uint32;};F int64; _ [104]byte};} */) (r int32) {
 	return Xsigtimedwait(tls, _mask, _si, null)
+}
+
+type t792__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t792__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t46pid_t = int32
@@ -63772,6 +72262,17 @@ func X__xmknodat(tls TLS, _ver int32, _fd int32, _path uintptr /* *int8 */, _mod
 	return Xmknodat(tls, _fd, _path, _mode, *(*uint64)(unsafe.Pointer(_dev)))
 }
 
+type t793__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t793__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s6stat = struct {
 	Fst_dev     uint64
 	Fst_ino     uint64
@@ -63822,6 +72323,17 @@ func Xchmod(tls TLS, _path uintptr /* *int8 */, _mode uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x36__syscall2(tls, int64(90), int64(_path), int64(_mode)))))
 }
 
+type t794__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t794__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t20mode_t = uint32
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -63849,6 +72361,17 @@ func Xfchmod(tls TLS, _fd int32, _mode uint32) (r int32) {
 _1:
 	X__procfdname(tls, _buf, uint32(_fd))
 	return int32(X__syscall_ret(tls, uint64(x37__syscall2(tls, int64(90), int64(_buf), int64(_mode)))))
+}
+
+type t795__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t795__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t21mode_t = uint32
@@ -63935,6 +72458,17 @@ _7:
 	return int32(X__syscall_ret(tls, uint64(_ret)))
 }
 
+type t796__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t796__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t22mode_t = uint32
 
 type s7stat = struct {
@@ -64015,6 +72549,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x38__syscall2(tls, int64(4), int64(_buf), int64(_st)))))
 }
 
+type t797__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t797__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s8stat = struct {
 	Fst_dev     uint64
 	Fst_ino     uint64
@@ -64068,6 +72613,17 @@ type t41time_t = int64
 // Xfstatat is defined at fstatat.c:5:5
 func Xfstatat(tls TLS, _fd int32, _path uintptr /* *int8 */, _buf uintptr /* *Sstat */, _flag int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x23__syscall4(tls, int64(262), int64(_fd), int64(_path), int64(_buf), int64(_flag)))))
+}
+
+type t798__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t798__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s9stat = struct {
@@ -64125,6 +72681,17 @@ func Xfutimens(tls TLS, _fd int32, _times uintptr /* [2]Stimespec */) (r int32) 
 	return Xutimensat(tls, _fd, null, _times, int32(0))
 }
 
+type t799__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t799__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s27timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -64174,6 +72741,17 @@ _1:
 	}(), int32(0))
 }
 
+type t800__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t800__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s15timeval = struct {
 	Ftv_sec  int64
 	Ftv_usec int64
@@ -64195,6 +72773,17 @@ func Xlchmod(tls TLS, _path uintptr /* *int8 */, _mode uint32) (r int32) {
 	return Xfchmodat(tls, int32(-100), _path, _mode, int32(0x100))
 }
 
+type t801__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t801__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t25mode_t = uint32
 
 // linking lstat.o
@@ -64202,6 +72791,17 @@ type t25mode_t = uint32
 // Xlstat is defined at lstat.c:6:5
 func Xlstat(tls TLS, _path uintptr /* *int8 */, _buf uintptr /* *Sstat */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x39__syscall2(tls, int64(6), int64(_path), int64(_buf)))))
+}
+
+type t802__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t802__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s10stat = struct {
@@ -64259,6 +72859,17 @@ func Xmkdir(tls TLS, _path uintptr /* *int8 */, _mode uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x40__syscall2(tls, int64(83), int64(_path), int64(_mode)))))
 }
 
+type t803__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t803__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t27mode_t = uint32
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -64271,6 +72882,17 @@ func x40__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xmkdirat is defined at mkdirat.c:4:5
 func Xmkdirat(tls TLS, _fd int32, _path uintptr /* *int8 */, _mode uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x41__syscall3(tls, int64(258), int64(_fd), int64(_path), int64(_mode)))))
+}
+
+type t804__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t804__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t28mode_t = uint32
@@ -64287,6 +72909,17 @@ func Xmkfifo(tls TLS, _path uintptr /* *int8 */, _mode uint32) (r int32) {
 	return Xmknod(tls, _path, _mode|uint32(010000), uint64(0))
 }
 
+type t805__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t805__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t29mode_t = uint32
 
 type t11dev_t = uint64
@@ -64298,6 +72931,17 @@ func Xmkfifoat(tls TLS, _fd int32, _path uintptr /* *int8 */, _mode uint32) (r i
 	return Xmknodat(tls, _fd, _path, _mode|uint32(010000), uint64(0))
 }
 
+type t806__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t806__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t30mode_t = uint32
 
 type t12dev_t = uint64
@@ -64307,6 +72951,17 @@ type t12dev_t = uint64
 // Xmknod is defined at mknod.c:5:5
 func Xmknod(tls TLS, _path uintptr /* *int8 */, _mode uint32, _dev uint64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x42__syscall3(tls, int64(133), int64(_path), int64(_mode), int64(_dev)))))
+}
+
+type t807__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t807__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t31mode_t = uint32
@@ -64325,6 +72980,17 @@ func Xmknodat(tls TLS, _fd int32, _path uintptr /* *int8 */, _mode uint32, _dev 
 	return int32(X__syscall_ret(tls, uint64(x24__syscall4(tls, int64(259), int64(_fd), int64(_path), int64(_mode), int64(_dev)))))
 }
 
+type t808__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t808__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t32mode_t = uint32
 
 type t14dev_t = uint64
@@ -64339,6 +73005,17 @@ func x24__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 // Xstat is defined at stat.c:6:5
 func Xstat(tls TLS, _path uintptr /* *int8 */, _buf uintptr /* *Sstat */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x41__syscall2(tls, int64(4), int64(_path), int64(_buf)))))
+}
+
+type t809__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t809__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s11stat = struct {
@@ -64439,6 +73116,17 @@ _1:
 	return int32(0)
 }
 
+type t810__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t810__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sstatfs = struct {
 	Ff_type    uint64
 	Ff_bsize   uint64
@@ -64508,6 +73196,17 @@ type Tfsid_t = struct{ F__val [2]int32 }
 // Xumask is defined at umask.c:4:8
 func Xumask(tls TLS, _mode uint32) (r uint32) {
 	return uint32(X__syscall_ret(tls, uint64(x31__syscall1(tls, int64(95), int64(_mode)))))
+}
+
+type t811__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t811__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t34mode_t = uint32
@@ -64590,6 +73289,17 @@ _9:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
 
+type t812__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t812__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s31timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -64628,6 +73338,17 @@ func fn788(p uintptr) func(TLS, uintptr) int32 {
 // X__fclose_ca is defined at __fclose_ca.c:3:5
 func X__fclose_ca(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
 	return fn788(*(*uintptr)(unsafe.Pointer(_f + 24)))(tls, _f)
+}
+
+type t813__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t813__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s24_IO_FILE = struct {
@@ -64765,6 +73486,17 @@ _8:
 	return X__ofl_add(tls, _f)
 }
 
+type t814__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t814__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s25_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -64882,6 +73614,17 @@ _9:
 	return _flags
 }
 
+type t815__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t815__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking __fopen_rb_ca.o
 
 func fp793(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
@@ -64912,6 +73655,17 @@ _1:
 	*(*uintptr)(unsafe.Pointer(_f + 24)) = fp795(X__stdio_close)
 	*(*int32)(unsafe.Pointer(_f + 140)) = int32(-1)
 	return _f
+}
+
+type t816__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t816__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t199size_t = uint64
@@ -65024,6 +73778,17 @@ func X__unlockfile(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) {
 
 	x1__wake(tls, _f+140, int32(1), int32(1))
 _1:
+}
+
+type t817__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t817__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s27_IO_FILE = struct {
@@ -65175,8 +73940,6 @@ type s29__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t60locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 // linking __overflow.o
 
 func set797(p *uint8, v uint8) uint8 { *p = v; return v }
@@ -65215,6 +73978,17 @@ _2:
 
 _3:
 	return int32(*(*uint8)(unsafe.Pointer(_c)))
+}
+
+type t818__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t818__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s28_IO_FILE = struct {
@@ -65264,6 +74038,17 @@ type s71__locale_struct = struct{ Fcat [6]uintptr }
 // X__stdio_close is defined at __stdio_close.c:10:5
 func X__stdio_close(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x32__syscall1(tls, int64(3), int64(X__aio_close(tls, *(*int32)(unsafe.Pointer(_f + 120))))))))
+}
+
+type t819__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t819__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xdummy is defined at __stdio_close.c:3:12
@@ -65337,6 +74122,17 @@ _1:
 _3:
 	xclose_file(tls, *(*uintptr)(unsafe.Pointer(X__stdin_used)))
 	xclose_file(tls, *(*uintptr)(unsafe.Pointer(X__stdout_used)))
+}
+
+type t820__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t820__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s30_IO_FILE = struct {
@@ -65479,6 +74275,17 @@ _3:
 	return _len
 }
 
+type t821__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t821__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t204size_t = uint64
 
 type s31_IO_FILE = struct {
@@ -65541,6 +74348,17 @@ func X__stdio_seek(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _off int64, _wh
 
 	_ret = X__syscall_ret(tls, uint64(x48__syscall3(tls, int64(8), int64(*(*int32)(unsafe.Pointer(_f + 120))), _off, int64(_whence))))
 	return _ret
+}
+
+type t822__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t822__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t48off_t = int64
@@ -65664,6 +74482,17 @@ _6:
 	return r
 }
 
+type t823__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t823__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t206size_t = uint64
 
 type s33_IO_FILE = struct {
@@ -65737,6 +74566,17 @@ func X__stdout_write(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _buf uintptr 
 	*(*int8)(unsafe.Pointer(_f + 139)) = int8(-1)
 _1:
 	return X__stdio_write(tls, _f, _buf, _len)
+}
+
+type t824__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t824__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t207size_t = uint64
@@ -65822,6 +74662,17 @@ _2:
 	*(*uintptr)(unsafe.Pointer(_f + 16)) = _src + uintptr(_k)
 	*(*uintptr)(unsafe.Pointer(_f + 152)) = _src + uintptr(_k)
 	return _len
+}
+
+type t825__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t825__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t208size_t = uint64
@@ -65911,6 +74762,17 @@ func X__toread_needs_stdio_exit(tls TLS) {
 	X__stdio_exit_needed(tls)
 }
 
+type t826__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t826__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s36_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -65985,6 +74847,17 @@ func X__towrite_needs_stdio_exit(tls TLS) {
 	X__stdio_exit_needed(tls)
 }
 
+type t827__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t827__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s37_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -66048,6 +74921,17 @@ _1:
 	return int32(-1)
 }
 
+type t828__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t828__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s38_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -66096,20 +74980,24 @@ type s81__locale_struct = struct{ Fcat [6]uintptr }
 func Xasprintf(tls TLS, _s uintptr /* **int8 */, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvasprintf(tls, _s, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t3__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t829__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t3__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t829__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking clearerr.o
 
@@ -66133,6 +75021,17 @@ func Xclearerr(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) {
 
 	X__unlockfile(tls, _f)
 _2:
+}
+
+type t830__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t830__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s39_IO_FILE = struct {
@@ -66183,20 +75082,24 @@ type s82__locale_struct = struct{ Fcat [6]uintptr }
 func Xdprintf(tls TLS, _fd int32, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvdprintf(tls, _fd, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t4__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t831__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t4__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t831__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking ext.o
 
@@ -66256,6 +75159,17 @@ func X__fpurge(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
 	*(*uintptr)(unsafe.Pointer(_f + 40)) = set809((*uintptr)(unsafe.Pointer(_f+56)), set809((*uintptr)(unsafe.Pointer(_f+32)), null))
 	*(*uintptr)(unsafe.Pointer(_f + 8)) = set809((*uintptr)(unsafe.Pointer(_f+16)), null)
 	return int32(0)
+}
+
+type t832__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t832__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s40_IO_FILE = struct {
@@ -66334,6 +75248,17 @@ func X__fseterr(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) {
 		p := (*uint32)(unsafe.Pointer(_f))
 		*p = *p | uint32(32)
 	}
+}
+
+type t833__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t833__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t214size_t = uint64
@@ -66447,6 +75372,17 @@ _6:
 	return _r
 }
 
+type t834__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t834__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at fclose.c:4:13
 func x12dummy(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) {
 }
@@ -66517,6 +75453,17 @@ _2:
 	return _ret
 }
 
+type t835__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t835__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s43_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -66581,6 +75528,17 @@ func Xferror(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
 	X__unlockfile(tls, _f)
 _2:
 	return _ret
+}
+
+type t836__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t836__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s44_IO_FILE = struct {
@@ -66728,6 +75686,17 @@ _14:
 	return int32(0)
 }
 
+type t837__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t837__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s45_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -66798,6 +75767,17 @@ _1:
 	}()
 	X__unlockfile(tls, _f)
 	return _c
+}
+
+type t838__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t838__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s46_IO_FILE = struct {
@@ -66882,6 +75862,17 @@ _2:
 	return _ret
 }
 
+type t839__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t839__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s47_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -66943,6 +75934,17 @@ func Xfgetpos(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _pos uintptr /* *Tfp
 _1:
 	*(*int64)(unsafe.Pointer(_pos)) = _off
 	return int32(0)
+}
+
+type t840__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t840__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s48_IO_FILE = struct {
@@ -67111,6 +76113,17 @@ _13:
 	return _s
 }
 
+type t841__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t841__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s49_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -67198,6 +76211,17 @@ _2:
 	return _c
 }
 
+type t842__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t842__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t20wint_t = uint32
 
 type s50_IO_FILE = struct {
@@ -67237,8 +76261,6 @@ type s50_IO_FILE = struct {
 }
 
 type s93__locale_struct = struct{ Fcat [6]uintptr }
-
-type t61locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type t22wchar_t = int32
 
@@ -67447,6 +76469,17 @@ _9:
 	return _s
 }
 
+type t843__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t843__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s51_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -67514,6 +76547,17 @@ _2:
 	return *(*int32)(unsafe.Pointer(_f + 120))
 }
 
+type t844__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t844__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s52_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -67571,6 +76615,17 @@ _1:
 	X__register_locked_file(tls, _f, x27__pthread_self(tls))
 }
 
+type t845__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t845__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s53_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -67619,8 +76674,6 @@ type t69off_t = int64
 
 type s96__locale_struct = struct{ Fcat [6]uintptr }
 
-type t10pthread_t = uintptr // Tpthread_t = *S__pthread
-
 type s33__pthread = struct {
 	Fself          uintptr // *S__pthread
 	Fdtv           uintptr // **void
@@ -67667,8 +76720,6 @@ type s31__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t62locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 // linking fmemopen.o
 
@@ -67772,6 +76823,17 @@ _7:
 	*(*int32)(unsafe.Pointer(_f + 140)) = int32(-1)
 _9:
 	return X__ofl_add(tls, _f)
+}
+
+type t846__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t846__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t227size_t = uint64
@@ -68016,6 +77078,17 @@ _4:
 	return null
 }
 
+type t847__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t847__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s55_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -68133,6 +77206,17 @@ _3:
 	*(*uintptr)(unsafe.Pointer(_f + 80)) = fp833(xcookieseek)
 	*(*uintptr)(unsafe.Pointer(_f + 24)) = fp834(xcookieclose)
 	return X__ofl_add(tls, _f)
+}
+
+type t848__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t848__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tcookie_io_functions_t = struct {
@@ -68395,20 +77479,24 @@ type Sfcookie = struct {
 func Xfprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvfprintf(tls, _f, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t5__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t849__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t5__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t849__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s57_IO_FILE struct{ uintptr }
 
@@ -68440,6 +77528,17 @@ _1:
 	}()
 	X__unlockfile(tls, _f)
 	return _c
+}
+
+type t850__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t850__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s58_IO_FILE = struct {
@@ -68492,6 +77591,17 @@ func Xfputs(tls TLS, _s uintptr /* *int8 */, _f uintptr /* *TFILE = S_IO_FILE */
 
 	_l = Xstrlen(tls, _s)
 	return bool2int(Xfwrite(tls, _s, uint64(1), _l, _f) == _l) - int32(1)
+}
+
+type t851__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t851__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s59_IO_FILE = struct {
@@ -68634,6 +77744,17 @@ _2:
 	return uint32(_c)
 }
 
+type t852__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t852__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t24wchar_t = int32
 
 type t22wint_t = uint32
@@ -68675,8 +77796,6 @@ type s60_IO_FILE = struct {
 }
 
 type s102__locale_struct = struct{ Fcat [6]uintptr }
-
-type t63locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x28__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
@@ -68795,6 +77914,17 @@ _7:
 	return int32(_l)
 }
 
+type t853__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t853__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s61_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -68836,8 +77966,6 @@ type t25wchar_t = int32
 type t233size_t = uint64
 
 type s103__locale_struct = struct{ Fcat [6]uintptr }
-
-type t64locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x29__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
@@ -68981,6 +78109,17 @@ _10:
 	return _nmemb
 }
 
+type t854__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t854__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t234size_t = uint64
 
 type s62_IO_FILE = struct {
@@ -69109,6 +78248,17 @@ lfail:
 	return null
 }
 
+type t855__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t855__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s63_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -69162,20 +78312,24 @@ type s105__locale_struct = struct{ Fcat [6]uintptr }
 func Xfscanf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvfscanf(tls, _f, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t6__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t856__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t6__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t856__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s64_IO_FILE struct{ uintptr }
 
@@ -69255,6 +78409,17 @@ func Xfseek(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _off int64, _whence in
 	return X__fseeko(tls, _f, _off, _whence)
 }
 
+type t857__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t857__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t79off_t = int64
 
 type s65_IO_FILE = struct {
@@ -69302,6 +78467,17 @@ type s106__locale_struct = struct{ Fcat [6]uintptr }
 // Xfsetpos is defined at fsetpos.c:3:5
 func Xfsetpos(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _pos uintptr /* *Tfpos_t = struct{F__opaque [0][...n [0]float64;F int64; _ [8]byte} */) (r int32) {
 	return X__fseeko(tls, _f, *(*int64)(unsafe.Pointer(_pos)), int32(0))
+}
+
+type t858__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t858__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s66_IO_FILE = struct {
@@ -69408,6 +78584,17 @@ func Xftell(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int64) {
 
 _1:
 	return _pos
+}
+
+type t859__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t859__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t81off_t = int64
@@ -69554,6 +78741,17 @@ _4:
 	return int32(0)
 }
 
+type t860__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t860__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s68_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -69600,8 +78798,6 @@ func x30__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 func x2a_store(tls TLS, _p uintptr /* *int32 */, _x int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+36 /* "arch/x86_64/atom..." */, int32(100), x851__func__)
 }
-
-type t11pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s36__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -69665,8 +78861,6 @@ type s34__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t65locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 // linking funlockfile.o
 
 // Xfunlockfile is defined at funlockfile.c:6:6
@@ -69683,6 +78877,17 @@ func Xfunlockfile(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) {
 _1:
 	*(*int64)(unsafe.Pointer(_f + 128))--
 _2:
+}
+
+type t861__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t861__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s69_IO_FILE = struct {
@@ -69767,6 +78972,17 @@ _4:
 	return _mode
 }
 
+type t862__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t862__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s70_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -69818,20 +79034,24 @@ type s111__locale_struct = struct{ Fcat [6]uintptr }
 func Xfwprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvfwprintf(tls, _f, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t7__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t863__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t7__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t863__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s71_IO_FILE struct{ uintptr }
 
@@ -69931,6 +79151,17 @@ _3:
 	return _k / _size
 }
 
+type t864__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t864__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t242size_t = uint64
 
 type s72_IO_FILE = struct {
@@ -69979,20 +79210,24 @@ type s112__locale_struct = struct{ Fcat [6]uintptr }
 func Xfwscanf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvfwscanf(tls, _f, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t8__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t865__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t8__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t865__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s73_IO_FILE struct{ uintptr }
 
@@ -70024,6 +79259,17 @@ _1:
 	}()
 	X__unlockfile(tls, _f)
 	return _c
+}
+
+type t866__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t866__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s74_IO_FILE = struct {
@@ -70082,6 +79328,17 @@ func Xgetc_unlocked(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
 	}()
 }
 
+type t867__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t867__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s75_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -70131,6 +79388,17 @@ func Xgetchar(tls TLS) (r int32) {
 	return Xfgetc(tls, *(*uintptr)(unsafe.Pointer(Xstdin)))
 }
 
+type t868__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t868__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking getchar_unlocked.o
 
 func postinc856(p *uintptr) uintptr { r := *p; *p += 1; return r }
@@ -70143,6 +79411,17 @@ func Xgetchar_unlocked(tls TLS) (r int32) {
 		}
 		return X__uflow(tls, *(*uintptr)(unsafe.Pointer(Xstdin)))
 	}()
+}
+
+type t869__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t869__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking getdelim.o
@@ -70311,6 +79590,17 @@ _22:
 	return int64(-1)
 }
 
+type t870__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t870__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t39ssize_t = int64
 
 type s76_IO_FILE = struct {
@@ -70362,6 +79652,17 @@ func Xgetline(tls TLS, _s uintptr /* **int8 */, _n uintptr /* *Tsize_t = uint64 
 	return Xgetdelim(tls, _s, _n, int32('\n'), _f)
 }
 
+type t871__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t871__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t40ssize_t = int64
 
 type s77_IO_FILE struct{ uintptr }
@@ -70382,6 +79683,17 @@ _1:
 	return _ret
 }
 
+type t872__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t872__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t246size_t = uint64
 
 // linking getw.o
@@ -70398,6 +79710,17 @@ func Xgetw(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
 	return int32(-1)
 }
 
+type t873__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t873__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t247size_t = uint64
 
 type s78_IO_FILE struct{ uintptr }
@@ -70407,6 +79730,17 @@ type s78_IO_FILE struct{ uintptr }
 // Xgetwc is defined at getwc.c:4:8
 func Xgetwc(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r uint32) {
 	return Xfgetwc(tls, _f)
+}
+
+type t874__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t874__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t23wint_t = uint32
@@ -70460,6 +79794,17 @@ func Xgetwchar(tls TLS) (r uint32) {
 	return Xfgetwc(tls, *(*uintptr)(unsafe.Pointer(Xstdin)))
 }
 
+type t875__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t875__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t24wint_t = uint32
 
 // linking ofl.o
@@ -70473,6 +79818,17 @@ func X__ofl_lock(tls TLS) (r uintptr /* **TFILE = S_IO_FILE */) {
 // X__ofl_unlock is defined at ofl.c:13:6
 func X__ofl_unlock(tls TLS) {
 	X__unlock(tls, xofl_lock)
+}
+
+type t876__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t876__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s80_IO_FILE = struct {
@@ -70512,10 +79868,10 @@ type s80_IO_FILE = struct {
 }
 
 // xofl_lock [1]int32, escapes: true, ofl.c:5:21
-var xofl_lock = bss + 3888
+var xofl_lock = bss + 3904
 
 // xofl_head *TFILE = S_IO_FILE, escapes: true, ofl.c:4:13
-var xofl_head = bss + 3896
+var xofl_head = bss + 3912
 
 type t249size_t = uint64
 
@@ -70540,6 +79896,17 @@ _1:
 	*(*uintptr)(unsafe.Pointer(_head)) = _f
 	X__ofl_unlock(tls)
 	return _f
+}
+
+type t877__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t877__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s81_IO_FILE = struct {
@@ -70642,6 +80009,17 @@ _2:
 	*(*int32)(unsafe.Pointer(_f + 140)) = int32(-1)
 _3:
 	return X__ofl_add(tls, _f)
+}
+
+type t878__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t878__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s82_IO_FILE = struct {
@@ -70855,6 +80233,17 @@ _3:
 	return X__ofl_add(tls, _f)
 }
 
+type t879__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t879__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s83_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -71055,6 +80444,17 @@ _3:
 	return *(*int32)(unsafe.Pointer(_status))
 }
 
+type t880__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t880__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s84_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -71137,6 +80537,17 @@ _1:
 
 	X__unlockfile(tls, _f)
 _3:
+}
+
+type t881__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t881__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s85_IO_FILE = struct {
@@ -71287,6 +80698,17 @@ lfail:
 	return null
 }
 
+type t882__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t882__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s86_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -71343,20 +80765,24 @@ type s123__locale_struct = struct{ Fcat [6]uintptr }
 func Xprintf(tls TLS, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvfprintf(tls, *(*uintptr)(unsafe.Pointer(Xstdout)), _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t9__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t883__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t9__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t883__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking putc.o
 
@@ -71386,6 +80812,17 @@ _1:
 	}()
 	X__unlockfile(tls, _f)
 	return _c
+}
+
+type t884__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t884__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s87_IO_FILE = struct {
@@ -71446,6 +80883,17 @@ func Xputc_unlocked(tls TLS, _c int32, _f uintptr /* *TFILE = S_IO_FILE */) (r i
 	}()
 }
 
+type t885__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t885__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s88_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -71495,6 +80943,17 @@ func Xputchar(tls TLS, _c int32) (r int32) {
 	return Xfputc(tls, _c, *(*uintptr)(unsafe.Pointer(Xstdout)))
 }
 
+type t886__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t886__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking putchar_unlocked.o
 
 func set879(p *uint8, v uint8) uint8 { *p = v; return v }
@@ -71509,6 +80968,17 @@ func Xputchar_unlocked(tls TLS, _c int32) (r int32) {
 		}
 		return X__overflow(tls, *(*uintptr)(unsafe.Pointer(Xstdout)), _c)
 	}()
+}
+
+type t887__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t887__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking puts.o
@@ -71544,6 +81014,17 @@ _2:
 	return _r
 }
 
+type t888__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t888__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking putw.o
 
 // Xputw is defined at putw.c:4:5
@@ -71555,6 +81036,17 @@ func Xputw(tls TLS, ax int32, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
 	return int32(Xfwrite(tls, _x, uint64(4), uint64(1), _f)) - int32(1)
 }
 
+type t889__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t889__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t258size_t = uint64
 
 type s89_IO_FILE struct{ uintptr }
@@ -71564,6 +81056,17 @@ type s89_IO_FILE struct{ uintptr }
 // Xputwc is defined at putwc.c:4:8
 func Xputwc(tls TLS, _c int32, _f uintptr /* *TFILE = S_IO_FILE */) (r uint32) {
 	return Xfputwc(tls, _c, _f)
+}
+
+type t890__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t890__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t27wchar_t = int32
@@ -71619,6 +81122,17 @@ func Xputwchar(tls TLS, _c int32) (r uint32) {
 	return Xfputwc(tls, _c, *(*uintptr)(unsafe.Pointer(Xstdout)))
 }
 
+type t891__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t891__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t28wchar_t = int32
 
 type t26wint_t = uint32
@@ -71639,6 +81153,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
 
+type t892__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t892__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x35__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -71649,6 +81174,17 @@ func x35__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xrename is defined at rename.c:5:5
 func Xrename(tls TLS, _old uintptr /* *int8 */, _new uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x46__syscall2(tls, int64(82), int64(_old), int64(_new)))))
+}
+
+type t893__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t893__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -71679,6 +81215,17 @@ func Xrewind(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) {
 
 	X__unlockfile(tls, _f)
 _2:
+}
+
+type t894__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t894__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s91_IO_FILE = struct {
@@ -71729,20 +81276,24 @@ type s127__locale_struct = struct{ Fcat [6]uintptr }
 func Xscanf(tls TLS, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvscanf(tls, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t10__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t895__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t10__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t895__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking setbuf.o
 
@@ -71754,6 +81305,17 @@ func Xsetbuf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _buf uintptr /* *int8
 		}
 		return int32(2)
 	}(), uint64(1024))
+}
+
+type t896__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t896__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t261size_t = uint64
@@ -71772,6 +81334,17 @@ func Xsetbuffer(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _buf uintptr /* *i
 	}(), _size)
 }
 
+type t897__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t897__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t262size_t = uint64
 
 type s93_IO_FILE struct{ uintptr }
@@ -71781,6 +81354,17 @@ type s93_IO_FILE struct{ uintptr }
 // Xsetlinebuf is defined at setlinebuf.c:4:6
 func Xsetlinebuf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) {
 	Xsetvbuf(tls, _f, null, int32(1), uint64(0))
+}
+
+type t898__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t898__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t263size_t = uint64
@@ -71819,6 +81403,17 @@ _2:
 		*p = *p | uint32(64)
 	}
 	return int32(0)
+}
+
+type t899__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t899__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t264size_t = uint64
@@ -71869,22 +81464,26 @@ type s128__locale_struct = struct{ Fcat [6]uintptr }
 func Xsnprintf(tls TLS, _s uintptr /* *int8 */, _n uint64, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvsnprintf(tls, _s, _n, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
+type t900__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t900__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t265size_t = uint64
-
-type t11__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t11__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
 
 // linking sprintf.o
 
@@ -71892,20 +81491,24 @@ type t11__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintpt
 func Xsprintf(tls TLS, _s uintptr /* *int8 */, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvsprintf(tls, _s, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t12__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t901__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t12__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t901__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking sscanf.o
 
@@ -71913,32 +81516,47 @@ type t12__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintpt
 func Xsscanf(tls TLS, _s uintptr /* *int8 */, _fmt uintptr /* *int8 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvsscanf(tls, _s, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t13__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t902__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t13__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t902__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking stderr.o
 
 // Xstderr *TFILE = S_IO_FILE, escapes: true, stderr.c:15:6
-var Xstderr = bss + 3904 // pointer to FILE
+var Xstderr = bss + 3920 // pointer to FILE
 
 func init() { *(*uintptr)(unsafe.Pointer(Xstderr)) = x3f }
 
 // X__stderr_used *TFILE = S_IO_FILE, escapes: true, stderr.c:16:6
-var X__stderr_used = bss + 3912 // pointer to FILE
+var X__stderr_used = bss + 3928 // pointer to FILE
 
 func init() { *(*uintptr)(unsafe.Pointer(X__stderr_used)) = x3f }
+
+type t903__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t903__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s96_IO_FILE = struct {
 	Fflags        uint32
@@ -71985,7 +81603,7 @@ func fp884(f func(TLS, uintptr, int64, int32) int64) uintptr { return *(*uintptr
 func fp885(f func(TLS, uintptr) int32) uintptr { return *(*uintptr)(unsafe.Pointer(&f)) }
 
 // xf TFILE = S_IO_FILE, escapes: true, stderr.c:4:13
-var x3f = bss + 3920 // FILE
+var x3f = bss + 3936 // FILE
 
 func init() {
 	*(*s96_IO_FILE)(unsafe.Pointer(x3f)) = s96_IO_FILE{
@@ -72009,19 +81627,30 @@ type s129__locale_struct = struct{ Fcat [6]uintptr }
 type t4FILE = s96_IO_FILE
 
 // xbuf [8]uint8, escapes: true, stderr.c:3:22
-var x1buf = bss + 4152
+var x1buf = bss + 4168
 
 // linking stdin.o
 
 // Xstdin *TFILE = S_IO_FILE, escapes: true, stdin.c:14:6
-var Xstdin = bss + 4160 // pointer to FILE
+var Xstdin = bss + 4176 // pointer to FILE
 
 func init() { *(*uintptr)(unsafe.Pointer(Xstdin)) = x4f }
 
 // X__stdin_used *TFILE = S_IO_FILE, escapes: true, stdin.c:15:6
-var X__stdin_used = bss + 4168 // pointer to FILE
+var X__stdin_used = bss + 4184 // pointer to FILE
 
 func init() { *(*uintptr)(unsafe.Pointer(X__stdin_used)) = x4f }
+
+type t904__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t904__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s97_IO_FILE = struct {
 	Fflags        uint32
@@ -72068,7 +81697,7 @@ func fp887(f func(TLS, uintptr, int64, int32) int64) uintptr { return *(*uintptr
 func fp888(f func(TLS, uintptr) int32) uintptr { return *(*uintptr)(unsafe.Pointer(&f)) }
 
 // xf TFILE = S_IO_FILE, escapes: true, stdin.c:4:13
-var x4f = bss + 4176 // FILE
+var x4f = bss + 4192 // FILE
 
 func init() {
 	*(*s97_IO_FILE)(unsafe.Pointer(x4f)) = s97_IO_FILE{
@@ -72091,19 +81720,30 @@ type s130__locale_struct = struct{ Fcat [6]uintptr }
 type t5FILE = s97_IO_FILE
 
 // xbuf [1032]uint8, escapes: true, stdin.c:3:22
-var x2buf = bss + 4408
+var x2buf = bss + 4424
 
 // linking stdout.o
 
 // Xstdout *TFILE = S_IO_FILE, escapes: true, stdout.c:15:6
-var Xstdout = bss + 5440 // pointer to FILE
+var Xstdout = bss + 5456 // pointer to FILE
 
 func init() { *(*uintptr)(unsafe.Pointer(Xstdout)) = x5f }
 
 // X__stdout_used *TFILE = S_IO_FILE, escapes: true, stdout.c:16:6
-var X__stdout_used = bss + 5448 // pointer to FILE
+var X__stdout_used = bss + 5464 // pointer to FILE
 
 func init() { *(*uintptr)(unsafe.Pointer(X__stdout_used)) = x5f }
+
+type t905__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t905__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s98_IO_FILE = struct {
 	Fflags        uint32
@@ -72150,7 +81790,7 @@ func fp890(f func(TLS, uintptr, int64, int32) int64) uintptr { return *(*uintptr
 func fp891(f func(TLS, uintptr) int32) uintptr { return *(*uintptr)(unsafe.Pointer(&f)) }
 
 // xf TFILE = S_IO_FILE, escapes: true, stdout.c:4:13
-var x5f = bss + 5456 // FILE
+var x5f = bss + 5472 // FILE
 
 func init() {
 	*(*s98_IO_FILE)(unsafe.Pointer(x5f)) = s98_IO_FILE{
@@ -72175,7 +81815,7 @@ type s131__locale_struct = struct{ Fcat [6]uintptr }
 type t6FILE = s98_IO_FILE
 
 // xbuf [1032]uint8, escapes: true, stdout.c:3:22
-var x3buf = bss + 5688
+var x3buf = bss + 5704
 
 // linking swprintf.o
 
@@ -72183,22 +81823,26 @@ var x3buf = bss + 5688
 func Xswprintf(tls TLS, _s uintptr /* *Twchar_t = int32 */, _n uint64, _fmt uintptr /* *Twchar_t = int32 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvswprintf(tls, _s, _n, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
+type t906__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t906__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t269size_t = uint64
-
-type t14__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t14__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
 
 // linking swscanf.o
 
@@ -72206,20 +81850,24 @@ type t14__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintpt
 func Xswscanf(tls TLS, _s uintptr /* *Twchar_t = int32 */, _fmt uintptr /* *Twchar_t = int32 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvswscanf(tls, _s, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t15__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t907__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t15__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t907__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking tempnam.o
 
@@ -72284,6 +81932,17 @@ _7:
 
 _6:
 	return null
+}
+
+type t908__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t908__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t270size_t = uint64
@@ -72379,6 +82038,17 @@ _3:
 	return null
 }
 
+type t909__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t909__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s99_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -72471,8 +82141,19 @@ _3:
 	return null
 }
 
+type t910__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t910__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1internal [20]int8, escapes: true, tmpnam.c:14:14
-var x892internal = bss + 6720
+var x892internal = bss + 6736
 
 type s13stat = struct {
 	Fst_dev     uint64
@@ -72574,6 +82255,17 @@ _3:
 	X__unlockfile(tls, _f)
 _7:
 	return _c
+}
+
+type t911__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t911__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s100_IO_FILE = struct {
@@ -72684,6 +82376,17 @@ _7:
 	return _c
 }
 
+type t912__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t912__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t27wint_t = uint32
 
 type s101_IO_FILE = struct {
@@ -72726,8 +82429,6 @@ type s101_IO_FILE = struct {
 var x895__func__ = ds + 44680
 
 type s134__locale_struct = struct{ Fcat [6]uintptr }
-
-type t66locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 // x__pthread_self is defined at pthread_arch.h:1:30
 func x31__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
@@ -72793,17 +82494,14 @@ type s35__ptcb = struct {
 func set896(p *uintptr, v uintptr) uintptr { *p = v; return v }
 
 // Xvasprintf is defined at vasprintf.c:6:5
-func Xvasprintf(tls TLS, _s uintptr /* **int8 */, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvasprintf(tls TLS, _s uintptr /* **int8 */, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	var (
-		_ap2 *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap2 uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_l   int32
 	)
-	{
-		x := *_ap
-		_ap2 = &x
-	}
+	_ap2 = X__builtin_va_copy(tls, _ap)
 	_l = Xvsnprintf(tls, null, uint64(0), _fmt, _ap2)
-	_ap2 = nil
+	X__builtin_free(tls, _ap2)
 	if _l >= int32(0) && set896((*uintptr)(unsafe.Pointer(_s)), Xmalloc(tls, uint64(uint32(_l)+uint32(1)))) != 0 {
 		goto _1
 	}
@@ -72814,11 +82512,18 @@ _1:
 	return Xvsnprintf(tls, *(*uintptr)(unsafe.Pointer(_s)), uint64(uint32(_l)+uint32(1)), _fmt, _ap)
 }
 
+type t913__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t913__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t274size_t = uint64
-
-type t16__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t16__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
 
 // linking vdprintf.o
 
@@ -72827,7 +82532,7 @@ func fp897(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
 }
 
 // Xvdprintf is defined at vdprintf.c:8:5
-func Xvdprintf(tls TLS, _fd int32, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvdprintf(tls TLS, _fd int32, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(232)
 	var _f = esc // *TFILE = S_IO_FILE
 	defer Free(esc)
@@ -72839,6 +82544,17 @@ func Xvdprintf(tls TLS, _fd int32, _fmt uintptr /* *int8 */, _ap *[]interface{})
 		Flock:  int32(-1),
 	}
 	return Xvfprintf(tls, _f, _fmt, _ap)
+}
+
+type t914__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t914__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s102_IO_FILE = struct {
@@ -72890,10 +82606,6 @@ type t110off_t = int64
 
 type s135__locale_struct = struct{ Fcat [6]uintptr }
 
-type t17__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t17__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
-
 // linking vfprintf.o
 
 func set898(p *uintptr, v uintptr) uintptr { *p = v; return v }
@@ -72903,14 +82615,14 @@ func fn899(p uintptr) func(TLS, uintptr, uintptr, uint64) uint64 {
 }
 
 // Xvfprintf is defined at vfprintf.c:655:5
-func Xvfprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvfprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(208)
 	var (
-		_ap2           *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-		_nl_type       = esc          // *[10]int32
-		_nl_arg        = esc + 48     // *[10]Uarg
-		_internal_buf  = esc + 128    // *[80]uint8
-		_saved_buf     uintptr        // *uint8
+		_ap2           uintptr     // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_nl_type       = esc       // *[10]int32
+		_nl_arg        = esc + 48  // *[10]Uarg
+		_internal_buf  = esc + 128 // *[80]uint8
+		_saved_buf     uintptr     // *uint8
 		_olderr        int32
 		_ret           int32
 		___need_unlock int32
@@ -72918,15 +82630,12 @@ func Xvfprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *in
 	defer Free(esc)
 	Copy(_nl_type, ts+4608 /* "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00..." */, 40)
 	_saved_buf = 0
-	{
-		x := *_ap
-		_ap2 = &x
-	}
+	_ap2 = X__builtin_va_copy(tls, _ap)
 	if xprintf_core(tls, null, _fmt, uintptr(unsafe.Pointer(&_ap2)), _nl_arg, _nl_type) >= int32(0) {
 		goto _1
 	}
 
-	_ap2 = nil
+	X__builtin_free(tls, _ap2)
 	return int32(-1)
 
 _1:
@@ -72987,8 +82696,19 @@ _6:
 
 	X__unlockfile(tls, _f)
 _8:
-	_ap2 = nil
+	X__builtin_free(tls, _ap2)
 	return _ret
+}
+
+type t915__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t915__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s103_IO_FILE = struct {
@@ -73041,7 +82761,7 @@ func postinc901(p *uintptr) uintptr { r := *p; *p += 1; return r }
 func postinc902(p *uintptr) uintptr { r := *p; *p += 4; return r }
 
 // xprintf_core is defined at vfprintf.c:428:12
-func xprintf_core(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, _ap uintptr /* **struct{F_ [2]uintptr;} */, _nl_arg uintptr /* *Uarg */, _nl_type uintptr /* *int32 */) (r int32) {
+func xprintf_core(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, _ap uintptr /* **T__builtin_va_list_header = st...truct{Fsize int32;Fdata int8;};} */, _nl_arg uintptr /* *Uarg */, _nl_type uintptr /* *int32 */) (r int32) {
 	esc := MustMalloc(100)
 	var (
 		_a      uintptr // *int8
@@ -73176,7 +82896,7 @@ _22:
 
 	_w = func() int32 {
 		if _f != 0 {
-			return VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))
+			return VAint32(*(*uintptr)(unsafe.Pointer(_ap)))
 		}
 		return int32(0)
 	}()
@@ -73226,7 +82946,7 @@ _30:
 
 	_p = func() int32 {
 		if _f != 0 {
-			return VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))
+			return VAint32(*(*uintptr)(unsafe.Pointer(_ap)))
 		}
 		return int32(0)
 	}()
@@ -73784,7 +83504,7 @@ _3:
 var xstates = ds + 44688
 
 // xpop_arg is defined at vfprintf.c:108:13
-func xpop_arg(tls TLS, _arg uintptr /* *Uarg */, _type int32, _ap uintptr /* **struct{F_ [2]uintptr;} */) {
+func xpop_arg(tls TLS, _arg uintptr /* *Uarg */, _type int32, _ap uintptr /* **T__builtin_va_list_header = st...truct{Fsize int32;Fdata int8;};} */) {
 	switch _type {
 	case int32(9):
 		goto _2
@@ -73826,75 +83546,75 @@ func xpop_arg(tls TLS, _arg uintptr /* *Uarg */, _type int32, _ap uintptr /* **s
 	goto _1
 
 _2:
-	*(*uintptr)(unsafe.Pointer(_arg)) = VAuintptr(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uintptr)(unsafe.Pointer(_arg)) = VAuintptr(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _3:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint32(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint32(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _4:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuint32(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuint32(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _5:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _6:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _7:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _8:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int16(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int16(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _9:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint16(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint16(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _10:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int8(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int8(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _11:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint8(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint8(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _12:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _13:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _14:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _15:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _16:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _17:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuintptr(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuintptr(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _18:
-	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _19:
-	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(*uintptr)(unsafe.Pointer(_ap)))
 _1:
 }
 
@@ -74825,7 +84545,7 @@ func postinc910(p *uint64) uint64 { r := *p; *p += 1; return r }
 func set911(p *uintptr, v uintptr) uintptr { *p = v; return v }
 
 // Xvfscanf is defined at vfscanf.c:57:5
-func Xvfscanf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvfscanf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(273)
 	var (
 		_width         int32
@@ -75659,6 +85379,17 @@ _144:
 	return _matches
 }
 
+type t916__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t916__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s104_IO_FILE = struct {
 	Fflags        uint32
 	Frpos         uintptr // *uint8
@@ -75713,16 +85444,13 @@ func x5__isspace(tls TLS, __c int32) (r int32) {
 }
 
 // xarg_n is defined at vfscanf.c:45:13
-func xarg_n(tls TLS, _ap *[]interface{}, _n uint32) (r uintptr /* *void */) {
+func xarg_n(tls TLS, _ap uintptr, _n uint32) (r uintptr /* *void */) {
 	var (
 		_p   uintptr // *void
 		_i   uint32
-		_ap2 *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap2 uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := *_ap
-		_ap2 = &x
-	}
+	_ap2 = X__builtin_va_copy(tls, _ap)
 	_i = _n
 _1:
 	if _i <= uint32(1) {
@@ -75735,7 +85463,7 @@ _1:
 
 _3:
 	_p = VAuintptr(_ap2)
-	_ap2 = nil
+	X__builtin_free(tls, _ap2)
 	return _p
 }
 
@@ -75794,27 +85522,24 @@ type s137__locale_struct = struct{ Fcat [6]uintptr }
 // linking vfwprintf.o
 
 // Xvfwprintf is defined at vfwprintf.c:334:5
-func Xvfwprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, _ap *[]interface{}) (r int32) {
+func Xvfwprintf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(120)
 	var (
-		_ap2           *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-		_nl_type       = esc          // *[9]int32
-		_nl_arg        = esc + 48     // *[9]Uarg
+		_ap2           uintptr    // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
+		_nl_type       = esc      // *[9]int32
+		_nl_arg        = esc + 48 // *[9]Uarg
 		_olderr        int32
 		_ret           int32
 		___need_unlock int32
 	)
 	defer Free(esc)
 	Copy(_nl_type, ts+3392 /* "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00..." */, 36)
-	{
-		x := *_ap
-		_ap2 = &x
-	}
+	_ap2 = X__builtin_va_copy(tls, _ap)
 	if xwprintf_core(tls, null, _fmt, uintptr(unsafe.Pointer(&_ap2)), _nl_arg, _nl_type) >= int32(0) {
 		goto _1
 	}
 
-	_ap2 = nil
+	X__builtin_free(tls, _ap2)
 	return int32(-1)
 
 _1:
@@ -75847,8 +85572,19 @@ _2:
 
 	X__unlockfile(tls, _f)
 _4:
-	_ap2 = nil
+	X__builtin_free(tls, _ap2)
 	return _ret
+}
+
+type t917__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t917__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s105_IO_FILE = struct {
@@ -75901,7 +85637,7 @@ func postinc914(p *uintptr) uintptr { r := *p; *p += 4; return r }
 func postinc915(p *int32) int32 { r := *p; *p += -1; return r }
 
 // xwprintf_core is defined at vfwprintf.c:143:12
-func xwprintf_core(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr /* **struct{F_ [2]uintptr;} */, _nl_arg uintptr /* *Uarg */, _nl_type uintptr /* *int32 */) (r int32) {
+func xwprintf_core(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr /* **T__builtin_va_list_header = st...truct{Fsize int32;Fdata int8;};} */, _nl_arg uintptr /* *Uarg */, _nl_type uintptr /* *int32 */) (r int32) {
 	esc := MustMalloc(52)
 	var (
 		_a       uintptr // *Twchar_t = int32
@@ -76033,7 +85769,7 @@ _22:
 
 	_w = func() int32 {
 		if _f != 0 {
-			return VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))
+			return VAint32(*(*uintptr)(unsafe.Pointer(_ap)))
 		}
 		return int32(0)
 	}()
@@ -76083,7 +85819,7 @@ _30:
 
 	_p = func() int32 {
 		if _f != 0 {
-			return VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))
+			return VAint32(*(*uintptr)(unsafe.Pointer(_ap)))
 		}
 		return int32(0)
 	}()
@@ -76537,7 +86273,7 @@ _3:
 var x1states = ds + 45176
 
 // xpop_arg is defined at vfwprintf.c:99:13
-func x1pop_arg(tls TLS, _arg uintptr /* *Uarg */, _type int32, _ap uintptr /* **struct{F_ [2]uintptr;} */) {
+func x1pop_arg(tls TLS, _arg uintptr /* *Uarg */, _type int32, _ap uintptr /* **T__builtin_va_list_header = st...truct{Fsize int32;Fdata int8;};} */) {
 	switch _type {
 	case int32(9):
 		goto _2
@@ -76579,75 +86315,75 @@ func x1pop_arg(tls TLS, _arg uintptr /* *Uarg */, _type int32, _ap uintptr /* **
 	goto _1
 
 _2:
-	*(*uintptr)(unsafe.Pointer(_arg)) = VAuintptr(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uintptr)(unsafe.Pointer(_arg)) = VAuintptr(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _3:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint32(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint32(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _4:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuint32(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuint32(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _5:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _6:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _7:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _8:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int16(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int16(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _9:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint16(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint16(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _10:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int8(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(int8(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _11:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint8(VAint32(*(**[]interface{})(unsafe.Pointer(_ap)))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(uint8(VAint32(*(*uintptr)(unsafe.Pointer(_ap)))))
 	goto _1
 
 _12:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _13:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _14:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _15:
-	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*uint64)(unsafe.Pointer(_arg)) = VAuint64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _16:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAint64(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _17:
-	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuintptr(*(**[]interface{})(unsafe.Pointer(_ap))))
+	*(*uint64)(unsafe.Pointer(_arg)) = uint64(VAuintptr(*(*uintptr)(unsafe.Pointer(_ap))))
 	goto _1
 
 _18:
-	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(*uintptr)(unsafe.Pointer(_ap)))
 	goto _1
 
 _19:
-	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(**[]interface{})(unsafe.Pointer(_ap)))
+	*(*float64)(unsafe.Pointer(_arg)) = VAfloat64(*(*uintptr)(unsafe.Pointer(_ap)))
 _1:
 }
 
@@ -76661,7 +86397,7 @@ type t28wint_t = uint32
 // linking vfwscanf.o
 
 // Xvfwscanf is defined at vfwscanf.c:88:5
-func Xvfwscanf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, _ap *[]interface{}) (r int32) {
+func Xvfwscanf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr) (r int32) {
 	var (
 		_dest    uintptr // *void
 		_        = _dest
@@ -76675,6 +86411,17 @@ func Xvfwscanf(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */, _fmt uintptr /* *Tw
 	_pos = int64(0)
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+4764 /* "src/stdio/vfwsca..." */, int32(101), x917__func__)
 	return r
+}
+
+type t918__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t918__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s106_IO_FILE = struct {
@@ -76725,24 +86472,38 @@ type s139__locale_struct = struct{ Fcat [6]uintptr }
 // linking vprintf.o
 
 // Xvprintf is defined at vprintf.c:3:5
-func Xvprintf(tls TLS, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvprintf(tls TLS, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	return Xvfprintf(tls, *(*uintptr)(unsafe.Pointer(Xstdout)), _fmt, _ap)
 }
 
-type t18__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t919__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t18__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t919__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking vscanf.o
 
 // Xvscanf is defined at vscanf.c:5:5
-func Xvscanf(tls TLS, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvscanf(tls TLS, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	return Xvfscanf(tls, *(*uintptr)(unsafe.Pointer(Xstdin)), _fmt, _ap)
 }
 
-type t19__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t920__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t19__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t920__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking vsnprintf.o
 
@@ -76751,7 +86512,7 @@ func fp918(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
 }
 
 // Xvsnprintf is defined at vsnprintf.c:35:5
-func Xvsnprintf(tls TLS, _s uintptr /* *int8 */, _n uint64, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvsnprintf(tls TLS, _s uintptr /* *int8 */, _n uint64, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(280)
 	var (
 		_buf   = esc      // *[1]uint8
@@ -76791,6 +86552,17 @@ func Xvsnprintf(tls TLS, _s uintptr /* *int8 */, _n uint64, _fmt uintptr /* *int
 _1:
 	*(*int8)(unsafe.Pointer(*(*uintptr)(unsafe.Pointer(_c)))) = int8(0)
 	return Xvfprintf(tls, _f, _fmt, _ap)
+}
+
+type t921__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t921__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t280size_t = uint64
@@ -76890,22 +86662,25 @@ type t115off_t = int64
 
 type s140__locale_struct = struct{ Fcat [6]uintptr }
 
-type t20__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t20__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
-
 // linking vsprintf.o
 
 // Xvsprintf is defined at vsprintf.c:4:5
-func Xvsprintf(tls TLS, _s uintptr /* *int8 */, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvsprintf(tls TLS, _s uintptr /* *int8 */, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	return Xvsnprintf(tls, _s, uint64(0x7fffffff), _fmt, _ap)
 }
 
+type t922__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t922__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t281size_t = uint64
-
-type t21__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t21__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
 
 // linking vsscanf.o
 
@@ -76914,7 +86689,7 @@ func fp920(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
 }
 
 // Xvsscanf is defined at vsscanf.c:9:5
-func Xvsscanf(tls TLS, _s uintptr /* *int8 */, _fmt uintptr /* *int8 */, _ap *[]interface{}) (r int32) {
+func Xvsscanf(tls TLS, _s uintptr /* *int8 */, _fmt uintptr /* *int8 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(232)
 	var _f = esc // *TFILE = S_IO_FILE
 	defer Free(esc)
@@ -76925,6 +86700,17 @@ func Xvsscanf(tls TLS, _s uintptr /* *int8 */, _fmt uintptr /* *int8 */, _ap *[]
 		Flock:   int32(-1),
 	}
 	return Xvfscanf(tls, _f, _fmt, _ap)
+}
+
+type t923__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t923__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s108_IO_FILE = struct {
@@ -76976,10 +86762,6 @@ type t116off_t = int64
 
 type s141__locale_struct = struct{ Fcat [6]uintptr }
 
-type t22__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t22__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
-
 // linking vswprintf.o
 
 func fp921(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
@@ -76987,7 +86769,7 @@ func fp921(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
 }
 
 // Xvswprintf is defined at vswprintf.c:36:5
-func Xvswprintf(tls TLS, _s uintptr /* *Twchar_t = int32 */, _n uint64, _fmt uintptr /* *Twchar_t = int32 */, _ap *[]interface{}) (r int32) {
+func Xvswprintf(tls TLS, _s uintptr /* *Twchar_t = int32 */, _n uint64, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(504)
 	var (
 		_r   int32
@@ -77033,6 +86815,17 @@ _2:
 	}
 
 	return _r
+}
+
+type t924__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t924__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t283size_t = uint64
@@ -77137,10 +86930,6 @@ type s142__locale_struct = struct{ Fcat [6]uintptr }
 
 type t33wchar_t = int32
 
-type t23__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t23__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
-
 // linking vswscanf.o
 
 func fp924(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
@@ -77148,7 +86937,7 @@ func fp924(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
 }
 
 // Xvswscanf is defined at vswscanf.c:28:5
-func Xvswscanf(tls TLS, _s uintptr /* *Twchar_t = int32 */, _fmt uintptr /* *Twchar_t = int32 */, _ap *[]interface{}) (r int32) {
+func Xvswscanf(tls TLS, _s uintptr /* *Twchar_t = int32 */, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr) (r int32) {
 	esc := MustMalloc(488)
 	var (
 		_buf = esc       // *[256]uint8
@@ -77163,6 +86952,17 @@ func Xvswscanf(tls TLS, _s uintptr /* *Twchar_t = int32 */, _fmt uintptr /* *Twc
 		Flock:     int32(-1),
 	}
 	return Xvfwscanf(tls, _f, _fmt, _ap)
+}
+
+type t925__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t925__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s110_IO_FILE = struct {
@@ -77252,31 +87052,41 @@ type t118off_t = int64
 
 type s143__locale_struct = struct{ Fcat [6]uintptr }
 
-type t24__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
-
-type t24__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
-
 // linking vwprintf.o
 
 // Xvwprintf is defined at vwprintf.c:4:5
-func Xvwprintf(tls TLS, _fmt uintptr /* *Twchar_t = int32 */, _ap *[]interface{}) (r int32) {
+func Xvwprintf(tls TLS, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr) (r int32) {
 	return Xvfwprintf(tls, *(*uintptr)(unsafe.Pointer(Xstdout)), _fmt, _ap)
 }
 
-type t25__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t926__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t25__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t926__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking vwscanf.o
 
 // Xvwscanf is defined at vwscanf.c:6:5
-func Xvwscanf(tls TLS, _fmt uintptr /* *Twchar_t = int32 */, _ap *[]interface{}) (r int32) {
+func Xvwscanf(tls TLS, _fmt uintptr /* *Twchar_t = int32 */, _ap uintptr) (r int32) {
 	return Xvfwscanf(tls, *(*uintptr)(unsafe.Pointer(Xstdin)), _fmt, _ap)
 }
 
-type t26__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t927__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t26__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t927__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking wprintf.o
 
@@ -77284,20 +87094,24 @@ type t26__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintpt
 func Xwprintf(tls TLS, _fmt uintptr /* *Twchar_t = int32 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvwprintf(tls, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t27__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t928__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t27__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t928__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking wscanf.o
 
@@ -77305,20 +87119,24 @@ type t27__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintpt
 func Xwscanf(tls TLS, _fmt uintptr /* *Twchar_t = int32 */, ap ...interface{}) (r int32) {
 	var (
 		_ret int32
-		_ap  *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap  uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 	)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_ret = Xvwscanf(tls, _fmt, _ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	return _ret
 }
 
-type t28__isoc_va_list = *[]interface{} // T__isoc_va_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t929__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t28__builtin_va_list = uintptr // T__builtin_va_list = *struct{F_ [2]uintptr;}
+type t929__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking abs.o
 
@@ -77331,11 +87149,33 @@ func Xabs(tls TLS, _a int32) (r int32) {
 	return -_a
 }
 
+type t930__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t930__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking atof.o
 
 // Xatof is defined at atof.c:3:8
 func Xatof(tls TLS, _s uintptr /* *int8 */) (r float64) {
 	return Xstrtod(tls, _s, null)
+}
+
+type t931__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t931__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking atoi.o
@@ -77386,6 +87226,17 @@ _7:
 	}
 
 	return -_n
+}
+
+type t932__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t932__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__isspace is defined at ctype.h:26:21
@@ -77443,6 +87294,17 @@ _7:
 	return -_n
 }
 
+type t933__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t933__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__isspace is defined at ctype.h:26:21
 func x7__isspace(tls TLS, __c int32) (r int32) {
 	return bool2int((__c == int32(' ')) || (uint32(__c)-uint32('\t') < uint32(5)))
@@ -77496,6 +87358,17 @@ _7:
 	}
 
 	return -_n
+}
+
+type t934__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t934__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__isspace is defined at ctype.h:26:21
@@ -77559,6 +87432,17 @@ _2:
 	return null
 }
 
+type t935__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t935__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t285size_t = uint64
 
 // linking div.o
@@ -77580,6 +87464,17 @@ func Xdiv(tls TLS, _num int32, _den int32) (r struct {
 		Fquot: _num / _den,
 		Frem:  _num % _den,
 	}
+}
+
+type t936__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t936__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tdiv_t = struct {
@@ -77626,8 +87521,19 @@ _4:
 	return x933buf
 }
 
+type t937__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t937__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1buf [16]int8, escapes: true, ecvt.c:7:14
-var x933buf = bss + 6744
+var x933buf = bss + 6760
 
 // linking fcvt.o
 
@@ -77676,6 +87582,17 @@ _4:
 	return Xecvt(tls, _x, _n-_lz, _dp, _sign)
 }
 
+type t938__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t938__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t286size_t = uint64
 
 // linking gcvt.o
@@ -77684,6 +87601,17 @@ type t286size_t = uint64
 func Xgcvt(tls TLS, _x float64, _n int32, _b uintptr /* *int8 */) (r uintptr /* *int8 */) {
 	Xsprintf(tls, _b, ts+4820 /* "%.*g" */, _n, _x)
 	return _b
+}
+
+type t939__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t939__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking imaxabs.o
@@ -77695,6 +87623,17 @@ func Ximaxabs(tls TLS, _a int64) (r int64) {
 	}
 
 	return -_a
+}
+
+type t940__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t940__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tintmax_t = int64
@@ -77720,6 +87659,17 @@ func Ximaxdiv(tls TLS, _num int64, _den int64) (r struct {
 	}
 }
 
+type t941__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t941__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1intmax_t = int64
 
 type Timaxdiv_t = struct {
@@ -77736,6 +87686,17 @@ func Xlabs(tls TLS, _a int64) (r int64) {
 	}
 
 	return -_a
+}
+
+type t942__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t942__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking ldiv.o
@@ -77759,6 +87720,17 @@ func Xldiv(tls TLS, _num int64, _den int64) (r struct {
 	}
 }
 
+type t943__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t943__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Tldiv_t = struct {
 	Fquot int64
 	Frem  int64
@@ -77773,6 +87745,17 @@ func Xllabs(tls TLS, _a int64) (r int64) {
 	}
 
 	return -_a
+}
+
+type t944__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t944__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking lldiv.o
@@ -77794,6 +87777,17 @@ func Xlldiv(tls TLS, _num int64, _den int64) (r struct {
 		Fquot: _num / _den,
 		Frem:  _num % _den,
 	}
+}
+
+type t945__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t945__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tlldiv_t = struct {
@@ -77925,9 +87919,18 @@ _16:
 _14:
 }
 
-type t287size_t = uint64
+type t946__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type Tcmpfun = uintptr // Tcmpfun = *func(TLS, uintptr, uintptr) int32
+type t946__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t287size_t = uint64
 
 func fn935(p uintptr) func(TLS, uintptr, uintptr) int32 {
 	return *(*func(TLS, uintptr, uintptr) int32)(unsafe.Pointer(&p))
@@ -78185,6 +88188,17 @@ func Xstrtold(tls TLS, _s uintptr /* *int8 */, _p uintptr /* **int8 */) (r float
 	return xstrtox(tls, _s, _p, int32(2))
 }
 
+type t947__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t947__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xstrtox is defined at strtod.c:7:20
 func xstrtox(tls TLS, _s uintptr /* *int8 */, _p uintptr /* **int8 */, _prec int32) (r float64) {
 	esc := MustMalloc(232)
@@ -78293,6 +88307,17 @@ func Xstrtoumax(tls TLS, _s uintptr /* *int8 */, _p uintptr /* **int8 */, _base 
 	return Xstrtoull(tls, _s, _p, _base)
 }
 
+type t948__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t948__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 func set938(p *uintptr, v uintptr) uintptr { *p = v; return v }
 
 // xstrtox is defined at strtol.c:9:27
@@ -78390,6 +88415,17 @@ func Xwcstod(tls TLS, _s uintptr /* *Twchar_t = int32 */, _p uintptr /* **Twchar
 // Xwcstold is defined at wcstod.c:62:13
 func Xwcstold(tls TLS, _s uintptr /* *Twchar_t = int32 */, _p uintptr /* **Twchar_t = int32 */) (r float64) {
 	return xwcstox(tls, _s, _p, int32(2))
+}
+
+type t949__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t949__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 func set939(p *uintptr, v uintptr) uintptr { *p = v; return v }
@@ -78567,6 +88603,17 @@ func Xwcstoumax(tls TLS, _s uintptr /* *Twchar_t = int32 */, _p uintptr /* **Twc
 	return Xwcstoull(tls, _s, _p, _base)
 }
 
+type t950__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t950__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 func set942(p *uintptr, v uintptr) uintptr { *p = v; return v }
 
 func fp943(f func(TLS, uintptr, uintptr, uint64) uint64) uintptr {
@@ -78721,6 +88768,17 @@ func Xbcmp(tls TLS, _s1 uintptr /* *void */, _s2 uintptr /* *void */, _n uint64)
 	return Xmemcmp(tls, _s1, _s2, _n)
 }
 
+type t951__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t951__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t292size_t = uint64
 
 // linking bcopy.o
@@ -78730,6 +88788,17 @@ func Xbcopy(tls TLS, _s1 uintptr /* *void */, _s2 uintptr /* *void */, _n uint64
 	Xmemmove(tls, _s2, _s1, _n)
 }
 
+type t952__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t952__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t293size_t = uint64
 
 // linking bzero.o
@@ -78737,6 +88806,17 @@ type t293size_t = uint64
 // Xbzero is defined at bzero.c:5:6
 func Xbzero(tls TLS, _s uintptr /* *void */, _n uint64) {
 	Xmemset(tls, _s, int32(0), _n)
+}
+
+type t953__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t953__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t294size_t = uint64
@@ -78749,6 +88829,17 @@ func Xexplicit_bzero(tls TLS, _d uintptr /* *void */, _n uint64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5092 /* "src/string/expli..." */, int32(8), x945__func__)
 }
 
+type t954__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t954__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t295size_t = uint64
 
 // x1__func__ [15]int8, escapes: true, explicit_bzero.c:6:1
@@ -78759,6 +88850,17 @@ var x945__func__ = ds + 45680
 // Xindex is defined at index.c:5:6
 func Xindex(tls TLS, _s uintptr /* *int8 */, _c int32) (r uintptr /* *int8 */) {
 	return Xstrchr(tls, _s, _c)
+}
+
+type t955__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t955__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking memccpy.o
@@ -78841,6 +88943,17 @@ _12:
 	return null
 }
 
+type t956__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t956__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t296size_t = uint64
 
 type t47uintptr_t = uint64
@@ -78902,6 +89015,17 @@ _4:
 	return null
 }
 
+type t957__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t957__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t297size_t = uint64
 
 type t48uintptr_t = uint64
@@ -78935,6 +89059,17 @@ _3:
 	return int32(0)
 }
 
+type t958__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t958__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t298size_t = uint64
 
 // linking memcpy.o
@@ -78961,6 +89096,17 @@ _1:
 
 _3:
 	return _dest
+}
+
+type t959__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t959__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t299size_t = uint64
@@ -79027,6 +89173,17 @@ _6:
 
 _7:
 	return xtwoway_memmem(tls, _h, _h+uintptr(_k), _n, _l)
+}
+
+type t960__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t960__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t300size_t = uint64
@@ -79499,6 +89656,17 @@ _4:
 	return _dest
 }
 
+type t961__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t961__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t301size_t = uint64
 
 type t49uintptr_t = uint64
@@ -79508,6 +89676,17 @@ type t49uintptr_t = uint64
 // Xmempcpy is defined at mempcpy.c:4:6
 func Xmempcpy(tls TLS, _dest uintptr /* *void */, _src uintptr /* *void */, _n uint64) (r uintptr /* *void */) {
 	return Xmemcpy(tls, _dest, _src, _n) + uintptr(_n)
+}
+
+type t962__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t962__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t302size_t = uint64
@@ -79538,6 +89717,17 @@ _3:
 
 _2:
 	return null
+}
+
+type t963__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t963__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t303size_t = uint64
@@ -79606,6 +89796,17 @@ _7:
 	return _dest
 }
 
+type t964__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t964__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t304size_t = uint64
 
 type t50uintptr_t = uint64
@@ -79615,6 +89816,17 @@ type t50uintptr_t = uint64
 // Xrindex is defined at rindex.c:5:6
 func Xrindex(tls TLS, _s uintptr /* *int8 */, _c int32) (r uintptr /* *int8 */) {
 	return Xstrrchr(tls, _s, _c)
+}
+
+type t965__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t965__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking stpcpy.o
@@ -79676,6 +89888,17 @@ _9:
 
 _11:
 	return _d
+}
+
+type t966__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t966__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t51uintptr_t = uint64
@@ -79749,6 +89972,17 @@ ltail:
 	return _d
 }
 
+type t967__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t967__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t306size_t = uint64
 
 type t52uintptr_t = uint64
@@ -79782,7 +90016,16 @@ func X__strcasecmp_l(tls TLS, _l uintptr /* *int8 */, _r uintptr /* *int8 */, _l
 	return Xstrcasecmp(tls, _l, _r)
 }
 
-type t67locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t968__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t968__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s148__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -79813,6 +90056,17 @@ _3:
 	return null
 }
 
+type t969__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t969__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t307size_t = uint64
 
 // linking strcat.o
@@ -79821,6 +90075,17 @@ type t307size_t = uint64
 func Xstrcat(tls TLS, _dest uintptr /* *int8 */, _src uintptr /* *int8 */) (r uintptr /* *int8 */) {
 	Xstrcpy(tls, _dest+uintptr(Xstrlen(tls, _dest)), _src)
 	return _dest
+}
+
+type t970__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t970__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t308size_t = uint64
@@ -79837,6 +90102,17 @@ func Xstrchr(tls TLS, _s uintptr /* *int8 */, _c int32) (r uintptr /* *int8 */) 
 	}
 
 	return null
+}
+
+type t971__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t971__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking strchrnul.o
@@ -79895,6 +90171,17 @@ _11:
 	return _s
 }
 
+type t972__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t972__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t309size_t = uint64
 
 type t53uintptr_t = uint64
@@ -79916,12 +90203,34 @@ _3:
 	return int32(*(*uint8)(unsafe.Pointer(_l))) - int32(*(*uint8)(unsafe.Pointer(_r)))
 }
 
+type t973__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t973__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking strcpy.o
 
 // Xstrcpy is defined at strcpy.c:6:6
 func Xstrcpy(tls TLS, _dest uintptr /* *int8 */, _src uintptr /* *int8 */) (r uintptr /* *int8 */) {
 	X__stpcpy(tls, _dest, _src)
 	return _dest
+}
+
+type t974__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t974__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking strcspn.o
@@ -79967,6 +90276,17 @@ _7:
 	return uint64(int64(_s - _a))
 }
 
+type t975__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t975__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t310size_t = uint64
 
 // linking strdup.o
@@ -79987,6 +90307,17 @@ func X__strdup(tls TLS, _s uintptr /* *int8 */) (r uintptr /* *int8 */) {
 
 _1:
 	return Xmemcpy(tls, _d, _s, _l+uint64(1))
+}
+
+type t976__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t976__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t311size_t = uint64
@@ -80019,6 +90350,17 @@ _1:
 	return int32(0)
 }
 
+type t977__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t977__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t312size_t = uint64
 
 // linking strlcat.o
@@ -80036,6 +90378,17 @@ func Xstrlcat(tls TLS, _d uintptr /* *int8 */, _s uintptr /* *int8 */, _n uint64
 
 _1:
 	return _l + Xstrlcpy(tls, _d+uintptr(_l), _s, _n-_l)
+}
+
+type t978__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t978__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t313size_t = uint64
@@ -80116,6 +90469,17 @@ lfinish:
 	return uint64(int64(_d-_d0)) + Xstrlen(tls, _s)
 }
 
+type t979__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t979__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t314size_t = uint64
 
 type t54uintptr_t = uint64
@@ -80169,6 +90533,17 @@ _10:
 	return uint64(int64(_s - _a))
 }
 
+type t980__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t980__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t315size_t = uint64
 
 type t55uintptr_t = uint64
@@ -80211,9 +90586,18 @@ func X__strncasecmp_l(tls TLS, _l uintptr /* *int8 */, _r uintptr /* *int8 */, _
 	return Xstrncasecmp(tls, _l, _r, _n)
 }
 
-type t316size_t = uint64
+type t981__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t68locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t981__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t316size_t = uint64
 
 type s149__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -80239,6 +90623,17 @@ _1:
 _2:
 	*(*int8)(unsafe.Pointer(postinc961(&_d))) = int8(0)
 	return _a
+}
+
+type t982__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t982__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t317size_t = uint64
@@ -80276,6 +90671,17 @@ _4:
 	return int32(*(*uint8)(unsafe.Pointer(_l))) - int32(*(*uint8)(unsafe.Pointer(_r)))
 }
 
+type t983__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t983__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t318size_t = uint64
 
 // linking strncpy.o
@@ -80284,6 +90690,17 @@ type t318size_t = uint64
 func Xstrncpy(tls TLS, _d uintptr /* *int8 */, _s uintptr /* *int8 */, _n uint64) (r uintptr /* *int8 */) {
 	X__stpncpy(tls, _d, _s, _n)
 	return _d
+}
+
+type t984__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t984__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t319size_t = uint64
@@ -80310,6 +90727,17 @@ _1:
 	return _d
 }
 
+type t985__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t985__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t320size_t = uint64
 
 // linking strnlen.o
@@ -80326,6 +90754,17 @@ func Xstrnlen(tls TLS, _s uintptr /* *int8 */, _n uint64) (r uint64) {
 	return _n
 }
 
+type t986__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t986__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t321size_t = uint64
 
 // linking strpbrk.o
@@ -80340,6 +90779,17 @@ func Xstrpbrk(tls TLS, _s uintptr /* *int8 */, _b uintptr /* *int8 */) (r uintpt
 	return null
 }
 
+type t987__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t987__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t322size_t = uint64
 
 // linking strrchr.o
@@ -80347,6 +90797,17 @@ type t322size_t = uint64
 // Xstrrchr is defined at strrchr.c:5:6
 func Xstrrchr(tls TLS, _s uintptr /* *int8 */, _c int32) (r uintptr /* *int8 */) {
 	return X__memrchr(tls, _s, _c, Xstrlen(tls, _s)+uint64(1))
+}
+
+type t988__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t988__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t323size_t = uint64
@@ -80382,6 +90843,17 @@ _2:
 _3:
 	*(*uintptr)(unsafe.Pointer(_str)) = _end
 	return _s
+}
+
+type t989__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t989__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t324size_t = uint64
@@ -80421,6 +90893,17 @@ _7:
 
 _4:
 	return X__lctrans_cur(tls, _s)
+}
+
+type t990__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t990__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xstrings [671]int8, escapes: true, strsignal.c:56:19
@@ -80482,6 +90965,17 @@ _9:
 
 _11:
 	return uint64(int64(_s - _a))
+}
+
+type t991__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t991__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t325size_t = uint64
@@ -80548,6 +91042,17 @@ _7:
 
 _8:
 	return xtwoway_strstr(tls, _h, _n)
+}
+
+type t992__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t992__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 func preinc966(p *uintptr) uintptr { *p += 1; return *p }
@@ -80935,6 +91440,17 @@ _4:
 	return _s
 }
 
+type t993__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t993__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1p *int8, escapes: false, strtok.c:5:14
 var x971p uintptr
 
@@ -80975,6 +91491,17 @@ _3:
 	*(*uintptr)(unsafe.Pointer(_p)) = null
 _4:
 	return _s
+}
+
+type t994__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t994__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t328size_t = uint64
@@ -81073,6 +91600,17 @@ _9:
 	return int32(*(*uint8)(unsafe.Pointer(_l + uintptr(_i)))) - int32(*(*uint8)(unsafe.Pointer(_r + uintptr(_i))))
 }
 
+type t995__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t995__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t329size_t = uint64
 
 // linking swab.o
@@ -81101,6 +91639,17 @@ _1:
 _3:
 }
 
+type t996__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t996__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t43ssize_t = int64
 
 // linking wcpcpy.o
@@ -81108,6 +91657,17 @@ type t43ssize_t = int64
 // Xwcpcpy is defined at wcpcpy.c:3:9
 func Xwcpcpy(tls TLS, _d uintptr /* *Twchar_t = int32 */, _s uintptr /* *Twchar_t = int32 */) (r uintptr /* *Twchar_t = int32 */) {
 	return Xwcscpy(tls, _d, _s) + 4*uintptr(Xwcslen(tls, _s))
+}
+
+type t997__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t997__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t330size_t = uint64
@@ -81119,6 +91679,17 @@ func Xwcpncpy(tls TLS, _d uintptr /* *Twchar_t = int32 */, _s uintptr /* *Twchar
 	return Xwcsncpy(tls, _d, _s, _n) + 4*uintptr(Xwcsnlen(tls, _s, _n))
 }
 
+type t998__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t998__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t331size_t = uint64
 
 // linking wcscasecmp.o
@@ -81126,6 +91697,17 @@ type t331size_t = uint64
 // Xwcscasecmp is defined at wcscasecmp.c:4:5
 func Xwcscasecmp(tls TLS, _l uintptr /* *Twchar_t = int32 */, _r uintptr /* *Twchar_t = int32 */) (r int32) {
 	return Xwcsncasecmp(tls, _l, _r, uint64(18446744073709551615))
+}
+
+type t999__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t999__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t332size_t = uint64
@@ -81137,7 +91719,16 @@ func Xwcscasecmp_l(tls TLS, _l uintptr /* *Twchar_t = int32 */, _r uintptr /* *T
 	return Xwcscasecmp(tls, _l, _r)
 }
 
-type t69locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t1000__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1000__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s150__locale_struct struct{ uintptr }
 
@@ -81147,6 +91738,17 @@ type s150__locale_struct struct{ uintptr }
 func Xwcscat(tls TLS, _dest uintptr /* *Twchar_t = int32 */, _src uintptr /* *Twchar_t = int32 */) (r uintptr /* *Twchar_t = int32 */) {
 	Xwcscpy(tls, _dest+4*uintptr(Xwcslen(tls, _dest)), _src)
 	return _dest
+}
+
+type t1001__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1001__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t333size_t = uint64
@@ -81178,6 +91780,17 @@ _4:
 	return null
 }
 
+type t1002__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1002__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t36wchar_t = int32
 
 type t334size_t = uint64
@@ -81197,6 +91810,17 @@ _1:
 
 _3:
 	return *(*int32)(unsafe.Pointer(_l)) - *(*int32)(unsafe.Pointer(_r))
+}
+
+type t1003__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1003__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t37wchar_t = int32
@@ -81221,6 +91845,17 @@ _1:
 
 _2:
 	return _a
+}
+
+type t1004__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1004__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t38wchar_t = int32
@@ -81264,6 +91899,17 @@ _5:
 	return uint64(int64((_s - _a) / 4))
 }
 
+type t1005__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1005__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t335size_t = uint64
 
 type t39wchar_t = int32
@@ -81288,6 +91934,17 @@ _1:
 	return Xwmemcpy(tls, _d, _s, _l+uint64(1))
 }
 
+type t1006__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1006__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t336size_t = uint64
 
 // linking wcslen.o
@@ -81307,6 +91964,17 @@ _1:
 
 _3:
 	return uint64(int64((_s - _a) / 4))
+}
+
+type t1007__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1007__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t337size_t = uint64
@@ -81340,6 +92008,17 @@ _4:
 	return int32(Xtowlower(tls, uint32(*(*int32)(unsafe.Pointer(_l)))) - Xtowlower(tls, uint32(*(*int32)(unsafe.Pointer(_r)))))
 }
 
+type t1008__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1008__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t338size_t = uint64
 
 type t41wchar_t = int32
@@ -81353,9 +92032,18 @@ func Xwcsncasecmp_l(tls TLS, _l uintptr /* *Twchar_t = int32 */, _r uintptr /* *
 	return Xwcsncasecmp(tls, _l, _r, _n)
 }
 
-type t339size_t = uint64
+type t1009__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t70locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t1009__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t339size_t = uint64
 
 type s151__locale_struct struct{ uintptr }
 
@@ -81383,6 +92071,17 @@ _2:
 	return _a
 }
 
+type t1010__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1010__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t340size_t = uint64
 
 type t42wchar_t = int32
@@ -81407,6 +92106,17 @@ _3:
 	}
 
 	return int32(0)
+}
+
+type t1011__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1011__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t341size_t = uint64
@@ -81436,6 +92146,17 @@ _2:
 	return _a
 }
 
+type t1012__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1012__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t342size_t = uint64
 
 type t44wchar_t = int32
@@ -81456,6 +92177,17 @@ _1:
 	return _n
 }
 
+type t1013__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1013__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t343size_t = uint64
 
 type t45wchar_t = int32
@@ -81470,6 +92202,17 @@ func Xwcspbrk(tls TLS, _s uintptr /* *Twchar_t = int32 */, _b uintptr /* *Twchar
 	}
 
 	return null
+}
+
+type t1014__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1014__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t46wchar_t = int32
@@ -81499,6 +92242,17 @@ _3:
 	return null
 }
 
+type t1015__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1015__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t47wchar_t = int32
 
 type t345size_t = uint64
@@ -81520,6 +92274,17 @@ _1:
 
 _3:
 	return uint64(int64((_s - _a) / 4))
+}
+
+type t1016__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1016__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t346size_t = uint64
@@ -81560,6 +92325,17 @@ _3:
 
 _4:
 	return xtwoway_wcsstr(tls, _h, _n)
+}
+
+type t1017__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1017__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t49wchar_t = int32
@@ -81830,6 +92606,17 @@ _4:
 	return _s
 }
 
+type t1018__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1018__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t50wchar_t = int32
 
 type t348size_t = uint64
@@ -81839,6 +92626,17 @@ type t348size_t = uint64
 // Xwcswcs is defined at wcswcs.c:3:9
 func Xwcswcs(tls TLS, _haystack uintptr /* *Twchar_t = int32 */, _needle uintptr /* *Twchar_t = int32 */) (r uintptr /* *Twchar_t = int32 */) {
 	return Xwcsstr(tls, _haystack, _needle)
+}
+
+type t1019__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1019__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking wmemchr.o
@@ -81860,6 +92658,17 @@ _3:
 	}
 
 	return null
+}
+
+type t1020__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1020__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t51wchar_t = int32
@@ -81888,6 +92697,17 @@ _3:
 	return int32(0)
 }
 
+type t1021__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1021__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t350size_t = uint64
 
 type t52wchar_t = int32
@@ -81913,6 +92733,17 @@ _1:
 
 _2:
 	return _a
+}
+
+type t1022__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1022__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t351size_t = uint64
@@ -81959,6 +92790,17 @@ _2:
 	return _d0
 }
 
+type t1023__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1023__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t352size_t = uint64
 
 type t54wchar_t = int32
@@ -81984,6 +92826,17 @@ _1:
 
 _2:
 	return _ret
+}
+
+type t1024__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1024__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t55wchar_t = int32
@@ -82016,6 +92869,17 @@ _1:
 
 _3:
 	return _template
+}
+
+type t1025__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1025__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s34timespec = struct {
@@ -82066,6 +92930,17 @@ _5:
 	return null
 }
 
+type t1026__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1026__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t354size_t = uint64
 
 type t37mode_t = uint32
@@ -82075,6 +92950,17 @@ type t37mode_t = uint32
 // Xmkostemp is defined at mkostemp.c:7:5
 func Xmkostemp(tls TLS, _template uintptr /* *int8 */, _flags int32) (r int32) {
 	return X__mkostemps(tls, _template, int32(0), _flags)
+}
+
+type t1027__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1027__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking mkostemps.o
@@ -82118,6 +93004,17 @@ _5:
 	return int32(-1)
 }
 
+type t1028__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1028__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t355size_t = uint64
 
 // linking mkstemp.o
@@ -82127,11 +93024,33 @@ func Xmkstemp(tls TLS, _template uintptr /* *int8 */) (r int32) {
 	return X__mkostemps(tls, _template, int32(0), int32(0))
 }
 
+type t1029__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1029__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking mkstemps.o
 
 // Xmkstemps is defined at mkstemps.c:7:5
 func Xmkstemps(tls TLS, _template uintptr /* *int8 */, _len int32) (r int32) {
 	return X__mkostemps(tls, _template, _len, int32(0))
+}
+
+type t1030__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1030__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking mktemp.o
@@ -82180,6 +93099,17 @@ _5:
 	*(*int8)(unsafe.Pointer(_template)) = int8(0)
 	*(*int32)(unsafe.Pointer(X__errno_location(tls))) = int32(17)
 	return _template
+}
+
+type t1031__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1031__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t356size_t = uint64
@@ -82239,6 +93169,17 @@ func Xcfgetispeed(tls TLS, _tio uintptr /* *Stermios */) (r uint32) {
 	return Xcfgetospeed(tls, _tio)
 }
 
+type t1032__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1032__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t3speed_t = uint32
 
 type s3termios = struct {
@@ -82282,6 +93223,17 @@ func Xcfmakeraw(tls TLS, _t uintptr /* *Stermios */) {
 	}
 	*(*uint8)(unsafe.Pointer((_t + 17) + 6)) = uint8(1)
 	*(*uint8)(unsafe.Pointer((_t + 17) + 5)) = uint8(0)
+}
+
+type t1033__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1033__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s4termios = struct {
@@ -82333,6 +93285,17 @@ func Xcfsetispeed(tls TLS, _tio uintptr /* *Stermios */, _speed uint32) (r int32
 	return int32(0)
 }
 
+type t1034__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1034__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t5speed_t = uint32
 
 type s5termios = struct {
@@ -82358,6 +93321,17 @@ func Xtcdrain(tls TLS, _fd int32) (r int32) {
 	return r
 }
 
+type t1035__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1035__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [8]int8, escapes: true, tcdrain.c:8:1
 var x995__func__ = ds + 46368
 
@@ -82368,11 +93342,33 @@ func Xtcflow(tls TLS, _fd int32, _action int32) (r int32) {
 	return Xioctl(tls, _fd, int32(0x540a), _action)
 }
 
+type t1036__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1036__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking tcflush.o
 
 // Xtcflush is defined at tcflush.c:4:5
 func Xtcflush(tls TLS, _fd int32, _queue int32) (r int32) {
 	return Xioctl(tls, _fd, int32(0x540b), _queue)
+}
+
+type t1037__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1037__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking tcgetattr.o
@@ -82387,6 +93383,17 @@ func Xtcgetattr(tls TLS, _fd int32, _tio uintptr /* *Stermios */) (r int32) {
 
 _1:
 	return int32(0)
+}
+
+type t1038__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1038__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s6termios = struct {
@@ -82423,6 +93430,17 @@ _1:
 	return *(*int32)(unsafe.Pointer(_sid))
 }
 
+type t1039__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1039__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t48pid_t = int32
 
 // linking tcsendbreak.o
@@ -82430,6 +93448,17 @@ type t48pid_t = int32
 // Xtcsendbreak is defined at tcsendbreak.c:4:5
 func Xtcsendbreak(tls TLS, _fd int32, _dur int32) (r int32) {
 	return Xioctl(tls, _fd, int32(0x5409), int32(0))
+}
+
+type t1040__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1040__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking tcsetattr.o
@@ -82445,6 +93474,17 @@ func Xtcsetattr(tls TLS, _fd int32, _act int32, _tio uintptr /* *Stermios */) (r
 
 _1:
 	return Xioctl(tls, _fd, int32(0x5402)+_act, _tio)
+}
+
+type t1041__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1041__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s7termios = struct {
@@ -82469,6 +93509,17 @@ type t7speed_t = uint32
 // X__futex is defined at __futex.c:4:5
 func X__futex(tls TLS, _addr uintptr /* *int32 */, _op int32, _val int32, _ts uintptr /* *void */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x28__syscall4(tls, int64(202), int64(_addr), int64(_op), int64(_val), int64(_ts)))))
+}
+
+type t1042__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1042__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall4 is defined at syscall_arch.h:42:22
@@ -82563,6 +93614,17 @@ _2:
 _1:
 }
 
+type t1043__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1043__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_cas is defined at atomic_arch.h:4:19
 func x4a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return a_cas(_p, _t, _s)
@@ -82624,6 +93686,17 @@ func X__set_thread_area(tls TLS, _p uintptr /* *void */) (r int32) {
 	return int32(x37__syscall1(tls, int64(205), int64(_p)))
 }
 
+type t1044__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1044__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x37__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -82634,6 +93707,17 @@ func x37__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // X__syscall_cp is defined at __syscall_cp.c:16:6
 func X__syscall_cp(tls TLS, _nr int64, _u int64, _v int64, _w int64, _x int64, _y int64, _z int64) (r int64) {
 	return X__syscall_cp_c(tls, _nr, _u, _v, _w, _x, _y, _z)
+}
+
+type t1045__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1045__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t7syscall_arg_t = int64
@@ -82727,6 +93811,17 @@ func X__timedwait(tls TLS, _addr uintptr /* *int32 */, _val int32, _clk int32, _
 	return _r
 }
 
+type t1046__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1046__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t4clockid_t = int32
 
 type s36timespec = struct {
@@ -82745,6 +93840,17 @@ type t52time_t = int64
 func X__tls_get_addr(tls TLS, _v uintptr /* *Tsize_t = uint64 */) (r uintptr /* *void */) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5180 /* "src/thread/__tls..." */, int32(10), x998__func__)
 	return r
+}
+
+type t1047__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1047__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [15]int8, escapes: true, __tls_get_addr.c:9:1
@@ -82776,6 +93882,17 @@ _2:
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5208 /* "src/thread/__unm..." */, int32(29), x999__func__)
 }
 
+type t1048__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1048__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t357size_t = uint64
 
 // x1__func__ [12]int8, escapes: true, __unmapself.c:20:1
@@ -82788,12 +93905,12 @@ func x32__pthread_self(tls TLS) (r uintptr /* *S__pthread */) {
 }
 
 // xshared_stack [256]int8, escapes: true, __unmapself.c:11:13
-var xshared_stack = bss + 6760
+var xshared_stack = bss + 6776
 
 type t57uintptr_t = uint64
 
 // xlock int32, escapes: true, __unmapself.c:8:21
-var x4lock = bss + 7016
+var x4lock = bss + 7032
 
 // xa_cas is defined at atomic_arch.h:4:19
 func x5a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
@@ -82865,8 +93982,6 @@ type s36__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t71locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s152__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking __wait.o
@@ -82928,6 +94043,17 @@ _8:
 _9:
 }
 
+type t1049__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1049__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_spin is defined at atomic_arch.h:114:20
 func x1a_spin(tls TLS) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+36 /* "arch/x86_64/atom..." */, int32(116), x1002__func__)
@@ -82958,11 +94084,33 @@ func Xcall_once(tls TLS, _flag uintptr /* *Tonce_flag = int32 */, _func uintptr 
 	X__pthread_once(tls, _flag, _func)
 }
 
+type t1050__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1050__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking clone.o
 
 // X__clone is defined at clone.c:4:5
 func X__clone(tls TLS, _func uintptr /* *func(TLS, uintptr) int32 */, _stack uintptr /* *void */, _flags int32, _arg uintptr /* *void */, ap ...interface{}) (r int32) {
 	return int32(-38)
+}
+
+type t1051__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1051__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cnd_broadcast.o
@@ -82972,10 +94120,32 @@ func Xcnd_broadcast(tls TLS, _c uintptr /* *Tcnd_t = struct{F__u struct{F__...6]
 	return X__private_cond_signal(tls, _c, int32(-1))
 }
 
+type t1052__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1052__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking cnd_destroy.o
 
 // Xcnd_destroy is defined at cnd_destroy.c:3:6
 func Xcnd_destroy(tls TLS, _c uintptr /* *Tcnd_t = struct{F__u struct{F__...6]uintptr;F int64; _ [40]byte};} */) {
+}
+
+type t1053__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1053__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cnd_init.o
@@ -83012,6 +94182,17 @@ func Xcnd_init(tls TLS, _c uintptr /* *Tcnd_t = struct{F__u struct{F__...6]uintp
 	return int32(0)
 }
 
+type t1054__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1054__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Tcnd_t = struct {
 	F__u struct {
 		F__i  [0][12]int32
@@ -83027,6 +94208,17 @@ type Tcnd_t = struct {
 // Xcnd_signal is defined at cnd_signal.c:5:5
 func Xcnd_signal(tls TLS, _c uintptr /* *Tcnd_t = struct{F__u struct{F__...6]uintptr;F int64; _ [40]byte};} */) (r int32) {
 	return X__private_cond_signal(tls, _c, int32(1))
+}
+
+type t1055__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1055__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking cnd_timedwait.o
@@ -83056,6 +94248,17 @@ _4:
 	return r
 }
 
+type t1056__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1056__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s37timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -83068,6 +94271,17 @@ type t53time_t = int64
 // Xcnd_wait is defined at cnd_wait.c:3:5
 func Xcnd_wait(tls TLS, _c uintptr /* *Tcnd_t = struct{F__u struct{F__...6]uintptr;F int64; _ [40]byte};} */, _m uintptr /* *Tmtx_t = struct{F__u struct{F__...5]uintptr;F int64; _ [32]byte};} */) (r int32) {
 	return Xcnd_timedwait(tls, _c, _m, null)
+}
+
+type t1057__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1057__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking lock_ptc.o
@@ -83087,13 +94301,35 @@ func X__release_ptc(tls TLS) {
 	Xpthread_rwlock_unlock(tls, x5lock)
 }
 
+type t1058__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1058__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xlock Tpthread_rwlock_t = struct{F__u ...7]uintptr;F int64; _ [48]byte};}, escapes: true, lock_ptc.c:3:25
-var x5lock = bss + 7024
+var x5lock = bss + 7040
 
 // linking mtx_destroy.o
 
 // Xmtx_destroy is defined at mtx_destroy.c:3:6
 func Xmtx_destroy(tls TLS, _mtx uintptr /* *Tmtx_t = struct{F__u struct{F__...5]uintptr;F int64; _ [32]byte};} */) {
+}
+
+type t1059__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1059__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking mtx_init.o
@@ -83105,6 +94341,17 @@ func Xmtx_init(tls TLS, _m uintptr /* *Tmtx_t = struct{F__u struct{F__...5]uintp
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5236 /* "src/thread/mtx_i..." */, int32(11), x1003__func__)
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5236 /* "src/thread/mtx_i..." */, int32(13), x1003__func__)
 	return r
+}
+
+type t1060__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1060__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [9]int8, escapes: true, mtx_init.c:6:1
@@ -83122,6 +94369,17 @@ func Xmtx_lock(tls TLS, _m uintptr /* *Tmtx_t = struct{F__u struct{F__...5]uintp
 
 _1:
 	return Xmtx_timedlock(tls, _m, null)
+}
+
+type t1061__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1061__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_cas is defined at atomic_arch.h:4:19
@@ -83155,6 +94413,17 @@ _3:
 _4:
 	return int32(4)
 	return r
+}
+
+type t1062__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1062__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s38timespec = struct {
@@ -83202,6 +94471,17 @@ _5:
 	return r
 }
 
+type t1063__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1063__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_cas is defined at atomic_arch.h:4:19
 func x7a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return a_cas(_p, _t, _s)
@@ -83213,6 +94493,17 @@ func x7a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 // Xmtx_unlock is defined at mtx_unlock.c:5:5
 func Xmtx_unlock(tls TLS, _mtx uintptr /* *Tmtx_t = struct{F__u struct{F__...5]uintptr;F int64; _ [32]byte};} */) (r int32) {
 	return X__pthread_mutex_unlock(tls, _mtx)
+}
+
+type t1064__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1064__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_atfork.o
@@ -83314,6 +94605,17 @@ _2:
 	return int32(0)
 }
 
+type t1065__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1065__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Satfork_funcs = struct {
 	Fprepare uintptr // *func(TLS)
 	Fparent  uintptr // *func(TLS)
@@ -83326,7 +94628,7 @@ type Satfork_funcs = struct {
 var x1funcs uintptr
 
 // xlock [1]int32, escapes: true, pthread_atfork.c:11:21
-var x6lock = bss + 7080
+var x6lock = bss + 7096
 
 type t358size_t = uint64
 
@@ -83335,6 +94637,17 @@ type t358size_t = uint64
 // Xpthread_attr_destroy is defined at pthread_attr_destroy.c:3:5
 func Xpthread_attr_destroy(tls TLS, _a uintptr /* *Tpthread_attr_t = struct{F__u s...[7]uint64;F int64; _ [48]byte};} */) (r int32) {
 	return int32(0)
+}
+
+type t1066__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1066__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_attr_get.o
@@ -83443,6 +94756,17 @@ func Xpthread_rwlockattr_getpshared(tls TLS, _a uintptr /* *Tpthread_rwlockattr_
 	return int32(0)
 }
 
+type t1067__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1067__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t359size_t = uint64
 
 type s4sched_param = struct {
@@ -83498,6 +94822,17 @@ func Xpthread_attr_init(tls TLS, _a uintptr /* *Tpthread_attr_t = struct{F__u s.
 	return int32(0)
 }
 
+type t1068__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1068__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t3pthread_attr_t = struct {
 	F__u struct {
 		F__i  [0][14]int32
@@ -83523,6 +94858,17 @@ _1:
 	return int32(0)
 }
 
+type t1069__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1069__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_attr_setguardsize.o
 
 // Xpthread_attr_setguardsize is defined at pthread_attr_setguardsize.c:3:5
@@ -83536,6 +94882,17 @@ func Xpthread_attr_setguardsize(tls TLS, _a uintptr /* *Tpthread_attr_t = struct
 _1:
 	*(*uint64)(unsafe.Pointer(_a + 8)) = _size
 	return int32(0)
+}
+
+type t1070__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1070__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t360size_t = uint64
@@ -83592,6 +94949,17 @@ _1:
 	return int32(0)
 }
 
+type t1071__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1071__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Sstart_sched_args = struct {
 	Fstart_arg uintptr // *void
 	Fstart_fn  uintptr // *func(TLS, uintptr) uintptr
@@ -83599,8 +94967,6 @@ type Sstart_sched_args = struct {
 	Fattr      uintptr // *Tpthread_attr_t = struct{F__u s...[7]uint64;F int64; _ [48]byte};}
 	Ffutex     int32
 }
-
-type t12pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s39__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -83688,8 +95054,6 @@ type s37__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t72locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s153__locale_struct = struct{ Fcat [6]uintptr }
 
 // x5__func__ [8]int8, escapes: true, atomic_arch.h:99:1
@@ -83701,6 +95065,17 @@ var x1006__func__ = ds + 46456
 func Xpthread_attr_setschedparam(tls TLS, _a uintptr /* *Tpthread_attr_t = struct{F__u s...[7]uint64;F int64; _ [48]byte};} */, _param uintptr /* *Ssched_param */) (r int32) {
 	*(*int32)(unsafe.Pointer(_a + 36)) = *(*int32)(unsafe.Pointer(_param))
 	return int32(0)
+}
+
+type t1072__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1072__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s5sched_param = struct {
@@ -83726,6 +95101,17 @@ func Xpthread_attr_setschedpolicy(tls TLS, _a uintptr /* *Tpthread_attr_t = stru
 	return int32(0)
 }
 
+type t1073__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1073__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_attr_setscope.o
 
 // Xpthread_attr_setscope is defined at pthread_attr_setscope.c:3:5
@@ -83749,6 +95135,17 @@ _4:
 	return r
 }
 
+type t1074__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1074__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_attr_setstack.o
 
 // Xpthread_attr_setstack is defined at pthread_attr_setstack.c:3:5
@@ -83763,6 +95160,17 @@ _1:
 	*(*uint64)(unsafe.Pointer(_a + 16)) = uint64(_addr) + _size
 	*(*uint64)(unsafe.Pointer(_a)) = _size
 	return int32(0)
+}
+
+type t1075__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1075__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t362size_t = uint64
@@ -83781,6 +95189,17 @@ _1:
 	*(*uint64)(unsafe.Pointer(_a + 16)) = uint64(0)
 	*(*uint64)(unsafe.Pointer(_a)) = _size
 	return int32(0)
+}
+
+type t1076__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1076__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t363size_t = uint64
@@ -83817,6 +95236,17 @@ _1:
 	return int32(0)
 }
 
+type t1077__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1077__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_or is defined at atomic_arch.h:53:20
 func x1a_or(tls TLS, _p uintptr /* *int32 */, _v int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+36 /* "arch/x86_64/atom..." */, int32(55), x1008__func__)
@@ -83838,6 +95268,17 @@ func Xpthread_barrier_init(tls TLS, _b uintptr /* *Tpthread_barrier_t = struct{F
 _1:
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5260 /* "src/thread/pthre..." */, int32(7), x1009__func__)
 	return int32(0)
+}
+
+type t1078__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1078__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [21]int8, escapes: true, pthread_barrier_init.c:5:1
@@ -83962,6 +95403,17 @@ _12:
 	x4__wake(tls, _inst+12, int32(1), int32(1))
 _16:
 	return int32(0)
+}
+
+type t1079__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1079__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sinstance = struct {
@@ -84153,6 +95605,17 @@ func Xpthread_barrierattr_destroy(tls TLS, _a uintptr /* *Tpthread_barrierattr_t
 	return int32(0)
 }
 
+type t1080__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1080__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_barrierattr_init.o
 
 // Xpthread_barrierattr_init is defined at pthread_barrierattr_init.c:3:5
@@ -84161,6 +95624,17 @@ func Xpthread_barrierattr_init(tls TLS, _a uintptr /* *Tpthread_barrierattr_t = 
 	_ = _unnamed1
 	*(*struct{ F__attr uint32 })(unsafe.Pointer(_a)) = struct{ F__attr uint32 }{}
 	return int32(0)
+}
+
+type t1081__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1081__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tpthread_barrierattr_t = struct{ F__attr uint32 }
@@ -84176,6 +95650,17 @@ func Xpthread_barrierattr_setpshared(tls TLS, _a uintptr /* *Tpthread_barrieratt
 		return int32(0)
 	}())
 	return int32(0)
+}
+
+type t1082__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1082__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_cancel.o
@@ -84250,7 +95735,16 @@ _1:
 	return Xpthread_kill(tls, _t, int32(33))
 }
 
-type t13pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1083__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1083__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s40__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -84330,8 +95824,6 @@ type s38__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t73locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s154__locale_struct = struct{ Fcat [6]uintptr }
 
 // x7__func__ [18]int8, escapes: true, pthread_cancel.c:80:1
@@ -84360,6 +95852,17 @@ func X_pthread_cleanup_pop(tls TLS, _cb uintptr /* *S__ptcb */, _run int32) {
 
 	fn1022(*(*uintptr)(unsafe.Pointer(_cb)))(tls, *(*uintptr)(unsafe.Pointer(_cb + 8)))
 _1:
+}
+
+type t1084__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1084__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xdummy is defined at pthread_cleanup_push.c:3:13
@@ -84393,6 +95896,17 @@ _2:
 	x3a_inc(tls, _c+8)
 	x5__wake(tls, _c+8, int32(-1), int32(0))
 	return int32(0)
+}
+
+type t1085__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1085__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_inc is defined at atomic_arch.h:80:20
@@ -84450,6 +95964,17 @@ _2:
 _3:
 _1:
 	return int32(0)
+}
+
+type t1086__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1086__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_or is defined at atomic_arch.h:53:20
@@ -84535,6 +96060,17 @@ _1:
 	return int32(0)
 }
 
+type t1087__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1087__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1pthread_cond_t = struct {
 	F__u struct {
 		F__i  [0][12]int32
@@ -84566,6 +96102,17 @@ _2:
 	x5a_inc(tls, _c+8)
 	x7__wake(tls, _c+8, int32(1), int32(0))
 	return int32(0)
+}
+
+type t1088__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1088__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_inc is defined at atomic_arch.h:80:20
@@ -84882,6 +96429,17 @@ _12:
 	return int32(0)
 }
 
+type t1089__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1089__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s41timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -85059,8 +96617,6 @@ type s40__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t74locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s155__locale_struct = struct{ Fcat [6]uintptr }
 
 // x14__func__ [8]int8, escapes: true, atomic_arch.h:99:1
@@ -85073,11 +96629,33 @@ func Xpthread_cond_wait(tls TLS, _c uintptr /* *Tpthread_cond_t = struct{F__u s.
 	return Xpthread_cond_timedwait(tls, _c, _m, null)
 }
 
+type t1090__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1090__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_condattr_destroy.o
 
 // Xpthread_condattr_destroy is defined at pthread_condattr_destroy.c:3:5
 func Xpthread_condattr_destroy(tls TLS, _a uintptr /* *Tpthread_condattr_t = struct{F__attr uint32;} */) (r int32) {
 	return int32(0)
+}
+
+type t1091__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1091__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_condattr_init.o
@@ -85088,6 +96666,17 @@ func Xpthread_condattr_init(tls TLS, _a uintptr /* *Tpthread_condattr_t = struct
 	_ = _unnamed1
 	*(*struct{ F__attr uint32 })(unsafe.Pointer(_a)) = struct{ F__attr uint32 }{}
 	return int32(0)
+}
+
+type t1092__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1092__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tpthread_condattr_t = struct{ F__attr uint32 }
@@ -85114,6 +96703,17 @@ _1:
 	return int32(0)
 }
 
+type t1093__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1093__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t7clockid_t = int32
 
 // linking pthread_condattr_setpshared.o
@@ -85136,6 +96736,17 @@ _1:
 		*p = *p | uint32(_pshared)<<(uint(31)%32)
 	}
 	return int32(0)
+}
+
+type t1094__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1094__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_create.o
@@ -85256,7 +96867,7 @@ func X__do_cleanup_pop(tls TLS, _cb uintptr /* *S__ptcb */) {
 }
 
 // X__block_new_threads int32, escapes: true, pthread_create.c:170:14
-var X__block_new_threads = bss + 7088
+var X__block_new_threads = bss + 7104
 
 // X__default_stacksize Tsize_t = uint64, escapes: true, pthread_create.c:171:8
 var X__default_stacksize = ds + 46576
@@ -85534,6 +97145,17 @@ lfail:
 	return int32(11)
 }
 
+type t1095__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1095__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy_0 is defined at pthread_create.c:14:13
 func xdummy_0(tls TLS) {
 }
@@ -85542,8 +97164,6 @@ func xdummy_0(tls TLS) {
 func xdummy_1(tls TLS, _p uintptr /* *void */) (r uintptr /* *void */) {
 	return null
 }
-
-type t14pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s42__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -85714,8 +97334,6 @@ type t4pthread_attr_t = struct {
 	}
 }
 
-type t75locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type t61uintptr_t = uint64
 
 // xa_inc is defined at atomic_arch.h:80:20
@@ -85793,7 +97411,16 @@ var x1034__func__ = ds + 46592
 
 // linking pthread_detach.o
 
-type t15pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1096__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1096__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // x__pthread_detach is defined at pthread_detach.c:6:12
 func x__pthread_detach(tls TLS, _t uintptr /* Tpthread_t = *S__pthread */) (r int32) {
@@ -85862,13 +97489,20 @@ type s42__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t76locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s157__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_equal.o
 
-type t16pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1097__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1097__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // x__pthread_equal is defined at pthread_equal.c:5:12
 func x__pthread_equal(tls TLS, _a uintptr /* Tpthread_t = *S__pthread */, _b uintptr /* Tpthread_t = *S__pthread */) (r int32) {
@@ -85941,7 +97575,16 @@ _2:
 	return int32(0)
 }
 
-type t17pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1098__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1098__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s45__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -86002,8 +97645,6 @@ type s43__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t77locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s158__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_getconcurrency.o
@@ -86011,6 +97652,17 @@ type s158__locale_struct = struct{ Fcat [6]uintptr }
 // Xpthread_getconcurrency is defined at pthread_getconcurrency.c:3:5
 func Xpthread_getconcurrency(tls TLS) (r int32) {
 	return int32(0)
+}
+
+type t1099__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1099__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_getcpuclockid.o
@@ -86021,7 +97673,16 @@ func Xpthread_getcpuclockid(tls TLS, _t uintptr /* Tpthread_t = *S__pthread */, 
 	return int32(0)
 }
 
-type t18pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1100__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1100__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s46__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -86074,8 +97735,6 @@ type s44__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t78locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s159__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_getschedparam.o
@@ -86105,7 +97764,16 @@ _2:
 	return _r
 }
 
-type t19pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1101__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1101__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s47__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -86174,8 +97842,6 @@ type s45__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t79locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s160__locale_struct = struct{ Fcat [6]uintptr }
 
 type s42timespec = struct {
@@ -86186,6 +97852,17 @@ type s42timespec = struct {
 type t58time_t = int64
 
 // linking pthread_getspecific.o
+
+type t1102__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1102__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type Tpthread_key_t = uint32
 
@@ -86251,8 +97928,6 @@ type s46__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t80locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s161__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -86331,7 +98006,16 @@ func X__pthread_tryjoin_np(tls TLS, _t uintptr /* Tpthread_t = *S__pthread */, _
 	return X__pthread_join(tls, _t, _res)
 }
 
-type t20pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1103__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1103__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s49__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -86397,8 +98081,6 @@ type s47__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t81locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s162__locale_struct = struct{ Fcat [6]uintptr }
 
 type t59time_t = int64
@@ -86411,7 +98093,7 @@ type t9clockid_t = int32
 var X__pthread_tsd_size = ds + 46600
 
 // X__pthread_tsd_main [128]uintptr, escapes: true, pthread_key_create.c:4:6
-var X__pthread_tsd_main = bss + 7096
+var X__pthread_tsd_main = bss + 7112
 
 func fp1036(f func(TLS, uintptr)) uintptr { return *(*uintptr)(unsafe.Pointer(&f)) }
 
@@ -86510,11 +98192,20 @@ _6:
 _3:
 }
 
+type t1104__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1104__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t373size_t = uint64
 
 type t1pthread_key_t = uint32
-
-type t21pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s50__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -86574,15 +98265,13 @@ func x2a_cas_p(tls TLS, _p uintptr /* *void */, _t uintptr /* *void */, _s uintp
 }
 
 // xkeys [128]*func(TLS, uintptr), escapes: true, pthread_key_create.c:6:13
-var xkeys = bss + 8120
+var xkeys = bss + 8136
 
 type s48__ptcb = struct {
 	F__f    uintptr // *func(TLS, uintptr)
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t82locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s163__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -86608,7 +98297,16 @@ func Xpthread_kill(tls TLS, _t uintptr /* Tpthread_t = *S__pthread */, _sig int3
 	return _r
 }
 
-type t22pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1105__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1105__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s51__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -86664,8 +98362,6 @@ type s49__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t83locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s164__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_mutex_consistent.o
@@ -86691,6 +98387,17 @@ _2:
 		*p = int32(uint32(*p) & uint32(4294967287))
 	}
 	return int32(0)
+}
+
+type t1106__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1106__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__pthread_self is defined at pthread_arch.h:1:30
@@ -86748,8 +98455,6 @@ type s50__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t84locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s165__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_mutex_destroy.o
@@ -86759,11 +98464,33 @@ func Xpthread_mutex_destroy(tls TLS, _mutex uintptr /* *Tpthread_mutex_t = struc
 	return int32(0)
 }
 
+type t1107__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1107__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_mutex_getprioceiling.o
 
 // Xpthread_mutex_getprioceiling is defined at pthread_mutex_getprioceiling.c:3:5
 func Xpthread_mutex_getprioceiling(tls TLS, _m uintptr /* *Tpthread_mutex_t = struct{F__u ...5]uintptr;F int64; _ [32]byte};} */, _ceiling uintptr /* *int32 */) (r int32) {
 	return int32(22)
+}
+
+type t1108__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1108__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_mutex_init.o
@@ -86806,6 +98533,17 @@ _1:
 	return int32(0)
 }
 
+type t1109__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1109__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t1pthread_mutex_t = struct {
 	F__u struct {
 		F__i  [0][10]int32
@@ -86830,6 +98568,17 @@ _1:
 	return X__pthread_mutex_timedlock(tls, _m, null)
 }
 
+type t1110__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1110__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_cas is defined at atomic_arch.h:4:19
 func x12a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return a_cas(_p, _t, _s)
@@ -86841,6 +98590,17 @@ func x12a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 // Xpthread_mutex_setprioceiling is defined at pthread_mutex_setprioceiling.c:3:5
 func Xpthread_mutex_setprioceiling(tls TLS, _m uintptr /* *Tpthread_mutex_t = struct{F__u ...5]uintptr;F int64; _ [32]byte};} */, _ceiling int32, _old uintptr /* *int32 */) (r int32) {
 	return int32(22)
+}
+
+type t1111__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1111__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_mutex_timedlock.o
@@ -86918,6 +98678,17 @@ _9:
 
 _6:
 	return _r
+}
+
+type t1112__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1112__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s44timespec = struct {
@@ -87007,8 +98778,6 @@ type s51__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t85locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s166__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -87116,7 +98885,16 @@ _1:
 	return X__pthread_mutex_trylock_owner(tls, _m)
 }
 
-type t23pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1113__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1113__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s54__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -87183,8 +98961,6 @@ type s52__ptcb = struct {
 	F__x    uintptr // *void
 	F__next uintptr // *S__ptcb
 }
-
-type t86locale_t = uintptr // Tlocale_t = *S__locale_struct
 
 type s167__locale_struct = struct{ Fcat [6]uintptr }
 
@@ -87262,7 +99038,16 @@ _7:
 	return int32(0)
 }
 
-type t24pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1114__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1114__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s55__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -87344,8 +99129,6 @@ type s53__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t87locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s168__locale_struct = struct{ Fcat [6]uintptr }
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -87360,6 +99143,17 @@ func Xpthread_mutexattr_destroy(tls TLS, _a uintptr /* *Tpthread_mutexattr_t = s
 	return int32(0)
 }
 
+type t1115__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1115__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_mutexattr_init.o
 
 // Xpthread_mutexattr_init is defined at pthread_mutexattr_init.c:3:5
@@ -87368,6 +99162,17 @@ func Xpthread_mutexattr_init(tls TLS, _a uintptr /* *Tpthread_mutexattr_t = stru
 	_ = _unnamed1
 	*(*struct{ F__attr uint32 })(unsafe.Pointer(_a)) = struct{ F__attr uint32 }{}
 	return int32(0)
+}
+
+type t1116__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1116__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tpthread_mutexattr_t = struct{ F__attr uint32 }
@@ -87384,6 +99189,17 @@ func Xpthread_mutexattr_setprotocol(tls TLS, _a uintptr /* *Tpthread_mutexattr_t
 
 _1:
 	return int32(0)
+}
+
+type t1117__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1117__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_mutexattr_setpshared.o
@@ -87408,6 +99224,17 @@ _1:
 	return int32(0)
 }
 
+type t1118__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1118__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_mutexattr_setrobust.o
 
 // Xpthread_mutexattr_setrobust is defined at pthread_mutexattr_setrobust.c:3:5
@@ -87430,6 +99257,17 @@ _1:
 	return int32(0)
 }
 
+type t1119__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1119__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_mutexattr_settype.o
 
 // Xpthread_mutexattr_settype is defined at pthread_mutexattr_settype.c:3:5
@@ -87443,6 +99281,17 @@ func Xpthread_mutexattr_settype(tls TLS, _a uintptr /* *Tpthread_mutexattr_t = s
 _1:
 	*(*uint32)(unsafe.Pointer(_a)) = *(*uint32)(unsafe.Pointer(_a))&uint32(4294967292) | uint32(_type)
 	return int32(0)
+}
+
+type t1120__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1120__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_once.o
@@ -87508,6 +99357,17 @@ func X__pthread_once(tls TLS, _control uintptr /* *Tpthread_once_t = int32 */, _
 
 _1:
 	return X__pthread_once_full(tls, _control, _init)
+}
+
+type t1121__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1121__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s54__ptcb = struct {
@@ -87576,6 +99436,17 @@ func Xpthread_rwlock_destroy(tls TLS, _rw uintptr /* *Tpthread_rwlock_t = struct
 	return int32(0)
 }
 
+type t1122__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1122__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_rwlock_init.o
 
 // Xpthread_rwlock_init is defined at pthread_rwlock_init.c:3:5
@@ -87616,6 +99487,17 @@ _1:
 	return int32(0)
 }
 
+type t1123__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1123__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type Tpthread_rwlock_t = struct {
 	F__u struct {
 		F__i  [0][14]int32
@@ -87631,6 +99513,17 @@ type Tpthread_rwlock_t = struct {
 // Xpthread_rwlock_rdlock is defined at pthread_rwlock_rdlock.c:3:5
 func Xpthread_rwlock_rdlock(tls TLS, _rw uintptr /* *Tpthread_rwlock_t = struct{F__u...7]uintptr;F int64; _ [48]byte};} */) (r int32) {
 	return Xpthread_rwlock_timedrdlock(tls, _rw, null)
+}
+
+type t1124__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1124__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_rwlock_timedrdlock.o
@@ -87692,6 +99585,17 @@ _7:
 
 _5:
 	return _r
+}
+
+type t1125__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1125__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s45timespec = struct {
@@ -87788,6 +99692,17 @@ _5:
 	return _r
 }
 
+type t1126__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1126__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s46timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -87853,6 +99768,17 @@ _5:
 	return int32(0)
 }
 
+type t1127__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1127__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_cas is defined at atomic_arch.h:4:19
 func x18a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return a_cas(_p, _t, _s)
@@ -87871,6 +99797,17 @@ func Xpthread_rwlock_trywrlock(tls TLS, _rw uintptr /* *Tpthread_rwlock_t = stru
 
 _1:
 	return int32(0)
+}
+
+type t1128__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1128__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_cas is defined at atomic_arch.h:4:19
@@ -87914,6 +99851,17 @@ _4:
 	return int32(0)
 }
 
+type t1129__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1129__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_cas is defined at atomic_arch.h:4:19
 func x20a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return a_cas(_p, _t, _s)
@@ -87951,11 +99899,33 @@ func Xpthread_rwlock_wrlock(tls TLS, _rw uintptr /* *Tpthread_rwlock_t = struct{
 	return Xpthread_rwlock_timedwrlock(tls, _rw, null)
 }
 
+type t1130__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1130__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_rwlockattr_destroy.o
 
 // Xpthread_rwlockattr_destroy is defined at pthread_rwlockattr_destroy.c:3:5
 func Xpthread_rwlockattr_destroy(tls TLS, _a uintptr /* *Tpthread_rwlockattr_t = struct{F__attr [2]uint32;} */) (r int32) {
 	return int32(0)
+}
+
+type t1131__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1131__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_rwlockattr_init.o
@@ -87964,6 +99934,17 @@ func Xpthread_rwlockattr_destroy(tls TLS, _a uintptr /* *Tpthread_rwlockattr_t =
 func Xpthread_rwlockattr_init(tls TLS, _a uintptr /* *Tpthread_rwlockattr_t = struct{F__attr [2]uint32;} */) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5412 /* "src/thread/pthre..." */, int32(6), x1050__func__)
 	return int32(0)
+}
+
+type t1132__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1132__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [24]int8, escapes: true, pthread_rwlockattr_init.c:5:1
@@ -87984,9 +99965,29 @@ _1:
 	return int32(0)
 }
 
+type t1133__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1133__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_self.o
 
-type t25pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1134__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1134__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // x__pthread_self_internal is defined at pthread_self.c:5:18
 func x__pthread_self_internal(tls TLS) (r uintptr /* Tpthread_t = *S__pthread */) {
@@ -88048,8 +100049,6 @@ type s55__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t88locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s169__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_setattr_default_np.o
@@ -88064,6 +100063,17 @@ func Xpthread_setattr_default_np(tls TLS, _attrp uintptr /* *Tpthread_attr_t = s
 func Xpthread_getattr_default_np(tls TLS, _attrp uintptr /* *Tpthread_attr_t = struct{F__u s...[7]uint64;F int64; _ [48]byte};} */) (r int32) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5452 /* "src/thread/pthre..." */, int32(29), x1052__func__)
 	return r
+}
+
+type t1135__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1135__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1__func__ [27]int8, escapes: true, pthread_setattr_default_np.c:8:1
@@ -88094,6 +100104,17 @@ _1:
 _2:
 	*(*uint8)(unsafe.Pointer(_self + 72)) = uint8(_new)
 	return int32(0)
+}
+
+type t1136__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1136__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s57__pthread = struct {
@@ -88151,8 +100172,6 @@ type s56__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t89locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s170__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_setcanceltype.o
@@ -88183,6 +100202,17 @@ _2:
 	Xpthread_testcancel(tls)
 _3:
 	return int32(0)
+}
+
+type t1137__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1137__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s58__pthread = struct {
@@ -88240,8 +100270,6 @@ type s57__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t90locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s171__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_setconcurrency.o
@@ -88263,6 +100291,17 @@ _1:
 
 _2:
 	return int32(0)
+}
+
+type t1138__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1138__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking pthread_setname_np.o
@@ -88310,7 +100349,16 @@ _3:
 	return _status
 }
 
-type t26pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1139__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1139__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s59__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -88366,8 +100414,6 @@ type s58__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t91locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s172__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_setschedparam.o
@@ -88387,7 +100433,16 @@ func Xpthread_setschedparam(tls TLS, _t uintptr /* Tpthread_t = *S__pthread */, 
 	return _r
 }
 
-type t27pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1140__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1140__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s60__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -88451,8 +100506,6 @@ type s59__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t92locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s173__locale_struct = struct{ Fcat [6]uintptr }
 
 type s47timespec = struct {
@@ -88484,7 +100537,16 @@ func Xpthread_setschedprio(tls TLS, _t uintptr /* Tpthread_t = *S__pthread */, a
 	return _r
 }
 
-type t28pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1141__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1141__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s61__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -88540,8 +100602,6 @@ type s60__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t93locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s174__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_setspecific.o
@@ -88565,6 +100625,17 @@ func Xpthread_setspecific(tls TLS, _k uint32, _x uintptr /* *void */) (r int32) 
 	setb1056((*uint8)(unsafe.Pointer(_self+74)), 1)
 _1:
 	return int32(0)
+}
+
+type t1142__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1142__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t2pthread_key_t = uint32
@@ -88624,8 +100695,6 @@ type s61__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t94locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s175__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking pthread_sigmask.o
@@ -88665,6 +100734,17 @@ _2:
 	return _ret
 }
 
+type t1143__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1143__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall4 is defined at syscall_arch.h:42:22
 func x33__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, int64(0), int64(0))
@@ -88677,6 +100757,17 @@ func Xpthread_spin_destroy(tls TLS, _s uintptr /* *Tpthread_spinlock_t = int32 *
 	return int32(0)
 }
 
+type t1144__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1144__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pthread_spin_init.o
 
 func set1057(p *int32, v int32) int32 { *p = v; return v }
@@ -88684,6 +100775,17 @@ func set1057(p *int32, v int32) int32 { *p = v; return v }
 // Xpthread_spin_init is defined at pthread_spin_init.c:3:5
 func Xpthread_spin_init(tls TLS, _s uintptr /* *Tpthread_spinlock_t = int32 */, _shared int32) (r int32) {
 	return set1057((*int32)(unsafe.Pointer(_s)), int32(0))
+}
+
+type t1145__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1145__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Tpthread_spinlock_t = int32
@@ -88702,6 +100804,17 @@ _1:
 
 _2:
 	return int32(0)
+}
+
+type t1146__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1146__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1pthread_spinlock_t = int32
@@ -88727,6 +100840,17 @@ func Xpthread_spin_trylock(tls TLS, _s uintptr /* *Tpthread_spinlock_t = int32 *
 	return x22a_cas(tls, _s, int32(0), int32(16))
 }
 
+type t1147__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1147__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_cas is defined at atomic_arch.h:4:19
 func x22a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return a_cas(_p, _t, _s)
@@ -88739,6 +100863,17 @@ func x22a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 func Xpthread_spin_unlock(tls TLS, _s uintptr /* *Tpthread_spinlock_t = int32 */) (r int32) {
 	x7a_store(tls, _s, int32(0))
 	return int32(0)
+}
+
+type t1148__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1148__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_store is defined at atomic_arch.h:98:20
@@ -88756,6 +100891,17 @@ func X__pthread_testcancel(tls TLS) {
 	X__testcancel(tls)
 }
 
+type t1149__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1149__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at pthread_testcancel.c:4:13
 func x16dummy(tls TLS) {
 }
@@ -88765,6 +100911,17 @@ func x16dummy(tls TLS) {
 // Xsem_destroy is defined at sem_destroy.c:3:5
 func Xsem_destroy(tls TLS, _sem uintptr /* *Tsem_t = struct{F__val [8]int32;} */) (r int32) {
 	return int32(0)
+}
+
+type t1150__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1150__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sem_getvalue.o
@@ -88781,6 +100938,17 @@ func Xsem_getvalue(tls TLS, _sem uintptr /* *Tsem_t = struct{F__val [8]int32;} *
 		return _val
 	}()
 	return int32(0)
+}
+
+type t1151__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1151__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking sem_init.o
@@ -88806,6 +100974,17 @@ _1:
 	return int32(0)
 }
 
+type t1152__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1152__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sem_open.o
 
 func set1060(p *uintptr, v uintptr) uintptr { *p = v; return v }
@@ -88816,7 +100995,7 @@ func set1061(p *int32, v int32) int32 { *p = v; return v }
 func Xsem_open(tls TLS, _name uintptr /* *int8 */, _flags int32, ap ...interface{}) (r uintptr /* *Tsem_t = struct{F__val [8]int32;} */) {
 	esc := MustMalloc(537)
 	var (
-		_ap     *[]interface{} // Tva_list = T__builtin_va_list = *struct{F_ [2]uintptr;}
+		_ap     uintptr // Tva_list = T__builtin_va_list = ...truct{Fsize int32;Fdata int8;};}
 		_mode   uint32
 		_value  uint32
 		_fd     int32
@@ -88932,13 +101111,10 @@ _16:
 	}
 
 	_first = int32(0)
-	{
-		x := ap
-		_ap = &x
-	}
+	_ap = X__builtin_va_start(tls, ap)
 	_mode = VAuint32(_ap) & uint32(0666)
 	_value = VAuint32(_ap)
-	_ap = nil
+	X__builtin_free(tls, _ap)
 	if _value <= uint32(0x7fffffff) {
 		goto _18
 	}
@@ -89067,6 +101243,17 @@ _4:
 	return int32(0)
 }
 
+type t1153__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1153__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t39mode_t = uint32
 
 type s48timespec = struct {
@@ -89093,7 +101280,7 @@ type s15stat = struct {
 }
 
 // xlock [1]int32, escapes: true, sem_open.c:23:21
-var x8lock = bss + 9144
+var x8lock = bss + 9160
 
 // xsemtab *struct{Fino uint64;Fsem *struct{F__val [8]int32;};Frefcnt int32;}, escapes: false, sem_open.c:22:3
 var xsemtab uintptr
@@ -89156,6 +101343,17 @@ _4:
 	x13__wake(tls, _sem, int32(1), _priv)
 _5:
 	return int32(0)
+}
+
+type t1154__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1154__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // xa_cas is defined at atomic_arch.h:4:19
@@ -89245,6 +101443,17 @@ _5:
 	return int32(0)
 }
 
+type t1155__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1155__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s49timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -89319,6 +101528,17 @@ _2:
 	return int32(-1)
 }
 
+type t1156__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1156__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xa_cas is defined at atomic_arch.h:4:19
 func x25a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 	return a_cas(_p, _t, _s)
@@ -89332,11 +101552,33 @@ func Xsem_unlink(tls TLS, _name uintptr /* *int8 */) (r int32) {
 	return Xshm_unlink(tls, _name)
 }
 
+type t1157__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1157__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking sem_wait.o
 
 // Xsem_wait is defined at sem_wait.c:3:5
 func Xsem_wait(tls TLS, _sem uintptr /* *Tsem_t = struct{F__val [8]int32;} */) (r int32) {
 	return Xsem_timedwait(tls, _sem, null)
+}
+
+type t1158__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1158__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking synccall.o
@@ -89347,6 +101589,17 @@ func X__synccall(tls TLS, _func uintptr /* *func(TLS, uintptr) */, _ctx uintptr 
 	_ = _dir
 	_dir = *(*s11__dirstream)(unsafe.Pointer(ts + 5564 /* "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00..." */))
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+7640 /* "src/thread/syncc..." */, int32(54), x1067__func__)
+}
+
+type t1159__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1159__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x2__func__ [11]int8, escapes: true, synccall.c:49:1
@@ -89366,6 +101619,17 @@ type s11__dirstream = struct {
 type t126off_t = int64
 
 // linking syscall_cp.o
+
+type t1160__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1160__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking thrd_create.o
 
@@ -89393,7 +101657,16 @@ _4:
 	return r
 }
 
-type Tthrd_start_t = uintptr // Tthrd_start_t = *func(TLS, uintptr) int32
+type t1161__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1161__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s63__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -89444,8 +101717,6 @@ type s63__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t95locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s176__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking thrd_exit.o
@@ -89453,6 +101724,17 @@ type s176__locale_struct = struct{ Fcat [6]uintptr }
 // Xthrd_exit is defined at thrd_exit.c:6:16
 func Xthrd_exit(tls TLS, _result int32) {
 	X__pthread_exit(tls, uintptr(int64(_result)))
+}
+
+type t1162__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1162__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1intptr_t = int64
@@ -89474,7 +101756,16 @@ _1:
 	return int32(0)
 }
 
-type Tthrd_t = uintptr // Tthrd_t = *S__pthread
+type t1163__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1163__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type t2intptr_t = int64
 
@@ -89506,6 +101797,17 @@ _4:
 	return r
 }
 
+type t1164__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1164__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s50timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -89525,12 +101827,34 @@ func Xthrd_yield(tls TLS) {
 	x7__syscall0(tls, int64(24))
 }
 
+type t1165__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1165__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall0 is defined at syscall_arch.h:8:22
 func x7__syscall0(tls TLS, _n int64) (r int64) {
 	return X__syscall(tls, _n, int64(0), int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
 // linking tls.o
+
+type t1166__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1166__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking tss_create.o
 
@@ -89543,13 +101867,33 @@ func Xtss_create(tls TLS, _tss uintptr /* *Ttss_t = uint32 */, _dtor uintptr /* 
 	return int32(0)
 }
 
-type Ttss_dtor_t = uintptr // Ttss_dtor_t = *func(TLS, uintptr)
+type t1167__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1167__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 // linking tss_delete.o
 
 // Xtss_delete is defined at tss_delete.c:5:6
 func Xtss_delete(tls TLS, _key uint32) {
 	X__pthread_key_delete(tls, _key)
+}
+
+type t1168__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1168__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Ttss_t = uint32
@@ -89575,6 +101919,17 @@ func Xtss_set(tls TLS, _k uint32, _x uintptr /* *void */) (r int32) {
 	setb1068((*uint8)(unsafe.Pointer(_self+74)), 1)
 _1:
 	return int32(0)
+}
+
+type t1169__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1169__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t1tss_t = uint32
@@ -89634,8 +101989,6 @@ type s64__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t96locale_t = uintptr // Tlocale_t = *S__locale_struct
-
 type s177__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking vmlock.o
@@ -89672,8 +102025,19 @@ func X__vm_unlock(tls TLS) {
 _1:
 }
 
+type t1170__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1170__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xvmlock [2]int32, escapes: true, vmlock.c:3:21
-var xvmlock = bss + 9152
+var xvmlock = bss + 9168
 
 // xa_inc is defined at atomic_arch.h:80:20
 func x12a_inc(tls TLS, _p uintptr /* *int32 */) {
@@ -89723,6 +102087,17 @@ _1:
 	return _buf
 }
 
+type t1171__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1171__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s1tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -89745,10 +102120,6 @@ func x4a_crash(tls TLS) {
 type t389size_t = uint64
 
 type t1nl_item = int32
-
-type t97locale_t = uintptr // Tlocale_t = *S__locale_struct
-
-type s178__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking __map_file.o
 
@@ -89783,6 +102154,17 @@ _2:
 	}
 
 	return _map
+}
+
+type t1172__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1172__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s16stat = struct {
@@ -89854,6 +102236,17 @@ func X__month_to_secs(tls TLS, _month int32, _is_leap int32) (r int32) {
 	_t = _t + int32(86400)
 _1:
 	return _t
+}
+
+type t1173__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1173__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x1secs_through_month [12]int32, escapes: true, __month_to_secs.c:3:19
@@ -89980,6 +102373,17 @@ _13:
 	return int32(0)
 }
 
+type t1174__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1174__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s2tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -90036,6 +102440,17 @@ _1:
 	return _t
 }
 
+type t1175__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1175__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s3tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -90053,13 +102468,13 @@ type s3tm = struct {
 // linking __tz.o
 
 // X__timezone int64, escapes: true, __tz.c:9:7
-var X__timezone = bss + 9160
+var X__timezone = bss + 9176
 
 // X__daylight int32, escapes: true, __tz.c:10:7
-var X__daylight = bss + 9168
+var X__daylight = bss + 9184
 
 // X__tzname [2]*int8, escapes: true, __tz.c:11:6
-var X__tzname = bss + 9176
+var X__tzname = bss + 9192
 
 // X__utc [4]int8, escapes: true, __tz.c:19:12
 var X__utc = ds + 46848
@@ -90213,10 +102628,21 @@ _1:
 	return _p
 }
 
+type t1176__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1176__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t391size_t = uint64
 
 // xlock [1]int32, escapes: true, __tz.c:31:21
-var x9lock = bss + 9192
+var x9lock = bss + 9208
 
 func set1072(p *uintptr, v uintptr) uintptr { *p = v; return v }
 
@@ -90747,10 +103173,10 @@ _2:
 }
 
 // xr0 [5]int32, escapes: true, __tz.c:22:12
-var xr0 = bss + 9200
+var xr0 = bss + 9216
 
 // xr1 [5]int32, escapes: true, __tz.c:22:19
-var x2r1 = bss + 9224
+var x2r1 = bss + 9240
 
 // xdst_off int32, escapes: false, __tz.c:21:12
 var xdst_off int32
@@ -90783,7 +103209,7 @@ var xold_tz uintptr
 func init() { xold_tz = xold_tz_buf }
 
 // xmap_size Tsize_t = uint64, escapes: true, __tz.c:25:15
-var xmap_size = bss + 9248
+var xmap_size = bss + 9264
 
 // xold_tz_size Tsize_t = uint64, escapes: false, __tz.c:29:15
 var xold_tz_size = uint64(32)
@@ -90860,7 +103286,7 @@ _2:
 }
 
 // xstd_name [7]int8, escapes: true, __tz.c:17:13
-var xstd_name = bss + 9256
+var xstd_name = bss + 9272
 
 // xgetoff is defined at __tz.c:40:12
 func xgetoff(tls TLS, _p uintptr /* **int8 */) (r int32) {
@@ -90908,7 +103334,7 @@ _4:
 }
 
 // xdst_name [7]int8, escapes: true, __tz.c:18:13
-var xdst_name = bss + 9264
+var xdst_name = bss + 9280
 
 // xgetrule is defined at __tz.c:61:13
 func xgetrule(tls TLS, _p uintptr /* **int8 */, _rule uintptr /* [5]int32 */) {
@@ -90975,7 +103401,7 @@ _2:
 }
 
 // xold_tz_buf [32]int8, escapes: true, __tz.c:27:13
-var xold_tz_buf = bss + 9272
+var xold_tz_buf = bss + 9288
 
 // xgetint is defined at __tz.c:33:12
 func x2getint(tls TLS, _p uintptr /* **int8 */) (r int32) {
@@ -91106,6 +103532,17 @@ _8:
 	return (_year-int64(100))*int64(31536000) + int64(_1leaps)*int64(86400) + int64(946684800) + int64(86400)
 }
 
+type t1177__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1177__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [15]int8, escapes: true, __year_to_secs.c:4:1
 var x1076__func__ = ds + 46912
 
@@ -91114,6 +103551,17 @@ var x1076__func__ = ds + 46912
 // Xasctime is defined at asctime.c:5:6
 func Xasctime(tls TLS, _tm uintptr /* *Stm */) (r uintptr /* *int8 */) {
 	return X__asctime(tls, _tm, x1077buf)
+}
+
+type t1178__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1178__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s5tm = struct {
@@ -91131,13 +103579,24 @@ type s5tm = struct {
 }
 
 // x1buf [26]int8, escapes: true, asctime.c:7:14
-var x1077buf = bss + 9304
+var x1077buf = bss + 9320
 
 // linking asctime_r.o
 
 // Xasctime_r is defined at asctime_r.c:5:6
 func Xasctime_r(tls TLS, _tm uintptr /* *Stm */, _buf uintptr /* *int8 */) (r uintptr /* *int8 */) {
 	return X__asctime(tls, _tm, _buf)
+}
+
+type t1179__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1179__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s6tm = struct {
@@ -91178,6 +103637,17 @@ _2:
 	return *(*int64)(unsafe.Pointer(_ts))*int64(1000000) + *(*int64)(unsafe.Pointer(_ts + 8))/int64(1000)
 }
 
+type t1180__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1180__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t7clock_t = int64
 
 type s52timespec = struct {
@@ -91213,6 +103683,17 @@ _1:
 	return int32(0)
 }
 
+type t1181__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1181__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t49pid_t = int32
 
 type s53timespec = struct {
@@ -91234,6 +103715,17 @@ type t69time_t = int64
 // Xclock_getres is defined at clock_getres.c:4:5
 func Xclock_getres(tls TLS, _clk int32, _ts uintptr /* *Stimespec */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x57__syscall2(tls, int64(229), int64(_clk), int64(_ts)))))
+}
+
+type t1182__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1182__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t17clockid_t = int32
@@ -91302,6 +103794,17 @@ _4:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
 
+type t1183__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1183__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t18clockid_t = int32
 
 type s55timespec = struct {
@@ -91354,6 +103857,17 @@ func Xclock_nanosleep(tls TLS, _clk int32, _flags int32, _req uintptr /* *Stimes
 	return r
 }
 
+type t1184__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1184__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t19clockid_t = int32
 
 type s56timespec = struct {
@@ -91371,6 +103885,17 @@ type t72time_t = int64
 // Xclock_settime is defined at clock_settime.c:4:5
 func Xclock_settime(tls TLS, _clk int32, _ts uintptr /* *Stimespec */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x59__syscall2(tls, int64(227), int64(_clk), int64(_ts)))))
+}
+
+type t1185__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1185__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t20clockid_t = int32
@@ -91402,6 +103927,17 @@ func Xctime(tls TLS, _t uintptr /* *Ttime_t = int64 */) (r uintptr /* *int8 */) 
 
 _1:
 	return Xasctime(tls, _tm)
+}
+
+type t1186__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1186__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s7tm = struct {
@@ -91436,6 +103972,17 @@ func Xctime_r(tls TLS, _t uintptr /* *Ttime_t = int64 */, _buf uintptr /* *int8 
 	return null
 }
 
+type t1187__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1187__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s8tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -91457,6 +104004,17 @@ func Xdifftime(tls TLS, _t1 int64, _t0 int64) (r float64) {
 	return float64(_t1 - _t0)
 }
 
+type t1188__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1188__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t74time_t = int64
 
 // linking ftime.o
@@ -91473,6 +104031,17 @@ func Xftime(tls TLS, _tp uintptr /* *Stimeb */) (r int32) {
 	*(*uint16)(unsafe.Pointer(_tp + 8)) = uint16(*(*int64)(unsafe.Pointer(_ts + 8)) / int64(1000000))
 	*(*int16)(unsafe.Pointer(_tp + 10)) = set1081((*int16)(unsafe.Pointer(_tp+12)), int16(0))
 	return int32(0)
+}
+
+type t1189__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1189__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Stimeb = struct {
@@ -91494,7 +104063,7 @@ type t21clockid_t = int32
 // linking getdate.o
 
 // Xgetdate_err int32, escapes: true, getdate.c:7:5
-var Xgetdate_err = bss + 9336
+var Xgetdate_err = bss + 9352
 
 // Xgetdate is defined at getdate.c:9:11
 func Xgetdate(tls TLS, _s uintptr /* *int8 */) (r uintptr /* *Stm */) {
@@ -91577,6 +104146,17 @@ _10:
 	return _ret
 }
 
+type t1190__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1190__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s9tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -91592,7 +104172,7 @@ type s9tm = struct {
 }
 
 // x1tmbuf Stm, escapes: true, getdate.c:11:19
-var x1082tmbuf = bss + 9344
+var x1082tmbuf = bss + 9360
 
 type s116_IO_FILE struct{ uintptr }
 
@@ -91614,6 +104194,17 @@ _1:
 	*(*int64)(unsafe.Pointer(_tv)) = *(*int64)(unsafe.Pointer(_ts))
 	*(*int64)(unsafe.Pointer(_tv + 8)) = int64(int32(*(*int64)(unsafe.Pointer(_ts + 8))) / int32(1000))
 	return int32(0)
+}
+
+type t1191__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1191__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s17timeval = struct {
@@ -91639,6 +104230,17 @@ func Xgmtime(tls TLS, _t uintptr /* *Ttime_t = int64 */) (r uintptr /* *Stm */) 
 	return X__gmtime_r(tls, _t, x1083tm)
 }
 
+type t1192__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1192__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s10tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -91654,7 +104256,7 @@ type s10tm = struct {
 }
 
 // x1tm Stm, escapes: true, gmtime.c:8:19
-var x1083tm = bss + 9400
+var x1083tm = bss + 9416
 
 // linking gmtime_r.o
 
@@ -91672,6 +104274,17 @@ _1:
 	*(*int64)(unsafe.Pointer(_tm + 40)) = int64(0)
 	*(*uintptr)(unsafe.Pointer(_tm + 48)) = X__utc
 	return _tm
+}
+
+type t1193__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1193__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s11tm = struct {
@@ -91697,6 +104310,17 @@ func Xlocaltime(tls TLS, _t uintptr /* *Ttime_t = int64 */) (r uintptr /* *Stm *
 	return X__localtime_r(tls, _t, x1084tm)
 }
 
+type t1194__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1194__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s12tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -91712,7 +104336,7 @@ type s12tm = struct {
 }
 
 // x1tm Stm, escapes: true, localtime.c:7:19
-var x1084tm = bss + 9456
+var x1084tm = bss + 9472
 
 // linking localtime_r.o
 
@@ -91736,6 +104360,17 @@ _1:
 
 _2:
 	return _tm
+}
+
+type t1195__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1195__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s13tm = struct {
@@ -91798,6 +104433,17 @@ lerror:
 	return int64(-1)
 }
 
+type t1196__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1196__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t79time_t = int64
 
 type s14tm = struct {
@@ -91819,6 +104465,17 @@ type s14tm = struct {
 // Xnanosleep is defined at nanosleep.c:6:5
 func Xnanosleep(tls TLS, _req uintptr /* *Stimespec */, _rem uintptr /* *Stimespec */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(35), int64(_req), int64(_rem), int64(0), int64(0), int64(0), int64(0)))))
+}
+
+type t1197__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1197__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s60timespec = struct {
@@ -92433,7 +105090,16 @@ func Xstrftime(tls TLS, _s uintptr /* *int8 */, _n uint64, _f uintptr /* *int8 *
 	return X__strftime_l(tls, _s, _n, _f, _tm, *(*uintptr)(unsafe.Pointer(x48__pthread_self(tls) + 192)))
 }
 
-type t98locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t1198__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1198__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s15tm = struct {
 	Ftm_sec    int32
@@ -92449,7 +105115,7 @@ type s15tm = struct {
 	Ftm_zone   uintptr // *int8
 }
 
-type s179__locale_struct = struct{ Fcat [6]uintptr }
+type s178__locale_struct = struct{ Fcat [6]uintptr }
 
 type t2nl_item = int32
 
@@ -93116,6 +105782,17 @@ _79:
 	return _s
 }
 
+type t1199__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1199__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s16tm = struct {
 	Ftm_sec    int32
 	Ftm_min    int32
@@ -93159,6 +105836,17 @@ _1:
 	return *(*int64)(unsafe.Pointer(_ts))
 }
 
+type t1200__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1200__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t81time_t = int64
 
 type s61timespec = struct {
@@ -93192,6 +105880,17 @@ _1:
 	*(*int64)(unsafe.Pointer(_tm + 40)) = int64(0)
 	*(*uintptr)(unsafe.Pointer(_tm + 48)) = X__utc
 	return _t
+}
+
+type t1201__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1201__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t82time_t = int64
@@ -93340,6 +106039,17 @@ _1:
 	return int32(0)
 }
 
+type t1202__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1202__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy_0 is defined at timer_create.c:18:13
 func x1dummy_0(tls TLS) {
 }
@@ -93356,7 +106066,7 @@ type s4sigevent = struct {
 }
 
 // x2once Tpthread_once_t = int32, escapes: true, timer_create.c:96:24
-var x1093once = bss + 9512
+var x1093once = bss + 9528
 
 type s67__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -93428,8 +106138,6 @@ func x68__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
 }
 
-type Ttimer_t = uintptr // Ttimer_t = *void
-
 type t3intptr_t = int64
 
 // xinstall_handler is defined at timer_create.c:53:13
@@ -93471,8 +106179,6 @@ func x2start(tls TLS, _arg uintptr /* *void */) (r uintptr /* *void */) {
 	return null
 }
 
-type t29pthread_t = uintptr // Tpthread_t = *S__pthread
-
 type t85uintptr_t = uint64
 
 type t394size_t = uint64
@@ -93483,9 +106189,7 @@ type s66__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t99locale_t = uintptr // Tlocale_t = *S__locale_struct
-
-type s180__locale_struct = struct{ Fcat [6]uintptr }
+type s179__locale_struct = struct{ Fcat [6]uintptr }
 
 type t1pthread_barrier_t = struct {
 	F__u struct {
@@ -93528,9 +106232,16 @@ _1:
 	return int32(x42__syscall1(tls, int64(226), int64(_t)))
 }
 
-type t1timer_t = uintptr // Ttimer_t = *void
+type t1203__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t30pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1203__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s68__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -93612,9 +106323,7 @@ type s67__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t100locale_t = uintptr // Tlocale_t = *S__locale_struct
-
-type s181__locale_struct = struct{ Fcat [6]uintptr }
+type s180__locale_struct = struct{ Fcat [6]uintptr }
 
 // x4__func__ [8]int8, escapes: true, atomic_arch.h:99:1
 var x1096__func__ = ds + 46984
@@ -93640,9 +106349,16 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x43__syscall1(tls, int64(225), int64(_t)))))
 }
 
-type t2timer_t = uintptr // Ttimer_t = *void
+type t1204__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t31pthread_t = uintptr // Tpthread_t = *S__pthread
+type t1204__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s69__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -93700,9 +106416,7 @@ type s68__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t101locale_t = uintptr // Tlocale_t = *S__locale_struct
-
-type s182__locale_struct = struct{ Fcat [6]uintptr }
+type s181__locale_struct = struct{ Fcat [6]uintptr }
 
 // linking timer_gettime.o
 
@@ -93720,14 +106434,21 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x60__syscall2(tls, int64(224), int64(_t), int64(_val)))))
 }
 
-type t3timer_t = uintptr // Ttimer_t = *void
+type t1205__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1205__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s1itimerspec = struct {
 	Fit_interval s62timespec
 	Fit_value    s62timespec
 }
-
-type t32pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s70__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -93790,9 +106511,7 @@ type s69__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t102locale_t = uintptr // Tlocale_t = *S__locale_struct
-
-type s183__locale_struct = struct{ Fcat [6]uintptr }
+type s182__locale_struct = struct{ Fcat [6]uintptr }
 
 type t83time_t = int64
 
@@ -93812,14 +106531,21 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x34__syscall4(tls, int64(223), int64(_t), int64(_flags), int64(_val), int64(_old)))))
 }
 
-type t4timer_t = uintptr // Ttimer_t = *void
+type t1206__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1206__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
 
 type s2itimerspec = struct {
 	Fit_interval s63timespec
 	Fit_value    s63timespec
 }
-
-type t33pthread_t = uintptr // Tpthread_t = *S__pthread
 
 type s71__pthread = struct {
 	Fself          uintptr // *S__pthread
@@ -93882,9 +106608,7 @@ type s70__ptcb = struct {
 	F__next uintptr // *S__ptcb
 }
 
-type t103locale_t = uintptr // Tlocale_t = *S__locale_struct
-
-type s184__locale_struct = struct{ Fcat [6]uintptr }
+type s183__locale_struct = struct{ Fcat [6]uintptr }
 
 type t84time_t = int64
 
@@ -93893,6 +106617,17 @@ type t84time_t = int64
 // Xtimes is defined at times.c:4:9
 func Xtimes(tls TLS, _tms uintptr /* *Stms */) (r int64) {
 	return x44__syscall1(tls, int64(100), int64(_tms))
+}
+
+type t1207__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1207__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t8clock_t = int64
@@ -93930,6 +106665,17 @@ _1:
 	return _base
 }
 
+type t1208__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1208__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s64timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -93955,6 +106701,17 @@ func Xutime(tls TLS, _path uintptr /* *int8 */, _times uintptr /* *Sutimbuf */) 
 	*(*int64)(unsafe.Pointer(_ts + 16)) = *(*int64)(unsafe.Pointer(_times + 8))
 _1:
 	return Xutimensat(tls, int32(-100), _path, _ts, int32(0))
+}
+
+type t1209__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1209__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type Sutimbuf = struct {
@@ -94148,9 +106905,18 @@ func Xwcsftime(tls TLS, _wcs uintptr /* *Twchar_t = int32 */, _n uint64, _f uint
 	return X__wcsftime_l(tls, _wcs, _n, _f, _tm, *(*uintptr)(unsafe.Pointer(x50__pthread_self(tls) + 192)))
 }
 
-type t399size_t = uint64
+type t1210__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
 
-type t104locale_t = uintptr // Tlocale_t = *S__locale_struct
+type t1210__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
+type t399size_t = uint64
 
 type s18tm = struct {
 	Ftm_sec    int32
@@ -94166,7 +106932,7 @@ type s18tm = struct {
 	Ftm_zone   uintptr // *int8
 }
 
-type s185__locale_struct = struct{ Fcat [6]uintptr }
+type s184__locale_struct = struct{ Fcat [6]uintptr }
 
 type t56wchar_t = int32
 
@@ -94230,11 +106996,33 @@ func X_exit(tls TLS, _status int32) {
 	X_Exit(tls, _status)
 }
 
+type t1211__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1211__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking access.o
 
 // Xaccess is defined at access.c:5:5
 func Xaccess(tls TLS, _filename uintptr /* *int8 */, _amode int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x61__syscall2(tls, int64(21), int64(_filename), int64(_amode)))))
+}
+
+type t1212__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1212__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -94247,6 +107035,17 @@ func x61__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xacct is defined at acct.c:6:5
 func Xacct(tls TLS, _filename uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x45__syscall1(tls, int64(163), int64(_filename)))))
+}
+
+type t1213__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1213__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -94264,6 +107063,17 @@ func Xalarm(tls TLS, _seconds uint32) (r uint32) {
 	return r
 }
 
+type t1214__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1214__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [6]int8, escapes: true, alarm.c:7:1
 var x1100__func__ = ds + 46992
 
@@ -94272,6 +107082,17 @@ var x1100__func__ = ds + 46992
 // Xchdir is defined at chdir.c:4:5
 func Xchdir(tls TLS, _path uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x46__syscall1(tls, int64(80), int64(_path)))))
+}
+
+type t1215__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1215__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -94284,6 +107105,17 @@ func x46__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xchown is defined at chown.c:5:5
 func Xchown(tls TLS, _path uintptr /* *int8 */, _uid uint32, _gid uint32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x70__syscall3(tls, int64(92), int64(_path), int64(_uid), int64(_gid)))))
+}
+
+type t1216__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1216__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t35uid_t = uint32
@@ -94312,6 +107144,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
 
+type t1217__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1217__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // xdummy is defined at close.c:7:12
 func x18dummy(tls TLS, _fd int32) (r int32) {
 	return _fd
@@ -94330,11 +107173,33 @@ func Xctermid(tls TLS, _s uintptr /* *int8 */) (r uintptr /* *int8 */) {
 	return ts + 1428 /* "/dev/tty" */
 }
 
+type t1218__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1218__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking dup.o
 
 // Xdup is defined at dup.c:4:5
 func Xdup(tls TLS, _fd int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x47__syscall1(tls, int64(32), int64(_fd)))))
+}
+
+type t1219__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1219__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -94359,6 +107224,17 @@ _1:
 
 _2:
 	return int32(X__syscall_ret(tls, uint64(_r)))
+}
+
+type t1220__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1220__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -94416,6 +107292,17 @@ _7:
 	x71__syscall3(tls, int64(72), int64(_new), int64(2), int64(1))
 _8:
 	return int32(X__syscall_ret(tls, uint64(_r)))
+}
+
+type t1221__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1221__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -94485,6 +107372,17 @@ _4:
 	x35__syscall4(tls, int64(61), int64(_pid), int64(_status), int64(2147483648), int64(0))
 	X__restore_sigs(tls, _set)
 	return int32(X__syscall_ret(tls, uint64(*(*int32)(unsafe.Pointer(_ret)))))
+}
+
+type t1222__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1222__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t50pid_t = int32
@@ -94567,6 +107465,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x49__syscall1(tls, int64(80), int64(_buf)))))
 }
 
+type t1223__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1223__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall1 is defined at syscall_arch.h:16:22
 func x49__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
@@ -94599,6 +107508,17 @@ _1:
 	return int32(X__syscall_ret(tls, uint64(x73__syscall3(tls, int64(92), int64(_buf), int64(_uid), int64(_gid)))))
 }
 
+type t1224__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1224__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t37uid_t = uint32
 
 type t38gid_t = uint32
@@ -94620,6 +107540,17 @@ func Xfchownat(tls TLS, _fd int32, _path uintptr /* *int8 */, _uid uint32, _gid 
 	return int32(X__syscall_ret(tls, uint64(x8__syscall5(tls, int64(260), int64(_fd), int64(_path), int64(_uid), int64(_gid), int64(_flag)))))
 }
 
+type t1225__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1225__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t38uid_t = uint32
 
 type t39gid_t = uint32
@@ -94637,6 +107568,17 @@ func Xfdatasync(tls TLS, _fd int32) (r int32) {
 	return r
 }
 
+type t1226__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1226__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [10]int8, escapes: true, fdatasync.c:6:1
 var x1104__func__ = ds + 47000
 
@@ -94647,6 +107589,17 @@ func Xfsync(tls TLS, _fd int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(74), int64(_fd), int64(0), int64(0), int64(0), int64(0), int64(0)))))
 }
 
+type t1227__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1227__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t11syscall_arg_t = int64
 
 // linking ftruncate.o
@@ -94654,6 +107607,17 @@ type t11syscall_arg_t = int64
 // Xftruncate is defined at ftruncate.c:5:5
 func Xftruncate(tls TLS, _fd int32, _length int64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x67__syscall2(tls, int64(77), int64(_fd), _length))))
+}
+
+type t1228__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1228__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t128off_t = int64
@@ -94714,6 +107678,17 @@ _5:
 	return _buf
 }
 
+type t1229__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1229__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t400size_t = uint64
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -94726,6 +107701,17 @@ func x68__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 // Xgetegid is defined at getegid.c:4:7
 func Xgetegid(tls TLS) (r uint32) {
 	return uint32(x9__syscall0(tls, int64(108)))
+}
+
+type t1230__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1230__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t40gid_t = uint32
@@ -94742,6 +107728,17 @@ func Xgeteuid(tls TLS) (r uint32) {
 	return uint32(x10__syscall0(tls, int64(107)))
 }
 
+type t1231__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1231__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t39uid_t = uint32
 
 // x__syscall0 is defined at syscall_arch.h:8:22
@@ -94756,6 +107753,17 @@ func Xgetgid(tls TLS) (r uint32) {
 	return uint32(x11__syscall0(tls, int64(104)))
 }
 
+type t1232__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1232__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t41gid_t = uint32
 
 // x__syscall0 is defined at syscall_arch.h:8:22
@@ -94768,6 +107776,17 @@ func x11__syscall0(tls TLS, _n int64) (r int64) {
 // Xgetgroups is defined at getgroups.c:4:5
 func Xgetgroups(tls TLS, _count int32, _list uintptr /* uintptr */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x69__syscall2(tls, int64(115), int64(_count), int64(_list)))))
+}
+
+type t1233__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1233__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall2 is defined at syscall_arch.h:24:22
@@ -94819,6 +107838,17 @@ _6:
 	return int32(0)
 }
 
+type t1234__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1234__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t401size_t = uint64
 
 type s2utsname = struct {
@@ -94835,6 +107865,17 @@ type s2utsname = struct {
 // Xgetlogin is defined at getlogin.c:4:6
 func Xgetlogin(tls TLS) (r uintptr /* *int8 */) {
 	return Xgetenv(tls, ts+8000 /* "LOGNAME" */)
+}
+
+type t1235__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1235__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // linking getlogin_r.o
@@ -94862,6 +107903,17 @@ _2:
 	return int32(0)
 }
 
+type t1236__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1236__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t402size_t = uint64
 
 // linking getpgid.o
@@ -94869,6 +107921,17 @@ type t402size_t = uint64
 // Xgetpgid is defined at getpgid.c:4:7
 func Xgetpgid(tls TLS, _pid int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x50__syscall1(tls, int64(121), int64(_pid)))))
+}
+
+type t1237__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1237__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t51pid_t = int32
@@ -94885,6 +107948,17 @@ func Xgetpgrp(tls TLS) (r int32) {
 	return int32(x51__syscall1(tls, int64(121), int64(0)))
 }
 
+type t1238__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1238__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t52pid_t = int32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -94897,6 +107971,17 @@ func x51__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xgetpid is defined at getpid.c:4:7
 func Xgetpid(tls TLS) (r int32) {
 	return int32(x12__syscall0(tls, int64(39)))
+}
+
+type t1239__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1239__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t53pid_t = int32
@@ -94913,6 +107998,17 @@ func Xgetppid(tls TLS) (r int32) {
 	return int32(x13__syscall0(tls, int64(110)))
 }
 
+type t1240__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1240__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t54pid_t = int32
 
 // x__syscall0 is defined at syscall_arch.h:8:22
@@ -94927,6 +108023,17 @@ func Xgetsid(tls TLS, _pid int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x52__syscall1(tls, int64(124), int64(_pid)))))
 }
 
+type t1241__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1241__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t55pid_t = int32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -94939,6 +108046,17 @@ func x52__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xgetuid is defined at getuid.c:4:7
 func Xgetuid(tls TLS) (r uint32) {
 	return uint32(x14__syscall0(tls, int64(102)))
+}
+
+type t1242__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1242__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t40uid_t = uint32
@@ -94956,6 +108074,17 @@ func Xisatty(tls TLS, _fd int32) (r int32) {
 	var _wsz = esc // *Swinsize
 	defer Free(esc)
 	return bool2int(x74__syscall3(tls, int64(16), int64(_fd), int64(21523), int64(_wsz)) == 0)
+}
+
+type t1243__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1243__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s4winsize = struct {
@@ -94977,6 +108106,17 @@ func Xlchown(tls TLS, _path uintptr /* *int8 */, _uid uint32, _gid uint32) (r in
 	return int32(X__syscall_ret(tls, uint64(x75__syscall3(tls, int64(94), int64(_path), int64(_uid), int64(_gid)))))
 }
 
+type t1244__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1244__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t41uid_t = uint32
 
 type t42gid_t = uint32
@@ -94993,6 +108133,17 @@ func Xlink(tls TLS, _existing uintptr /* *int8 */, _new uintptr /* *int8 */) (r 
 	return int32(X__syscall_ret(tls, uint64(x70__syscall2(tls, int64(86), int64(_existing), int64(_new)))))
 }
 
+type t1245__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1245__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x70__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -95005,6 +108156,17 @@ func Xlinkat(tls TLS, _fd1 int32, _existing uintptr /* *int8 */, _fd2 int32, _ne
 	return int32(X__syscall_ret(tls, uint64(x9__syscall5(tls, int64(265), int64(_fd1), int64(_existing), int64(_fd2), int64(_new), int64(_flag)))))
 }
 
+type t1246__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1246__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall5 is defined at syscall_arch.h:52:22
 func x9__syscall5(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, _a5, int64(0))
@@ -95015,6 +108177,17 @@ func x9__syscall5(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64,
 // Xlseek is defined at lseek.c:5:7
 func Xlseek(tls TLS, _fd int32, _offset int64, _whence int32) (r int64) {
 	return X__syscall_ret(tls, uint64(x76__syscall3(tls, int64(8), int64(_fd), _offset, int64(_whence))))
+}
+
+type t1247__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1247__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t129off_t = int64
@@ -95056,6 +108229,17 @@ _3:
 	return _prio
 }
 
+type t1248__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1248__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t3id_t = uint32
 
 // linking pause.o
@@ -95066,6 +108250,17 @@ func Xpause(tls TLS) (r int32) {
 	return r
 }
 
+type t1249__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1249__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [6]int8, escapes: true, pause.c:8:1
 var x1106__func__ = ds + 47016
 
@@ -95074,6 +108269,17 @@ var x1106__func__ = ds + 47016
 // Xpipe is defined at pipe.c:4:5
 func Xpipe(tls TLS, _fd uintptr /* [2]int32 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x53__syscall1(tls, int64(22), int64(_fd)))))
+}
+
+type t1250__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1250__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -95127,6 +108333,17 @@ _5:
 	return int32(0)
 }
 
+type t1251__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1251__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x71__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -95144,11 +108361,33 @@ func Xposix_close(tls TLS, _fd int32, _flags int32) (r int32) {
 	return Xclose(tls, _fd)
 }
 
+type t1252__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1252__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // linking pread.o
 
 // Xpread is defined at pread.c:6:9
 func Xpread(tls TLS, _fd int32, _buf uintptr /* *void */, _size uint64, _ofs int64) (r int64) {
 	return X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(17), int64(_fd), int64(_buf), int64(_size), _ofs, int64(0), int64(0))))
+}
+
+type t1253__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1253__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t403size_t = uint64
@@ -95166,6 +108405,17 @@ func Xpreadv(tls TLS, _fd int32, _iov uintptr /* *Siovec */, _count int32, _ofs 
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+8028 /* "src/unistd/pread..." */, int32(10), x1107__func__)
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+8028 /* "src/unistd/pread..." */, int32(12), x1107__func__)
 	return r
+}
+
+type t1254__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1254__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t131off_t = int64
@@ -95189,6 +108439,17 @@ func Xpwrite(tls TLS, _fd int32, _buf uintptr /* *void */, _size uint64, _ofs in
 	return X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(18), int64(_fd), int64(_buf), int64(_size), _ofs, int64(0), int64(0))))
 }
 
+type t1255__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1255__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t405size_t = uint64
 
 type t132off_t = int64
@@ -95204,6 +108465,17 @@ func Xpwritev(tls TLS, _fd int32, _iov uintptr /* *Siovec */, _count int32, _ofs
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+8048 /* "src/unistd/pwrit..." */, int32(10), x1108__func__)
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+8048 /* "src/unistd/pwrit..." */, int32(12), x1108__func__)
 	return r
+}
+
+type t1256__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1256__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t133off_t = int64
@@ -95227,6 +108499,17 @@ func Xread(tls TLS, _fd int32, _buf uintptr /* *void */, _count uint64) (r int64
 	return X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(0), int64(_fd), int64(_buf), int64(_count), int64(0), int64(0), int64(0))))
 }
 
+type t1257__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1257__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t407size_t = uint64
 
 type t50ssize_t = int64
@@ -95238,6 +108521,17 @@ type t14syscall_arg_t = int64
 // Xreadlink is defined at readlink.c:5:9
 func Xreadlink(tls TLS, _path uintptr /* *int8 */, _buf uintptr /* *int8 */, _bufsize uint64) (r int64) {
 	return X__syscall_ret(tls, uint64(x78__syscall3(tls, int64(89), int64(_path), int64(_buf), int64(_bufsize))))
+}
+
+type t1258__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1258__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t408size_t = uint64
@@ -95256,6 +108550,17 @@ func Xreadlinkat(tls TLS, _fd int32, _path uintptr /* *int8 */, _buf uintptr /* 
 	return X__syscall_ret(tls, uint64(x36__syscall4(tls, int64(267), int64(_fd), int64(_path), int64(_buf), int64(_bufsize))))
 }
 
+type t1259__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1259__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t409size_t = uint64
 
 type t52ssize_t = int64
@@ -95271,6 +108576,17 @@ func x36__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 func Xreadv(tls TLS, _fd int32, _iov uintptr /* *Siovec */, _count int32) (r int64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+8072 /* "src/unistd/readv..." */, int32(8), x1109__func__)
 	return r
+}
+
+type t1260__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1260__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t53ssize_t = int64
@@ -95292,6 +108608,17 @@ func Xrenameat(tls TLS, _oldfd int32, _old uintptr /* *int8 */, _newfd int32, _n
 	return int32(X__syscall_ret(tls, uint64(x37__syscall4(tls, int64(264), int64(_oldfd), int64(_old), int64(_newfd), int64(_new)))))
 }
 
+type t1261__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1261__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall4 is defined at syscall_arch.h:42:22
 func x37__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, _a4, int64(0), int64(0))
@@ -95302,6 +108629,17 @@ func x37__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 // Xrmdir is defined at rmdir.c:5:5
 func Xrmdir(tls TLS, _path uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x54__syscall1(tls, int64(84), int64(_path)))))
+}
+
+type t1262__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1262__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -95316,6 +108654,17 @@ func Xsetegid(tls TLS, _egid uint32) (r int32) {
 	return X__setxid(tls, int32(119), int32(-1), int32(_egid), int32(-1))
 }
 
+type t1263__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1263__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t43gid_t = uint32
 
 // linking seteuid.o
@@ -95323,6 +108672,17 @@ type t43gid_t = uint32
 // Xseteuid is defined at seteuid.c:5:5
 func Xseteuid(tls TLS, _euid uint32) (r int32) {
 	return X__setxid(tls, int32(117), int32(-1), int32(_euid), int32(-1))
+}
+
+type t1264__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1264__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t42uid_t = uint32
@@ -95334,6 +108694,17 @@ func Xsetgid(tls TLS, _gid uint32) (r int32) {
 	return X__setxid(tls, int32(106), int32(_gid), int32(0), int32(0))
 }
 
+type t1265__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1265__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t44gid_t = uint32
 
 // linking setpgid.o
@@ -95341,6 +108712,17 @@ type t44gid_t = uint32
 // Xsetpgid is defined at setpgid.c:4:5
 func Xsetpgid(tls TLS, _pid int32, _pgid int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x72__syscall2(tls, int64(109), int64(_pid), int64(_pgid)))))
+}
+
+type t1266__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1266__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t56pid_t = int32
@@ -95357,6 +108739,17 @@ func Xsetpgrp(tls TLS) (r int32) {
 	return Xsetpgid(tls, int32(0), int32(0))
 }
 
+type t1267__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1267__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t57pid_t = int32
 
 // linking setregid.o
@@ -95364,6 +108757,17 @@ type t57pid_t = int32
 // Xsetregid is defined at setregid.c:5:5
 func Xsetregid(tls TLS, _rgid uint32, _egid uint32) (r int32) {
 	return X__setxid(tls, int32(114), int32(_rgid), int32(_egid), int32(0))
+}
+
+type t1268__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1268__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t45gid_t = uint32
@@ -95375,6 +108779,17 @@ func Xsetresgid(tls TLS, _rgid uint32, _egid uint32, _sgid uint32) (r int32) {
 	return X__setxid(tls, int32(119), int32(_rgid), int32(_egid), int32(_sgid))
 }
 
+type t1269__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1269__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t46gid_t = uint32
 
 // linking setresuid.o
@@ -95382,6 +108797,17 @@ type t46gid_t = uint32
 // Xsetresuid is defined at setresuid.c:6:5
 func Xsetresuid(tls TLS, _ruid uint32, _euid uint32, _suid uint32) (r int32) {
 	return X__setxid(tls, int32(117), int32(_ruid), int32(_euid), int32(_suid))
+}
+
+type t1270__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1270__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t43uid_t = uint32
@@ -95393,6 +108819,17 @@ func Xsetreuid(tls TLS, _ruid uint32, _euid uint32) (r int32) {
 	return X__setxid(tls, int32(113), int32(_ruid), int32(_euid), int32(0))
 }
 
+type t1271__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1271__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t44uid_t = uint32
 
 // linking setsid.o
@@ -95400,6 +108837,17 @@ type t44uid_t = uint32
 // Xsetsid is defined at setsid.c:4:7
 func Xsetsid(tls TLS) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x15__syscall0(tls, int64(112)))))
+}
+
+type t1272__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1272__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t58pid_t = int32
@@ -95414,6 +108862,17 @@ func x15__syscall0(tls TLS, _n int64) (r int64) {
 // Xsetuid is defined at setuid.c:5:5
 func Xsetuid(tls TLS, _uid uint32) (r int32) {
 	return X__setxid(tls, int32(105), int32(_uid), int32(0), int32(0))
+}
+
+type t1273__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1273__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t45uid_t = uint32
@@ -95449,6 +108908,17 @@ _2:
 
 _1:
 	return int32(0)
+}
+
+type t1274__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1274__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type s2ctx = struct {
@@ -95519,6 +108989,17 @@ _1:
 	return uint32(0)
 }
 
+type t1275__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1275__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s66timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -95533,6 +109014,17 @@ func Xsymlink(tls TLS, _existing uintptr /* *int8 */, _new uintptr /* *int8 */) 
 	return int32(X__syscall_ret(tls, uint64(x74__syscall2(tls, int64(88), int64(_existing), int64(_new)))))
 }
 
+type t1276__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1276__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall2 is defined at syscall_arch.h:24:22
 func x74__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, int64(0), int64(0), int64(0), int64(0))
@@ -95545,6 +109037,17 @@ func Xsymlinkat(tls TLS, _existing uintptr /* *int8 */, _fd int32, _new uintptr 
 	return int32(X__syscall_ret(tls, uint64(x80__syscall3(tls, int64(266), int64(_existing), int64(_fd), int64(_new)))))
 }
 
+type t1277__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1277__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x__syscall3 is defined at syscall_arch.h:33:22
 func x80__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, _a2, _a3, int64(0), int64(0), int64(0))
@@ -95555,6 +109058,17 @@ func x80__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 // Xsync is defined at sync.c:4:6
 func Xsync(tls TLS) {
 	x17__syscall0(tls, int64(162))
+}
+
+type t1278__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1278__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall0 is defined at syscall_arch.h:8:22
@@ -95579,6 +109093,17 @@ _1:
 	return *(*int32)(unsafe.Pointer(_pgrp))
 }
 
+type t1279__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1279__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t59pid_t = int32
 
 // linking tcsetpgrp.o
@@ -95592,6 +109117,17 @@ func Xtcsetpgrp(tls TLS, _fd int32, _pgrp int32) (r int32) {
 	return Xioctl(tls, _fd, int32(0x5410), _pgrp_int)
 }
 
+type t1280__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1280__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t60pid_t = int32
 
 // linking truncate.o
@@ -95599,6 +109135,17 @@ type t60pid_t = int32
 // Xtruncate is defined at truncate.c:5:5
 func Xtruncate(tls TLS, _path uintptr /* *int8 */, _length int64) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x75__syscall2(tls, int64(76), int64(_path), _length))))
+}
+
+type t1281__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1281__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t134off_t = int64
@@ -95627,8 +109174,19 @@ _1:
 	return x1112buf
 }
 
+type t1282__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1282__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1buf [32]int8, escapes: true, ttyname.c:7:14
-var x1112buf = bss + 9520
+var x1112buf = bss + 9536
 
 type t411size_t = uint64
 
@@ -95686,6 +109244,17 @@ _5:
 
 _6:
 	return int32(0)
+}
+
+type t1283__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1283__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t412size_t = uint64
@@ -95748,6 +109317,17 @@ func Xualarm(tls TLS, _value uint32, _interval uint32) (r uint32) {
 	return r
 }
 
+type t1284__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1284__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 // x1__func__ [7]int8, escapes: true, ualarm.c:7:1
 var x1113__func__ = ds + 47048
 
@@ -95756,6 +109336,17 @@ var x1113__func__ = ds + 47048
 // Xunlink is defined at unlink.c:5:5
 func Xunlink(tls TLS, _path uintptr /* *int8 */) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x55__syscall1(tls, int64(87), int64(_path)))))
+}
+
+type t1285__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1285__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
@@ -95768,6 +109359,17 @@ func x55__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 // Xunlinkat is defined at unlinkat.c:4:5
 func Xunlinkat(tls TLS, _fd int32, _path uintptr /* *int8 */, _flag int32) (r int32) {
 	return int32(X__syscall_ret(tls, uint64(x81__syscall3(tls, int64(263), int64(_fd), int64(_path), int64(_flag)))))
+}
+
+type t1286__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1286__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 // x__syscall3 is defined at syscall_arch.h:33:22
@@ -95789,6 +109391,17 @@ func Xusleep(tls TLS, _useconds uint32) (r int32) {
 	return Xnanosleep(tls, _tv, _tv)
 }
 
+type t1287__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1287__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type s68timespec = struct {
 	Ftv_sec  int64
 	Ftv_nsec int64
@@ -95803,6 +109416,17 @@ func Xwrite(tls TLS, _fd int32, _buf uintptr /* *void */, _count uint64) (r int6
 	return X__syscall_ret(tls, uint64(X__syscall_cp(tls, int64(1), int64(_fd), int64(_buf), int64(_count), int64(0), int64(0), int64(0))))
 }
 
+type t1288__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1288__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
+}
+
 type t413size_t = uint64
 
 type t55ssize_t = int64
@@ -95815,6 +109439,17 @@ type t15syscall_arg_t = int64
 func Xwritev(tls TLS, _fd int32, _iov uintptr /* *Siovec */, _count int32) (r int64) {
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+8112 /* "src/unistd/write..." */, int32(8), x1114__func__)
 	return r
+}
+
+type t1289__builtin_va_list_header = struct {
+	Fsize  int32
+	Fcount int32
+	Fitem  uintptr // *T__builtin_va_list_item = struct{Fsize int32;Fdata int8;}
+}
+
+type t1289__builtin_va_list_item = struct {
+	Fsize int32
+	Fdata int8
 }
 
 type t56ssize_t = int64
@@ -102715,7 +116350,7 @@ func bool2int(b bool) int32 {
 
 var bss = BSS(&bssInit[0])
 
-var bssInit [9552]byte
+var bssInit [9568]byte
 
 var ds = DS(dsInit)
 
