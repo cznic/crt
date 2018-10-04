@@ -453,8 +453,8 @@ func WatchUint32(tls TLS, s string, p uintptr) {
 
 func watching(tls TLS, a []string) {
 	sort.Strings(a)
-	Xfflush(tls, 0)
 	fmt.Printf("==== %s\n%s----\n", strings.Join(a, "\n"), debug.Stack())
+	os.Stdout.Sync()
 }
 
 func TraceOn()  { trace++ }
