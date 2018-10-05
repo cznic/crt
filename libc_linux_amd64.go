@@ -45,9 +45,22 @@ func X__syscall(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _
 		return 0 // ignore
 	}
 	x, y, err := syscall.Syscall6(uintptr(_n), uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6))
+	switch _n {
+	case DSYS_open:
+		log(`%s(%q, %#x, %#o, %#x, %#x, %#x) -> (%#x, %#x, %v)`, syscalls[int(_n)], GoString(uintptr(_a1)), _a2, _a3, _a4, _a5, _a6, x, y, err)
+	case DSYS_unlink:
+		log(`%s(%q, %#x, %#x, %#x, %#x, %#x) -> (%#x, %#x, %v)`, syscalls[int(_n)], GoString(uintptr(_a1)), _a2, _a3, _a4, _a5, _a6, x, y, err)
+	case DSYS_fcntl:
+		log(`%s(%#x, %s, %#x, %#x, %#x, %#x) -> (%#x, %#x, %v)`, syscalls[int(_n)], _a1, fcntls[int(_a2)], _a3, _a4, _a5, _a6, x, y, err)
+	default:
+		log(`%s(%#x, %#x, %#x, %#x, %#x, %#x) -> (%#x, %#x, %v)`, syscalls[int(_n)], _a1, _a2, _a3, _a4, _a5, _a6, x, y, err)
+	}
 	_err = int32(err)
+	if _err == DEBADF {
+		println(`EBADF`)
+		println(string(debug.Stack()))
+	}
 	r = long(x)
-	_ = y
 
 	if _err == 0 {
 		goto _1
@@ -60,53 +73,53 @@ _1:
 	return r
 }
 
-// X__ccgo_arg is defined at ccgo.c:40:6
+// X__ccgo_arg is defined at ccgo.c:51:6
 func X__ccgo_arg(tls TLS, _i int32) (r uintptr /* *int8 */) {
 	return MustCString(os.Args[_i])
 	return r
 }
 
-// X__ccgo_env is defined at ccgo.c:41:6
+// X__ccgo_env is defined at ccgo.c:52:6
 func X__ccgo_env(tls TLS, _i int32) (r uintptr /* *int8 */) {
 	return MustCString(env[_i])
 	return r
 }
 
-// X__ccgo_argc is defined at ccgo.c:42:6
+// X__ccgo_argc is defined at ccgo.c:53:6
 func X__ccgo_argc(tls TLS) (r int32) {
 	return int32(len(os.Args))
 	return r
 }
 
-// X__ccgo_envc is defined at ccgo.c:43:6
+// X__ccgo_envc is defined at ccgo.c:54:6
 func X__ccgo_envc(tls TLS) (r int32) {
 	return int32(len(env))
 	return r
 }
 
-// X__ccgo_main_tls Tpthread_t = *S__pthread, escapes: true, ccgo.c:44:11
+// X__ccgo_main_tls Tpthread_t = *S__pthread, escapes: true, ccgo.c:55:11
 var X__ccgo_main_tls = bss + 32
 
-// X_DYNAMIC [1]uint64, escapes: true, ccgo.c:45:8
+// X_DYNAMIC [1]uint64, escapes: true, ccgo.c:56:8
 var X_DYNAMIC = bss + 40
 
-// Xdlsym is defined at ccgo.c:50:7
+// Xdlsym is defined at ccgo.c:61:7
 func Xdlsym(tls TLS, _ uintptr /* *void */, _ uintptr /* *int8 */) (r uintptr /* *void */) {
-	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+12 /* "ccgo.c" */, int32(51), x460__func__)
+	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+12 /* "ccgo.c" */, int32(62), x460__func__)
 	return r
 }
 
-// X__builtin_trap is defined at ccgo.c:54:6
+// X__builtin_trap is defined at ccgo.c:65:6
 func X__builtin_trap(tls TLS) {
 	Xabort(tls)
 }
 
-// X__restore_rt is defined at ccgo.c:58:6
+// X__restore_rt is defined at ccgo.c:69:6
 func X__restore_rt(tls TLS) {
 	X__syscall(tls, int64(15), int64(0), int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
-// X__syscall_cp_asm is defined at ccgo.c:66:6
+// X__syscall_cp_asm is defined at ccgo.c:77:6
 func X__syscall_cp_asm(tls TLS, _p uintptr /* *int32 */, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64, _a6 int64) (r int64) {
 	if *(*int32)(unsafe.Pointer(_p)) == 0 {
 		goto _1
@@ -138,7 +151,7 @@ func x__bswap_64(tls TLS, ___x uint64) (r uint64) {
 	return (uint64(x__bswap_32(tls, uint32(___x)))+uint64(0))<<(uint(32)%64) | uint64(x__bswap_32(tls, uint32(___x>>(uint(32)%64))))
 }
 
-// x2__func__ [6]int8, escapes: true, ccgo.c:50:56
+// x2__func__ [6]int8, escapes: true, ccgo.c:61:56
 var x460__func__ = ds + 0
 
 type Tsyscall_arg_t = int64
