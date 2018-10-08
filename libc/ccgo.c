@@ -25,11 +25,10 @@ long __syscall(long n, long a1, long a2, long a3, long a4, long a5, long a6) {
 		"\treturn 0 // ignore\n"
 		"}\n"
 		"x, y, err := syscall.Syscall6(uintptr(_n), uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6));\n"
+		"if logging { __syscall(_n, uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6), x, y, err) }\n"
 		"_err = int32(err)\n"
 		"r = long(x)\n"
 		"_ = y\n"
-		//"fmt.Printf(`syscall(tls %#x, %v, %#x, %#x, %#x, %#x, %#x, %#x) retval %#x, %#x, err %v(%v)`, tls, _n, _a1, _a2, _a3, _a4, _a5, _a6, x, y, int(err), err)\n"
-		//"fmt.Println()\n"
 	);
 	if (err) {
 		errno = err;

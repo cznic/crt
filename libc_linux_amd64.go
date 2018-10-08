@@ -45,9 +45,11 @@ func X__syscall(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _
 		return 0 // ignore
 	}
 	x, y, err := syscall.Syscall6(uintptr(_n), uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6))
+	if logging {
+		__syscall(_n, uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6), x, y, err)
+	}
 	_err = int32(err)
 	r = long(x)
-	_ = y
 
 	if _err == 0 {
 		goto _1
@@ -60,53 +62,53 @@ _1:
 	return r
 }
 
-// X__ccgo_arg is defined at ccgo.c:40:6
+// X__ccgo_arg is defined at ccgo.c:39:6
 func X__ccgo_arg(tls TLS, _i int32) (r uintptr /* *int8 */) {
 	return MustCString(os.Args[_i])
 	return r
 }
 
-// X__ccgo_env is defined at ccgo.c:41:6
+// X__ccgo_env is defined at ccgo.c:40:6
 func X__ccgo_env(tls TLS, _i int32) (r uintptr /* *int8 */) {
 	return MustCString(env[_i])
 	return r
 }
 
-// X__ccgo_argc is defined at ccgo.c:42:6
+// X__ccgo_argc is defined at ccgo.c:41:6
 func X__ccgo_argc(tls TLS) (r int32) {
 	return int32(len(os.Args))
 	return r
 }
 
-// X__ccgo_envc is defined at ccgo.c:43:6
+// X__ccgo_envc is defined at ccgo.c:42:6
 func X__ccgo_envc(tls TLS) (r int32) {
 	return int32(len(env))
 	return r
 }
 
-// X__ccgo_main_tls Tpthread_t = *S__pthread, escapes: true, ccgo.c:44:11
+// X__ccgo_main_tls Tpthread_t = *S__pthread, escapes: true, ccgo.c:43:11
 var X__ccgo_main_tls = bss + 32
 
-// X_DYNAMIC [1]uint64, escapes: true, ccgo.c:45:8
+// X_DYNAMIC [1]uint64, escapes: true, ccgo.c:44:8
 var X_DYNAMIC = bss + 40
 
-// Xdlsym is defined at ccgo.c:50:7
+// Xdlsym is defined at ccgo.c:49:7
 func Xdlsym(tls TLS, _ uintptr /* *void */, _ uintptr /* *int8 */) (r uintptr /* *void */) {
-	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+12 /* "ccgo.c" */, int32(51), x460__func__)
+	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+12 /* "ccgo.c" */, int32(50), x460__func__)
 	return r
 }
 
-// X__builtin_trap is defined at ccgo.c:54:6
+// X__builtin_trap is defined at ccgo.c:53:6
 func X__builtin_trap(tls TLS) {
 	Xabort(tls)
 }
 
-// X__restore_rt is defined at ccgo.c:58:6
+// X__restore_rt is defined at ccgo.c:57:6
 func X__restore_rt(tls TLS) {
 	X__syscall(tls, int64(15), int64(0), int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
-// X__syscall_cp_asm is defined at ccgo.c:66:6
+// X__syscall_cp_asm is defined at ccgo.c:65:6
 func X__syscall_cp_asm(tls TLS, _p uintptr /* *int32 */, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64, _a5 int64, _a6 int64) (r int64) {
 	if *(*int32)(unsafe.Pointer(_p)) == 0 {
 		goto _1
@@ -138,7 +140,7 @@ func x__bswap_64(tls TLS, ___x uint64) (r uint64) {
 	return (uint64(x__bswap_32(tls, uint32(___x)))+uint64(0))<<(uint(32)%64) | uint64(x__bswap_32(tls, uint32(___x>>(uint(32)%64))))
 }
 
-// x2__func__ [6]int8, escapes: true, ccgo.c:50:56
+// x2__func__ [6]int8, escapes: true, ccgo.c:49:56
 var x460__func__ = ds + 0
 
 type Tsyscall_arg_t = int64
@@ -13332,7 +13334,13 @@ type s8__ptcb = struct {
 
 // X_Exit is defined at _Exit.c:4:16
 func X_Exit(tls TLS, _ec int32) {
-	os.Exit(int(_ec))
+	Log(`==== exit: %v`, _ec)
+
+	x1__syscall1(tls, int64(231), int64(_ec))
+
+_1:
+	x1__syscall1(tls, int64(60), int64(_ec))
+	goto _1
 }
 
 type t147__builtin_va_list_header = struct {
@@ -13344,6 +13352,11 @@ type t147__builtin_va_list_header = struct {
 type t147__builtin_va_list_item = struct {
 	Fsize int32
 	Fdata int8
+}
+
+// x__syscall1 is defined at syscall_arch.h:16:22
+func x1__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
 // linking abort.o
@@ -13750,7 +13763,7 @@ _7:
 		goto _10
 	}
 
-	x1__syscall1(tls, int64(3), int64(_1ret))
+	x2__syscall1(tls, int64(3), int64(_1ret))
 _10:
 	return int32(X__syscall_ret(tls, uint64(18446744073709551594)))
 
@@ -13812,7 +13825,7 @@ func x5__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64) 
 type t1pid_t = int32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x1__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x2__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -16968,7 +16981,7 @@ type t7mode_t = uint32
 
 // Xshmdt is defined at shmdt.c:5:5
 func Xshmdt(tls TLS, _addr uintptr /* *void */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x2__syscall1(tls, int64(67), int64(_addr)))))
+	return int32(X__syscall_ret(tls, uint64(x3__syscall1(tls, int64(67), int64(_addr)))))
 }
 
 type t186__builtin_va_list_header = struct {
@@ -16983,7 +16996,7 @@ type t186__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x2__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x3__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -18356,7 +18369,7 @@ _2:
 	*(*int64)(unsafe.Pointer(_tx + 8)) = *(*int64)(unsafe.Pointer(_in))*int64(1000000) + *(*int64)(unsafe.Pointer(_in + 8))
 	*(*uint32)(unsafe.Pointer(_tx)) = uint32(0x8001)
 _1:
-	if X__syscall_ret(tls, uint64(x3__syscall1(tls, int64(159), int64(_tx)))) >= int64(0) {
+	if X__syscall_ret(tls, uint64(x4__syscall1(tls, int64(159), int64(_tx)))) >= int64(0) {
 		goto _3
 	}
 
@@ -18427,7 +18440,7 @@ type t10time_t = int64
 type t3suseconds_t = int64
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x3__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x4__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -18435,7 +18448,7 @@ func x3__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 
 // Xadjtimex is defined at adjtimex.c:4:5
 func Xadjtimex(tls TLS, _tx uintptr /* *Stimex */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x4__syscall1(tls, int64(159), int64(_tx)))))
+	return int32(X__syscall_ret(tls, uint64(x5__syscall1(tls, int64(159), int64(_tx)))))
 }
 
 type t212__builtin_va_list_header = struct {
@@ -18474,7 +18487,7 @@ type s1timex = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x4__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x5__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -18573,7 +18586,7 @@ func x2__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 
 // Xchroot is defined at chroot.c:5:5
 func Xchroot(tls TLS, _path uintptr /* *int8 */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x5__syscall1(tls, int64(161), int64(_path)))))
+	return int32(X__syscall_ret(tls, uint64(x6__syscall1(tls, int64(161), int64(_path)))))
 }
 
 type t217__builtin_va_list_header = struct {
@@ -18588,7 +18601,7 @@ type t217__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x5__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x6__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -18690,12 +18703,12 @@ func Xepoll_create(tls TLS, _size int32) (r int32) {
 func Xepoll_create1(tls TLS, _flags int32) (r int32) {
 	var _r int32
 
-	_r = int32(x6__syscall1(tls, int64(291), int64(_flags)))
+	_r = int32(x7__syscall1(tls, int64(291), int64(_flags)))
 	if _r != int32(-38) || _flags != 0 {
 		goto _1
 	}
 
-	_r = int32(x6__syscall1(tls, int64(213), int64(1)))
+	_r = int32(x7__syscall1(tls, int64(213), int64(1)))
 _1:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
@@ -18736,7 +18749,7 @@ type t220__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x6__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x7__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -18784,7 +18797,7 @@ func Xeventfd(tls TLS, _count uint32, _flags int32) (r int32) {
 		goto _1
 	}
 
-	_r = int32(x7__syscall1(tls, int64(284), int64(_count)))
+	_r = int32(x8__syscall1(tls, int64(284), int64(_count)))
 _1:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
@@ -18828,7 +18841,7 @@ func x4__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x7__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x8__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -18958,7 +18971,7 @@ func Xinotify_init(tls TLS) (r int32) {
 func Xinotify_init1(tls TLS, _flags int32) (r int32) {
 	var _r int32
 
-	_r = int32(x8__syscall1(tls, int64(294), int64(_flags)))
+	_r = int32(x9__syscall1(tls, int64(294), int64(_flags)))
 	if _r != int32(-38) || _flags != 0 {
 		goto _1
 	}
@@ -18990,7 +19003,7 @@ type t226__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x8__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x9__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -19038,7 +19051,7 @@ func x14__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 
 // Xiopl is defined at iopl.c:6:5
 func Xiopl(tls TLS, _level int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x9__syscall1(tls, int64(172), int64(_level)))))
+	return int32(X__syscall_ret(tls, uint64(x10__syscall1(tls, int64(172), int64(_level)))))
 }
 
 type t228__builtin_va_list_header = struct {
@@ -19053,7 +19066,7 @@ type t228__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x9__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x10__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -19210,7 +19223,7 @@ func x10__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 
 // Xpersonality is defined at personality.c:4:5
 func Xpersonality(tls TLS, _persona uint64) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x10__syscall1(tls, int64(135), int64(_persona)))))
+	return int32(X__syscall_ret(tls, uint64(x11__syscall1(tls, int64(135), int64(_persona)))))
 }
 
 type t234__builtin_va_list_header = struct {
@@ -19225,7 +19238,7 @@ type t234__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x10__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x11__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -19612,7 +19625,7 @@ func Xsbrk(tls TLS, _inc int64) (r uintptr /* *void */) {
 	return uintptr(X__syscall_ret(tls, uint64(18446744073709551604)))
 
 _1:
-	return uintptr(x11__syscall1(tls, int64(12), int64(0)))
+	return uintptr(x12__syscall1(tls, int64(12), int64(0)))
 }
 
 type t245__builtin_va_list_header = struct {
@@ -19629,7 +19642,7 @@ type t245__builtin_va_list_item = struct {
 type Tintptr_t = int64
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x11__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x12__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -19664,7 +19677,7 @@ func x8__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64)
 
 // Xsetfsgid is defined at setfsgid.c:5:5
 func Xsetfsgid(tls TLS, _gid uint32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x12__syscall1(tls, int64(123), int64(_gid)))))
+	return int32(X__syscall_ret(tls, uint64(x13__syscall1(tls, int64(123), int64(_gid)))))
 }
 
 type t247__builtin_va_list_header = struct {
@@ -19681,7 +19694,7 @@ type t247__builtin_va_list_item = struct {
 type t6gid_t = uint32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x12__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x13__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -19689,7 +19702,7 @@ func x12__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 
 // Xsetfsuid is defined at setfsuid.c:5:5
 func Xsetfsuid(tls TLS, _uid uint32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x13__syscall1(tls, int64(122), int64(_uid)))))
+	return int32(X__syscall_ret(tls, uint64(x14__syscall1(tls, int64(122), int64(_uid)))))
 }
 
 type t248__builtin_va_list_header = struct {
@@ -19706,7 +19719,7 @@ type t248__builtin_va_list_item = struct {
 type t7uid_t = uint32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x13__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x14__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -19945,7 +19958,7 @@ func Xswapon(tls TLS, _path uintptr /* *int8 */, _flags int32) (r int32) {
 
 // Xswapoff is defined at swap.c:9:5
 func Xswapoff(tls TLS, _path uintptr /* *int8 */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x14__syscall1(tls, int64(168), int64(_path)))))
+	return int32(X__syscall_ret(tls, uint64(x15__syscall1(tls, int64(168), int64(_path)))))
 }
 
 type t256__builtin_va_list_header = struct {
@@ -19965,7 +19978,7 @@ func x16__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x14__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x15__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -19998,7 +20011,7 @@ func x10__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 
 // Xsyncfs is defined at syncfs.c:5:5
 func Xsyncfs(tls TLS, _fd int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x15__syscall1(tls, int64(306), int64(_fd)))))
+	return int32(X__syscall_ret(tls, uint64(x16__syscall1(tls, int64(306), int64(_fd)))))
 }
 
 type t258__builtin_va_list_header = struct {
@@ -20013,7 +20026,7 @@ type t258__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x15__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x16__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -20021,7 +20034,7 @@ func x15__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 
 // X__lsysinfo is defined at sysinfo.c:5:5
 func X__lsysinfo(tls TLS, _info uintptr /* *Ssysinfo */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x16__syscall1(tls, int64(99), int64(_info)))))
+	return int32(X__syscall_ret(tls, uint64(x17__syscall1(tls, int64(99), int64(_info)))))
 }
 
 type t259__builtin_va_list_header = struct {
@@ -20053,7 +20066,7 @@ type s2sysinfo = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x16__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x17__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -20138,7 +20151,7 @@ type t16time_t = int64
 
 // Xunshare is defined at unshare.c:5:5
 func Xunshare(tls TLS, _flags int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x17__syscall1(tls, int64(272), int64(_flags)))))
+	return int32(X__syscall_ret(tls, uint64(x18__syscall1(tls, int64(272), int64(_flags)))))
 }
 
 type t262__builtin_va_list_header = struct {
@@ -20153,7 +20166,7 @@ type t262__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x17__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x18__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -24627,10 +24640,10 @@ _1:
 		goto _2
 	}
 
-	x589brk = uint64(x18__syscall1(tls, int64(12), int64(0)))
+	x589brk = uint64(x19__syscall1(tls, int64(12), int64(0)))
 	x589brk = x589brk + -x589brk&uint64(4095)
 _2:
-	if _n >= uint64(0xffffffffffffffff)-x589brk || xtraverses_stack_p(tls, x589brk, x589brk+_n) != 0 || uint64(x18__syscall1(tls, int64(12), int64(x589brk+_n))) != x589brk+_n {
+	if _n >= uint64(0xffffffffffffffff)-x589brk || xtraverses_stack_p(tls, x589brk, x589brk+_n) != 0 || uint64(x19__syscall1(tls, int64(12), int64(x589brk+_n))) != x589brk+_n {
 		goto _3
 	}
 
@@ -24681,7 +24694,7 @@ type t74size_t = uint64
 type t22uintptr_t = uint64
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x18__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x19__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -47159,7 +47172,7 @@ _5:
 	goto lerr
 
 _4:
-	x19__syscall1(tls, int64(3), int64(_fd))
+	x20__syscall1(tls, int64(3), int64(_fd))
 	if _resolved != 0 {
 		return Xstrcpy(tls, _resolved, _tmp)
 	}
@@ -47168,7 +47181,7 @@ _4:
 
 	goto lerr
 lerr:
-	x19__syscall1(tls, int64(3), int64(_fd))
+	x20__syscall1(tls, int64(3), int64(_fd))
 	return null
 }
 
@@ -47213,7 +47226,7 @@ type t4dev_t = uint64
 type t10ino_t = uint64
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x19__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x20__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -47716,7 +47729,7 @@ type Tsocklen_t = uint32
 
 // Xuname is defined at uname.c:4:5
 func Xuname(tls TLS, _uts uintptr /* *Sutsname */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x20__syscall1(tls, int64(63), int64(_uts)))))
+	return int32(X__syscall_ret(tls, uint64(x21__syscall1(tls, int64(63), int64(_uts)))))
 }
 
 type t550__builtin_va_list_header = struct {
@@ -47740,7 +47753,7 @@ type s1utsname = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x20__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x21__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -48269,7 +48282,7 @@ func x25__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 
 // Xmlockall is defined at mlockall.c:4:5
 func Xmlockall(tls TLS, _flags int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x21__syscall1(tls, int64(151), int64(_flags)))))
+	return int32(X__syscall_ret(tls, uint64(x22__syscall1(tls, int64(151), int64(_flags)))))
 }
 
 type t555__builtin_va_list_header = struct {
@@ -48284,7 +48297,7 @@ type t555__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x21__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x22__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -48660,7 +48673,7 @@ type t106size_t = uint64
 
 // Xmq_close is defined at mq_close.c:4:5
 func Xmq_close(tls TLS, _mqd int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x22__syscall1(tls, int64(3), int64(_mqd)))))
+	return int32(X__syscall_ret(tls, uint64(x23__syscall1(tls, int64(3), int64(_mqd)))))
 }
 
 type t565__builtin_va_list_header = struct {
@@ -48677,7 +48690,7 @@ type t565__builtin_va_list_item = struct {
 type Tmqd_t = int32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x22__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x23__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -48773,7 +48786,7 @@ _4:
 		goto _5
 	}
 
-	x23__syscall1(tls, int64(3), int64(_s))
+	x24__syscall1(tls, int64(3), int64(_s))
 	*(*int32)(unsafe.Pointer(X__errno_location(tls))) = int32(11)
 	return int32(-1)
 
@@ -48788,7 +48801,7 @@ _5:
 	}
 
 	Xpthread_cancel(tls, *(*uintptr)(unsafe.Pointer(_td)))
-	x23__syscall1(tls, int64(3), int64(_s))
+	x24__syscall1(tls, int64(3), int64(_s))
 	return int32(-1)
 
 _6:
@@ -48866,7 +48879,7 @@ func xstart(tls TLS, _p uintptr /* *void */) (r uintptr /* *void */) {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x23__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x24__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -49107,7 +49120,7 @@ func Xmq_unlink(tls TLS, _name uintptr /* *int8 */) (r int32) {
 
 	_name++
 _1:
-	_ret = int32(x24__syscall1(tls, int64(241), int64(_name)))
+	_ret = int32(x25__syscall1(tls, int64(241), int64(_name)))
 	if _ret >= int32(0) {
 		goto _2
 	}
@@ -49137,7 +49150,7 @@ type t574__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x24__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x25__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -54033,7 +54046,7 @@ func Xif_indextoname(tls TLS, _index uint32, _name uintptr /* *int8 */) (r uintp
 _1:
 	*(*int32)(unsafe.Pointer(_ifr + 16)) = int32(_index)
 	_r = Xioctl(tls, _fd, int32(0x8910), _ifr)
-	x25__syscall1(tls, int64(3), int64(_fd))
+	x26__syscall1(tls, int64(3), int64(_fd))
 	if _r >= int32(0) {
 		goto _2
 	}
@@ -54086,7 +54099,7 @@ type Sifreq = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x25__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x26__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -54157,7 +54170,7 @@ func Xif_nametoindex(tls TLS, _name uintptr /* *int8 */) (r uint32) {
 _1:
 	Xstrncpy(tls, _ifr, _name, uint64(16))
 	_r = Xioctl(tls, _fd, int32(0x8933), _ifr)
-	x26__syscall1(tls, int64(3), int64(_fd))
+	x27__syscall1(tls, int64(3), int64(_fd))
 	if _r < int32(0) {
 		return uint32(0)
 	}
@@ -54201,7 +54214,7 @@ type s1ifreq = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x26__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x27__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -55029,7 +55042,7 @@ _1:
 
 	_r = x__netlink_enumerate(tls, _fd, uint32(2), int32(22), _addr_af, _cb, _ctx)
 _2:
-	x27__syscall1(tls, int64(3), int64(_fd))
+	x28__syscall1(tls, int64(3), int64(_fd))
 	return _r
 }
 
@@ -55118,7 +55131,7 @@ _7:
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x27__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x28__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -60416,7 +60429,7 @@ _13:
 		goto _15
 	}
 
-	if set745((*int32)(unsafe.Pointer(_ret)), int32(x28__syscall1(tls, int64(106), x4__syscall0(tls, int64(104))))) == 0 && set745((*int32)(unsafe.Pointer(_ret)), int32(x28__syscall1(tls, int64(105), x4__syscall0(tls, int64(102))))) == 0 {
+	if set745((*int32)(unsafe.Pointer(_ret)), int32(x29__syscall1(tls, int64(106), x4__syscall0(tls, int64(104))))) == 0 && set745((*int32)(unsafe.Pointer(_ret)), int32(x29__syscall1(tls, int64(105), x4__syscall0(tls, int64(102))))) == 0 {
 		goto _16
 	}
 
@@ -60447,7 +60460,7 @@ _21:
 		goto _24
 	}
 
-	*(*int32)(unsafe.Pointer(_ret)) = int32(x28__syscall1(tls, int64(32), int64(_p)))
+	*(*int32)(unsafe.Pointer(_ret)) = int32(x29__syscall1(tls, int64(32), int64(_p)))
 	if *(*int32)(unsafe.Pointer(_ret)) >= int32(0) {
 		goto _25
 	}
@@ -60455,7 +60468,7 @@ _21:
 	goto lfail
 
 _25:
-	x28__syscall1(tls, int64(3), int64(_p))
+	x29__syscall1(tls, int64(3), int64(_p))
 	_p = *(*int32)(unsafe.Pointer(_ret))
 _24:
 	switch *(*int32)(unsafe.Pointer(_op + 16)) {
@@ -60469,7 +60482,7 @@ _24:
 	goto _26
 
 _27:
-	x28__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_op + 20))))
+	x29__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_op + 20))))
 	goto _26
 
 _28:
@@ -60520,7 +60533,7 @@ _34:
 	goto lfail
 
 _36:
-	x28__syscall1(tls, int64(3), int64(_fd))
+	x29__syscall1(tls, int64(3), int64(_fd))
 _35:
 	goto _26
 
@@ -60592,7 +60605,7 @@ func x29__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x28__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x29__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -69482,12 +69495,12 @@ type t189size_t = uint64
 
 // Xsched_get_priority_max is defined at sched_get_priority_max.c:4:5
 func Xsched_get_priority_max(tls TLS, _policy int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x29__syscall1(tls, int64(146), int64(_policy)))))
+	return int32(X__syscall_ret(tls, uint64(x30__syscall1(tls, int64(146), int64(_policy)))))
 }
 
 // Xsched_get_priority_min is defined at sched_get_priority_max.c:9:5
 func Xsched_get_priority_min(tls TLS, _policy int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x29__syscall1(tls, int64(147), int64(_policy)))))
+	return int32(X__syscall_ret(tls, uint64(x30__syscall1(tls, int64(147), int64(_policy)))))
 }
 
 type t741__builtin_va_list_header = struct {
@@ -69502,7 +69515,7 @@ type t741__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x29__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x30__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -72454,7 +72467,7 @@ _8:
 	_ret = int32(x40__syscall3(tls, int64(268), int64(-100), int64(_proc), int64(_mode)))
 _9:
 _7:
-	x30__syscall1(tls, int64(3), int64(_fd2))
+	x31__syscall1(tls, int64(3), int64(_fd2))
 	return int32(X__syscall_ret(tls, uint64(_ret)))
 }
 
@@ -72500,7 +72513,7 @@ func x40__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x30__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x31__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -73195,7 +73208,7 @@ type Tfsid_t = struct{ F__val [2]int32 }
 
 // Xumask is defined at umask.c:4:8
 func Xumask(tls TLS, _mode uint32) (r uint32) {
-	return uint32(X__syscall_ret(tls, uint64(x31__syscall1(tls, int64(95), int64(_mode)))))
+	return uint32(X__syscall_ret(tls, uint64(x32__syscall1(tls, int64(95), int64(_mode)))))
 }
 
 type t811__builtin_va_list_header = struct {
@@ -73212,7 +73225,7 @@ type t811__builtin_va_list_item = struct {
 type t34mode_t = uint32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x31__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x32__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -74037,7 +74050,7 @@ type s71__locale_struct = struct{ Fcat [6]uintptr }
 
 // X__stdio_close is defined at __stdio_close.c:10:5
 func X__stdio_close(tls TLS, _f uintptr /* *TFILE = S_IO_FILE */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x32__syscall1(tls, int64(3), int64(X__aio_close(tls, *(*int32)(unsafe.Pointer(_f + 120))))))))
+	return int32(X__syscall_ret(tls, uint64(x33__syscall1(tls, int64(3), int64(X__aio_close(tls, *(*int32)(unsafe.Pointer(_f + 120))))))))
 }
 
 type t819__builtin_va_list_header = struct {
@@ -74093,7 +74106,7 @@ type s29_IO_FILE = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x32__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x33__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -77074,7 +77087,7 @@ _3:
 	return _f
 
 _4:
-	x33__syscall1(tls, int64(3), int64(_fd))
+	x34__syscall1(tls, int64(3), int64(_fd))
 	return null
 }
 
@@ -77131,7 +77144,7 @@ func x51__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x33__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x34__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -80641,8 +80654,8 @@ _5:
 		goto _6
 	}
 
-	x34__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p))))
-	x34__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4))))
+	x35__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p))))
+	x35__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4))))
 	return null
 
 _6:
@@ -80665,7 +80678,7 @@ _6:
 	goto lfail
 
 _8:
-	x34__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4*uintptr(int32(1)-_op)))))
+	x35__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4*uintptr(int32(1)-_op)))))
 	*(*int32)(unsafe.Pointer(_p + 4*uintptr(int32(1)-_op))) = _tmp
 _7:
 	_e = int32(12)
@@ -80693,7 +80706,7 @@ _9:
 	goto lfail
 lfail:
 	Xfclose(tls, _f)
-	x34__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4*uintptr(int32(1)-_op)))))
+	x35__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4*uintptr(int32(1)-_op)))))
 	*(*int32)(unsafe.Pointer(X__errno_location(tls))) = _e
 	return null
 }
@@ -80749,7 +80762,7 @@ type s86_IO_FILE = struct {
 var x874__func__ = ds + 44672
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x34__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x35__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -81143,12 +81156,12 @@ type t26wint_t = uint32
 func Xremove(tls TLS, _path uintptr /* *int8 */) (r int32) {
 	var _r int32
 
-	_r = int32(x35__syscall1(tls, int64(87), int64(_path)))
+	_r = int32(x36__syscall1(tls, int64(87), int64(_path)))
 	if _r != int32(-21) {
 		goto _1
 	}
 
-	_r = int32(x35__syscall1(tls, int64(84), int64(_path)))
+	_r = int32(x36__syscall1(tls, int64(84), int64(_path)))
 _1:
 	return int32(X__syscall_ret(tls, uint64(_r)))
 }
@@ -81165,7 +81178,7 @@ type t892__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x35__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x36__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -82020,13 +82033,13 @@ _1:
 		goto _4
 	}
 
-	x36__syscall1(tls, int64(87), int64(_s))
+	x37__syscall1(tls, int64(87), int64(_s))
 	_f = X__fdopen(tls, _fd, ts+4564 /* "w+" */)
 	if _f != 0 {
 		goto _5
 	}
 
-	x36__syscall1(tls, int64(3), int64(_fd))
+	x37__syscall1(tls, int64(3), int64(_fd))
 _5:
 	return _f
 
@@ -82091,7 +82104,7 @@ func x53__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x36__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x37__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -93683,7 +93696,7 @@ func x54__syscall3(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64) (r int64)
 
 // X__set_thread_area is defined at __set_thread_area.c:3:5
 func X__set_thread_area(tls TLS, _p uintptr /* *void */) (r int32) {
-	return int32(x37__syscall1(tls, int64(205), int64(_p)))
+	return int32(x38__syscall1(tls, int64(205), int64(_p)))
 }
 
 type t1044__builtin_va_list_header = struct {
@@ -93698,7 +93711,7 @@ type t1044__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x37__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x38__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -93876,7 +93889,7 @@ _1:
 	goto _1
 
 _2:
-	x38__syscall1(tls, int64(218), int64(x4lock))
+	x39__syscall1(tls, int64(218), int64(x4lock))
 	xunmap_base = _base
 	xunmap_size = _size
 	X__assert_fail(tls, ts+0 /* "TODO(ccgo)" */, ts+5208 /* "src/thread/__unm..." */, int32(29), x999__func__)
@@ -93924,7 +93937,7 @@ func xa_spin(tls TLS) {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x38__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x39__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -96833,7 +96846,7 @@ _5:
 		goto _8
 	}
 
-	x39__syscall1(tls, int64(218), int64(0))
+	x40__syscall1(tls, int64(218), int64(0))
 _8:
 	if *(*int64)(unsafe.Pointer((_self + 160) + 8)) == 0 {
 		goto _9
@@ -96848,7 +96861,7 @@ _7:
 	X__unlock(tls, _self+200)
 
 _10:
-	x39__syscall1(tls, int64(60), int64(0))
+	x40__syscall1(tls, int64(60), int64(0))
 	goto _10
 }
 
@@ -97250,7 +97263,7 @@ func x10a_cas(tls TLS, _p uintptr /* *int32 */, _t int32, _s int32) (r int32) {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x39__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x40__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -97757,7 +97770,7 @@ _1:
 		goto _3
 	}
 
-	*(*int32)(unsafe.Pointer(_policy)) = int32(x40__syscall1(tls, int64(145), int64(*(*int32)(unsafe.Pointer(_t + 56)))))
+	*(*int32)(unsafe.Pointer(_policy)) = int32(x41__syscall1(tls, int64(145), int64(*(*int32)(unsafe.Pointer(_t + 56)))))
 _3:
 _2:
 	X__unlock(tls, _t+200)
@@ -97828,7 +97841,7 @@ func x50__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x40__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x41__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -102148,7 +102161,7 @@ _1:
 	_map = X__mmap(tls, null, uint64(*(*int64)(unsafe.Pointer(_st + 48))), int32(1), int32(0x1), _fd, int64(0))
 	*(*uint64)(unsafe.Pointer(_size)) = uint64(*(*int64)(unsafe.Pointer(_st + 48)))
 _2:
-	x41__syscall1(tls, int64(3), int64(_fd))
+	x42__syscall1(tls, int64(3), int64(_fd))
 	if _map == uintptr(18446744073709551615) {
 		return null
 	}
@@ -102195,7 +102208,7 @@ type t127off_t = int64
 type t390size_t = uint64
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x41__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x42__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -106229,7 +106242,7 @@ func Xtimer_delete(tls TLS, _t uintptr /* Ttimer_t = *void */) (r int32) {
 	return int32(0)
 
 _1:
-	return int32(x42__syscall1(tls, int64(226), int64(_t)))
+	return int32(x43__syscall1(tls, int64(226), int64(_t)))
 }
 
 type t1203__builtin_va_list_header = struct {
@@ -106311,7 +106324,7 @@ _2:
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x42__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x43__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -106346,7 +106359,7 @@ func Xtimer_getoverrun(tls TLS, _t uintptr /* Ttimer_t = *void */) (r int32) {
 	_td = uintptr(uint64(_t) << (uint(1) % 64))
 	_t = uintptr(uint64(*(*int32)(unsafe.Pointer(_td + 184)) & int32(0x7fffffff)))
 _1:
-	return int32(X__syscall_ret(tls, uint64(x43__syscall1(tls, int64(225), int64(_t)))))
+	return int32(X__syscall_ret(tls, uint64(x44__syscall1(tls, int64(225), int64(_t)))))
 }
 
 type t1204__builtin_va_list_header = struct {
@@ -106404,7 +106417,7 @@ type t5intptr_t = int64
 type t87uintptr_t = uint64
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x43__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x44__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -106616,7 +106629,7 @@ type t84time_t = int64
 
 // Xtimes is defined at times.c:4:9
 func Xtimes(tls TLS, _tms uintptr /* *Stms */) (r int64) {
-	return x44__syscall1(tls, int64(100), int64(_tms))
+	return x45__syscall1(tls, int64(100), int64(_tms))
 }
 
 type t1207__builtin_va_list_header = struct {
@@ -106640,7 +106653,7 @@ type Stms = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x44__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x45__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -107034,7 +107047,7 @@ func x61__syscall2(tls TLS, _n int64, _a1 int64, _a2 int64) (r int64) {
 
 // Xacct is defined at acct.c:6:5
 func Xacct(tls TLS, _filename uintptr /* *int8 */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x45__syscall1(tls, int64(163), int64(_filename)))))
+	return int32(X__syscall_ret(tls, uint64(x46__syscall1(tls, int64(163), int64(_filename)))))
 }
 
 type t1213__builtin_va_list_header = struct {
@@ -107049,7 +107062,7 @@ type t1213__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x45__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x46__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -107081,7 +107094,7 @@ var x1100__func__ = ds + 46992
 
 // Xchdir is defined at chdir.c:4:5
 func Xchdir(tls TLS, _path uintptr /* *int8 */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x46__syscall1(tls, int64(80), int64(_path)))))
+	return int32(X__syscall_ret(tls, uint64(x47__syscall1(tls, int64(80), int64(_path)))))
 }
 
 type t1215__builtin_va_list_header = struct {
@@ -107096,7 +107109,7 @@ type t1215__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x46__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x47__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -107188,7 +107201,7 @@ type t1218__builtin_va_list_item = struct {
 
 // Xdup is defined at dup.c:4:5
 func Xdup(tls TLS, _fd int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x47__syscall1(tls, int64(32), int64(_fd)))))
+	return int32(X__syscall_ret(tls, uint64(x48__syscall1(tls, int64(32), int64(_fd)))))
 }
 
 type t1219__builtin_va_list_header = struct {
@@ -107203,7 +107216,7 @@ type t1219__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x47__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x48__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -107361,14 +107374,14 @@ _3:
 	}
 	X__block_all_sigs(tls, _set)
 	_pid = X__clone(tls, fp1103(xchecker), _stack+uintptr(1024), int32(0), _c)
-	x48__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4))))
+	x49__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p + 4))))
 	if _pid >= int32(0) && uint64(x72__syscall3(tls, int64(0), int64(*(*int32)(unsafe.Pointer(_p))), int64(_ret), int64(4))) == uint64(4) {
 		goto _4
 	}
 
 	*(*int32)(unsafe.Pointer(_ret)) = int32(-16)
 _4:
-	x48__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p))))
+	x49__syscall1(tls, int64(3), int64(*(*int32)(unsafe.Pointer(_p))))
 	x35__syscall4(tls, int64(61), int64(_pid), int64(_status), int64(2147483648), int64(0))
 	X__restore_sigs(tls, _set)
 	return int32(X__syscall_ret(tls, uint64(*(*int32)(unsafe.Pointer(_ret)))))
@@ -107416,7 +107429,7 @@ func xchecker(tls TLS, _p uintptr /* *void */) (r int32) {
 		goto _1
 	}
 
-	x48__syscall1(tls, int64(60), int64(1))
+	x49__syscall1(tls, int64(60), int64(1))
 _1:
 	*(*int32)(unsafe.Pointer(_ret)) = int32(x35__syscall4(tls, int64(269), int64(*(*int32)(unsafe.Pointer(_c))), int64(*(*uintptr)(unsafe.Pointer(_c + 8))), int64(*(*int32)(unsafe.Pointer(_c + 16))), int64(0)))
 	x72__syscall3(tls, int64(1), int64(*(*int32)(unsafe.Pointer(_c + 20))), int64(_ret), int64(4))
@@ -107424,7 +107437,7 @@ _1:
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x48__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x49__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -107453,7 +107466,7 @@ func Xfchdir(tls TLS, _fd int32) (r int32) {
 		_buf = esc // *[27]int8
 	)
 	defer Free(esc)
-	_ret = int32(x49__syscall1(tls, int64(81), int64(_fd)))
+	_ret = int32(x50__syscall1(tls, int64(81), int64(_fd)))
 	if _ret == int32(-9) && x65__syscall2(tls, int64(72), int64(_fd), int64(1)) >= int64(0) {
 		goto _1
 	}
@@ -107462,7 +107475,7 @@ func Xfchdir(tls TLS, _fd int32) (r int32) {
 
 _1:
 	X__procfdname(tls, _buf, uint32(_fd))
-	return int32(X__syscall_ret(tls, uint64(x49__syscall1(tls, int64(80), int64(_buf)))))
+	return int32(X__syscall_ret(tls, uint64(x50__syscall1(tls, int64(80), int64(_buf)))))
 }
 
 type t1223__builtin_va_list_header = struct {
@@ -107477,7 +107490,7 @@ type t1223__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x49__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x50__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -107920,7 +107933,7 @@ type t402size_t = uint64
 
 // Xgetpgid is defined at getpgid.c:4:7
 func Xgetpgid(tls TLS, _pid int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x50__syscall1(tls, int64(121), int64(_pid)))))
+	return int32(X__syscall_ret(tls, uint64(x51__syscall1(tls, int64(121), int64(_pid)))))
 }
 
 type t1237__builtin_va_list_header = struct {
@@ -107937,7 +107950,7 @@ type t1237__builtin_va_list_item = struct {
 type t51pid_t = int32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x50__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x51__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -107945,7 +107958,7 @@ func x50__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 
 // Xgetpgrp is defined at getpgrp.c:4:7
 func Xgetpgrp(tls TLS) (r int32) {
-	return int32(x51__syscall1(tls, int64(121), int64(0)))
+	return int32(x52__syscall1(tls, int64(121), int64(0)))
 }
 
 type t1238__builtin_va_list_header = struct {
@@ -107962,7 +107975,7 @@ type t1238__builtin_va_list_item = struct {
 type t52pid_t = int32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x51__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x52__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -108020,7 +108033,7 @@ func x13__syscall0(tls TLS, _n int64) (r int64) {
 
 // Xgetsid is defined at getsid.c:4:7
 func Xgetsid(tls TLS, _pid int32) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x52__syscall1(tls, int64(124), int64(_pid)))))
+	return int32(X__syscall_ret(tls, uint64(x53__syscall1(tls, int64(124), int64(_pid)))))
 }
 
 type t1241__builtin_va_list_header = struct {
@@ -108037,7 +108050,7 @@ type t1241__builtin_va_list_item = struct {
 type t55pid_t = int32
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x52__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x53__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -108268,7 +108281,7 @@ var x1106__func__ = ds + 47016
 
 // Xpipe is defined at pipe.c:4:5
 func Xpipe(tls TLS, _fd uintptr /* [2]int32 */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x53__syscall1(tls, int64(22), int64(_fd)))))
+	return int32(X__syscall_ret(tls, uint64(x54__syscall1(tls, int64(22), int64(_fd)))))
 }
 
 type t1250__builtin_va_list_header = struct {
@@ -108283,7 +108296,7 @@ type t1250__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x53__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x54__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -108628,7 +108641,7 @@ func x37__syscall4(tls TLS, _n int64, _a1 int64, _a2 int64, _a3 int64, _a4 int64
 
 // Xrmdir is defined at rmdir.c:5:5
 func Xrmdir(tls TLS, _path uintptr /* *int8 */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x54__syscall1(tls, int64(84), int64(_path)))))
+	return int32(X__syscall_ret(tls, uint64(x55__syscall1(tls, int64(84), int64(_path)))))
 }
 
 type t1262__builtin_va_list_header = struct {
@@ -108643,7 +108656,7 @@ type t1262__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x54__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x55__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -109335,7 +109348,7 @@ var x1113__func__ = ds + 47048
 
 // Xunlink is defined at unlink.c:5:5
 func Xunlink(tls TLS, _path uintptr /* *int8 */) (r int32) {
-	return int32(X__syscall_ret(tls, uint64(x55__syscall1(tls, int64(87), int64(_path)))))
+	return int32(X__syscall_ret(tls, uint64(x56__syscall1(tls, int64(87), int64(_path)))))
 }
 
 type t1285__builtin_va_list_header = struct {
@@ -109350,7 +109363,7 @@ type t1285__builtin_va_list_item = struct {
 }
 
 // x__syscall1 is defined at syscall_arch.h:16:22
-func x55__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
+func x56__syscall1(tls TLS, _n int64, _a1 int64) (r int64) {
 	return X__syscall(tls, _n, _a1, int64(0), int64(0), int64(0), int64(0), int64(0))
 }
 
@@ -115660,6 +115673,7 @@ const (
 	Da_spin                                 = 0
 	Da_store                                = 0
 	Da_swap                                 = 0
+	Dalloca                                 = 0
 	Dalphasort64                            = 0
 	Dbittab                                 = 0
 	Dblkcnt64_t                             = 0
