@@ -43,6 +43,9 @@ func VAfloat32(ap uintptr) float32 { return float32(VAfloat64(ap)) }
 
 func VAfloat64(ap uintptr) (v float64) {
 	vaListMu.Lock()
+
+	defer vaListMu.Unlock()
+
 	s := vaLists[ap]
 	if len(s) == 0 {
 		return 0
@@ -55,12 +58,14 @@ func VAfloat64(ap uintptr) (v float64) {
 		panic(fmt.Errorf("crt.VAfloat64 %T", x))
 	}
 	vaLists[ap] = s[1:]
-	vaListMu.Unlock()
 	return v
 }
 
 func VAint32(ap uintptr) (v int32) {
 	vaListMu.Lock()
+
+	defer vaListMu.Unlock()
+
 	s := vaLists[ap]
 	if len(s) == 0 {
 		return 0
@@ -81,12 +86,14 @@ func VAint32(ap uintptr) (v int32) {
 		panic(fmt.Errorf("crt.VAint32 %T", x))
 	}
 	vaLists[ap] = s[1:]
-	vaListMu.Unlock()
 	return v
 }
 
 func VAint64(ap uintptr) (v int64) {
 	vaListMu.Lock()
+
+	defer vaListMu.Unlock()
+
 	s := vaLists[ap]
 	if len(s) == 0 {
 		return 0
@@ -107,12 +114,14 @@ func VAint64(ap uintptr) (v int64) {
 		panic(fmt.Errorf("crt.VAint64 %T", x))
 	}
 	vaLists[ap] = s[1:]
-	vaListMu.Unlock()
 	return v
 }
 
 func VAuint32(ap uintptr) (v uint32) {
 	vaListMu.Lock()
+
+	defer vaListMu.Unlock()
+
 	s := vaLists[ap]
 	if len(s) == 0 {
 		return 0
@@ -133,12 +142,14 @@ func VAuint32(ap uintptr) (v uint32) {
 		panic(fmt.Errorf("crt.VAuint32 %T", x))
 	}
 	vaLists[ap] = s[1:]
-	vaListMu.Unlock()
 	return v
 }
 
 func VAuint64(ap uintptr) (v uint64) {
 	vaListMu.Lock()
+
+	defer vaListMu.Unlock()
+
 	s := vaLists[ap]
 	if len(s) == 0 {
 		return 0
@@ -159,12 +170,14 @@ func VAuint64(ap uintptr) (v uint64) {
 		panic(fmt.Errorf("crt.VAuint64 %T", x))
 	}
 	vaLists[ap] = s[1:]
-	vaListMu.Unlock()
 	return v
 }
 
 func VAuintptr(ap uintptr) (v uintptr) {
 	vaListMu.Lock()
+
+	defer vaListMu.Unlock()
+
 	s := vaLists[ap]
 	if len(s) == 0 {
 		return 0
@@ -179,12 +192,14 @@ func VAuintptr(ap uintptr) (v uintptr) {
 		panic(fmt.Errorf("crt.VAuintptr %T", x))
 	}
 	vaLists[ap] = s[1:]
-	vaListMu.Unlock()
 	return v
 }
 
 func VAother(ap uintptr) (v interface{}) {
 	vaListMu.Lock()
+
+	defer vaListMu.Unlock()
+
 	s := vaLists[ap]
 	if len(s) == 0 {
 		return 0
@@ -192,6 +207,5 @@ func VAother(ap uintptr) (v interface{}) {
 
 	v = s[0]
 	vaLists[ap] = s[1:]
-	vaListMu.Unlock()
 	return v
 }
