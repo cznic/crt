@@ -41,19 +41,11 @@ import (
 	"github.com/cznic/strutil"
 )
 
-type process struct {
-	wg    *sync.WaitGroup
-	close []*os.File
-}
-
 var (
-	allocMu   sync.Mutex       //TODO use
-	allocator memory.Allocator //TODO use
-	allocs    = map[uintptr][]byte{}
+	allocMu   sync.Mutex
+	allocator memory.Allocator
 	env       = os.Environ()
 	logging   bool
-	pidMu     sync.Mutex
-	pids      = map[uintptr]*process{}
 
 	Log = func(s string, a ...interface{}) {}
 
@@ -454,12 +446,13 @@ func Main(main func(TLS, int32, uintptr) int32) {
 
 		Log("==== start: %v", os.Args)
 	}
-
 	tls := MainTLS()
 	Xexit(tls, main(tls, int32(len(os.Args)), *(*uintptr)(unsafe.Pointer(X__ccgo_argv))))
 }
 
-func MainTLS() TLS { return TLS(*(*uintptr)(unsafe.Pointer(X__ccgo_main_tls))) }
+func MainTLS() TLS {
+	return TLS(*(*uintptr)(unsafe.Pointer(X__ccgo_main_tls)))
+}
 
 // TLS represents a virtual C thread.
 type TLS uintptr
@@ -484,33 +477,10 @@ func UsableSize(p uintptr) int {
 
 // Malloc allocates uninitialized memory.
 func Malloc(size int) (uintptr, error) {
-	if size < 0 {
-		panic("internal error")
-	}
-
-	if size == 0 {
-		return 0, nil
-	}
-
 	allocMu.Lock()
-	r, _ := malloc(size)
+	p, err := allocator.UintptrMalloc(size)
 	allocMu.Unlock()
-	return r, nil
-}
-
-func malloc(size int) (uintptr, error) {
-	b := make([]byte, size+16)
-	r := uintptr(unsafe.Pointer(&b[0]))
-	if r%2*unsafe.Sizeof(uintptr(0)) != 0 {
-		panic("internal error")
-	}
-
-	if _, ok := allocs[r]; ok {
-		panic("internal error")
-	}
-
-	allocs[r] = b
-	return r, nil
+	return p, err
 }
 
 // MustCalloc is like Calloc but panics if the allocation cannot be made.
@@ -524,60 +494,11 @@ func MustCalloc(size int) uintptr {
 }
 
 // Calloc allocates zeroed memory.
-func Calloc(size int) (uintptr, error) { return Malloc(size) }
-
-// Realloc reallocates memory.
-func Realloc(p uintptr, size int) (uintptr, error) {
-	if p == 0 {
-		return Malloc(size)
-	}
-
-	if size == 0 {
-		Free(p)
-		return 0, nil
-	}
-
+func Calloc(size int) (uintptr, error) {
 	allocMu.Lock()
-	b, ok := allocs[p]
-	if !ok {
-		panic("internal error")
-	}
-
-	switch {
-	case cap(b) >= size:
-		b = b[:size]
-		allocs[p] = b
-	default:
-		r, _ := malloc(size)
-		copy(allocs[r], b)
-		free(p)
-		p = r
-	}
+	p, err := allocator.UintptrCalloc(size)
 	allocMu.Unlock()
-	return p, nil
-}
-
-// Free frees memory allocated by Calloc, Malloc or Realloc.
-func Free(p uintptr) error {
-	allocMu.Lock()
-	err := free(p)
-	allocMu.Unlock()
-	return err
-}
-
-func X__builtin_free(tls TLS, p uintptr) { Xfree(tls, p) }
-
-func free(p uintptr) error {
-	if p == 0 {
-		return nil
-	}
-
-	if _, ok := allocs[p]; !ok {
-		panic("internal error")
-	}
-
-	delete(allocs, p)
-	return nil
+	return p, err
 }
 
 // CString allocates a C string initialized from s.
@@ -605,7 +526,7 @@ func MustCString(s string) uintptr {
 // BSS allocates the the bss segment of a package/command.
 func BSS(init *byte) uintptr {
 	r := uintptr(unsafe.Pointer(init))
-	if r%2*unsafe.Sizeof(uintptr(0)) != 0 {
+	if r%unsafe.Sizeof(uintptr(0)) != 0 {
 		panic("internal error")
 	}
 
@@ -615,10 +536,18 @@ func BSS(init *byte) uintptr {
 // TS allocates the R/O text segment of a package/command.
 func TS(init string) uintptr { return (*reflect.StringHeader)(unsafe.Pointer(&init)).Data }
 
+// Free frees memory allocated by Calloc, Malloc or Realloc.
+func Free(p uintptr) error {
+	allocMu.Lock()
+	err := allocator.UintptrFree(p)
+	allocMu.Unlock()
+	return err
+}
+
 // DS allocates the the data segment of a package/command.
 func DS(init []byte) uintptr {
 	r := (*reflect.SliceHeader)(unsafe.Pointer(&init)).Data
-	if r%2*unsafe.Sizeof(uintptr(0)) != 0 {
+	if r%unsafe.Sizeof(uintptr(0)) != 0 {
 		panic("internal error")
 	}
 
@@ -728,6 +657,14 @@ func a_dec(p uintptr) {
 //static inline int a_fetch_add(volatile int *p, int v)
 func a_fetch_add(p uintptr, v int32) int32 {
 	return atomic.AddInt32((*int32)(unsafe.Pointer(p)), v)
+}
+
+// Realloc reallocates memory.
+func Realloc(p uintptr, size int) (uintptr, error) {
+	allocMu.Lock()
+	p, err := allocator.UintptrRealloc(p, size)
+	allocMu.Unlock()
+	return p, err
 }
 
 func debugStack() { fmt.Printf("%s\n", debug.Stack()) }
@@ -897,9 +834,6 @@ func checkSyscall(n long) bool { //TODO- eventually after making the C code clea
 		DSYS_chmod,
 		DSYS_clock_gettime,
 		DSYS_close,
-		DSYS_dup2,
-		DSYS_exit,
-		DSYS_exit_group,
 		DSYS_fchmod,
 		DSYS_fcntl,
 		DSYS_fstat,
@@ -956,19 +890,15 @@ func checkSyscall(n long) bool { //TODO- eventually after making the C code clea
 
 func X__log(tls TLS, format uintptr, args ...interface{}) {
 	const sz = 1 << 10
-
 	if !logging {
 		return
 	}
-
 	buf := Xmalloc(tls, sz)
-
 	defer Xfree(tls, buf)
-
 	ap := X__builtin_va_start(tls, args)
 	n := Xvsnprintf(tls, buf, sz, format, ap)
 	Log("%s", GoStringLen(buf, int(n)))
-	X__builtin_free(tls, ap)
+	X__builtin_va_end(tls, ap)
 }
 
 func __syscall(n long, a1, a2, a3, a4, a5, a6, x, y uintptr, err syscall.Errno) {
@@ -986,30 +916,4 @@ func __syscall(n long, a1, a2, a3, a4, a5, a6, x, y uintptr, err syscall.Errno) 
 	default:
 		Log(`%s(%#x, %#x, %#x, %#x, %#x, %#x) -> (%#x, %#x, %v(%v))`, syscalls[int(n)], a1, a2, a3, a4, a5, a6, x, y, err, int(err))
 	}
-}
-
-func AddPid(pid uintptr, wg *sync.WaitGroup, close ...*os.File) {
-	pidMu.Lock()
-	pids[pid] = &process{wg, close}
-	pidMu.Unlock()
-}
-
-func WaitPid(pid uintptr) {
-	pidMu.Lock()
-	p := pids[pid]
-	pidMu.Unlock()
-	if p == nil {
-		return
-	}
-
-	for _, v := range p.close {
-		v.Close()
-	}
-	p.close = nil
-	p.wg.Wait()
-	pidMu.Lock()
-	if x := pids[pid]; x == p {
-		delete(pids, pid)
-	}
-	pidMu.Unlock()
 }
