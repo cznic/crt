@@ -46,6 +46,8 @@ var (
 	allocator memory.Allocator
 	env       = os.Environ()
 	logging   bool
+	proc      = map[int]*os.Process{}
+	procMu    sync.Mutex
 
 	Log = func(s string, a ...interface{}) {}
 
@@ -421,6 +423,7 @@ func init() {
 }
 
 func Main(main func(TLS, int32, uintptr) int32) {
+	runtime.LockOSThread()
 	if fn := os.Getenv("CCGOLOG"); fn != "" {
 		logging = true
 		f, err := os.OpenFile(fn, os.O_APPEND|os.O_CREATE|os.O_WRONLY|os.O_SYNC, 0644)
@@ -772,8 +775,7 @@ func WatchUint32(tls TLS, s string, p uintptr) {
 
 func watching(tls TLS, a []string) {
 	sort.Strings(a)
-	fmt.Printf("==== %s\n%s----\n", strings.Join(a, "\n"), debug.Stack())
-	os.Stdout.Sync()
+	Log("%s\n%s----\n", strings.Join(a, "\n"), debug.Stack())
 }
 
 func TraceOn()  { trace++ }
@@ -781,9 +783,8 @@ func TraceOff() { trace-- }
 
 func Watch(tls TLS) { //TODO-
 	if trace > 0 {
-		Xfflush(tls, 0)
 		_, fn, fl, _ := runtime.Caller(1)
-		fmt.Printf("# trace %s:%d:\n", filepath.Base(fn), fl)
+		Log("# trace %s:%d:\n", filepath.Base(fn), fl)
 	}
 	var a []string
 	for p, v := range watches {
@@ -823,6 +824,24 @@ func Watch(tls TLS) { //TODO-
 	if len(a) != 0 {
 		watching(tls, a)
 	}
+}
+
+func RegisterProcess(p *os.Process) {
+	procMu.Lock()
+
+	defer procMu.Unlock()
+
+	proc[p.Pid] = p
+}
+
+func RemoveProcess(pid int) *os.Process {
+	procMu.Lock()
+
+	defer procMu.Unlock()
+
+	r := proc[pid]
+	delete(proc, pid)
+	return r
 }
 
 func checkSyscall(n long) bool { //TODO- eventually after making the C code clean of "bad" syscalls
