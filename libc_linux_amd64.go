@@ -11714,7 +11714,7 @@ type s8__ptcb = struct {
 
 // X_Exit is defined at _Exit.c:4:16
 func X_Exit(tls TLS, _ec int32) {
-	os.Exit(int(_ec))
+	Log(`==== exit: %v`, _ec)
 
 	x1__syscall1(tls, int64(231), int64(_ec))
 

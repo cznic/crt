@@ -41,13 +41,18 @@ import (
 	"github.com/cznic/strutil"
 )
 
+type procInfo struct {
+	*os.Process
+	files []*os.File
+}
+
 var (
-	allocMu   sync.Mutex
-	allocator memory.Allocator
-	env       = os.Environ()
-	logging   bool
-	proc      = map[int]*os.Process{}
-	procMu    sync.Mutex
+	allocMu         sync.Mutex
+	allocator       memory.Allocator
+	env             = os.Environ()
+	logging         bool
+	preserveFiles   = map[int][]*os.File{}
+	preserveFilesMu sync.Mutex
 
 	Log = func(s string, a ...interface{}) {}
 
@@ -826,22 +831,12 @@ func Watch(tls TLS) { //TODO-
 	}
 }
 
-func RegisterProcess(p *os.Process) {
-	procMu.Lock()
+func PreserveFiles(id int, files ...*os.File) {
+	preserveFilesMu.Lock()
 
-	defer procMu.Unlock()
+	defer preserveFilesMu.Unlock()
 
-	proc[p.Pid] = p
-}
-
-func RemoveProcess(pid int) *os.Process {
-	procMu.Lock()
-
-	defer procMu.Unlock()
-
-	r := proc[pid]
-	delete(proc, pid)
-	return r
+	preserveFiles[id] = files
 }
 
 func checkSyscall(n long) bool { //TODO- eventually after making the C code clean of "bad" syscalls
@@ -853,6 +848,7 @@ func checkSyscall(n long) bool { //TODO- eventually after making the C code clea
 		DSYS_chmod,
 		DSYS_clock_gettime,
 		DSYS_close,
+		DSYS_exit_group,
 		DSYS_fchmod,
 		DSYS_fcntl,
 		DSYS_fstat,
