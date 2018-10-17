@@ -41,18 +41,13 @@ import (
 	"github.com/cznic/strutil"
 )
 
-type procInfo struct {
-	*os.Process
-	files []*os.File
-}
-
 var (
-	allocMu         sync.Mutex
-	allocator       memory.Allocator
-	env             = os.Environ()
-	logging         bool
-	preserveFiles   = map[int][]*os.File{}
-	preserveFilesMu sync.Mutex
+	allocMu   sync.Mutex
+	allocator memory.Allocator
+	env       = os.Environ()
+	files     = map[uintptr]*os.File{}
+	filesMu   sync.Mutex
+	logging   bool
 
 	Log = func(s string, a ...interface{}) {}
 
@@ -831,12 +826,21 @@ func Watch(tls TLS) { //TODO-
 	}
 }
 
-func PreserveFiles(id int, files ...*os.File) {
-	preserveFilesMu.Lock()
+func File(fd uintptr) *os.File {
+	if int(fd) < 0 {
+		return nil
+	}
 
-	defer preserveFilesMu.Unlock()
+	filesMu.Lock()
 
-	preserveFiles[id] = files
+	defer filesMu.Unlock()
+
+	f := files[fd]
+	if f == nil {
+		f = os.NewFile(fd, fmt.Sprintf("fd%v", fd))
+		files[fd] = f
+	}
+	return f
 }
 
 func checkSyscall(n long) bool { //TODO- eventually after making the C code clean of "bad" syscalls
