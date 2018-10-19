@@ -20,16 +20,7 @@ void _fini() {}
 
 long __syscall(long n, long a1, long a2, long a3, long a4, long a5, long a6) {
 	int err;
-	__GO__(
-		"if !checkSyscall(_n) {\n"
-		"\treturn 0 // ignore\n"
-		"}\n"
-		"x, y, err := syscall.Syscall6(uintptr(_n), uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6));\n"
-		"if logging { __syscall(_n, uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6), x, y, err) }\n"
-		"_err = int32(err)\n"
-		"r = long(x)\n"
-		"_ = y\n"
-	);
+	__GO__("r, _err = __syscall(tls, _n, uintptr(_a1), uintptr(_a2), uintptr(_a3), uintptr(_a4), uintptr(_a5), uintptr(_a6))\n");
 	if (err) {
 		errno = err;
 		return -err;
