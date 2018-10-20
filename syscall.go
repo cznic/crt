@@ -5,6 +5,7 @@
 package crt
 
 import (
+	"fmt"
 	"runtime"
 	"syscall"
 	"unsafe"
@@ -347,14 +348,18 @@ var (
 	}
 )
 
-func checkSyscall(n long) bool { //TODO- eventually after making the C code clean of "bad" syscalls
+func __syscall(tls TLS, n long, a1, a2, a3, a4, a5, a6 uintptr) (long, int32) {
+	var locked bool
+	if tls != 0 {
+		locked = (*s1__pthread)(unsafe.Pointer(tls)).Fos_thread_locked != 0
+	}
+
 	switch n {
 	case
 		DSYS_access,
 		DSYS_brk,
 		DSYS_chdir,
 		DSYS_chmod,
-		DSYS_clock_gettime,
 		DSYS_close,
 		DSYS_exit_group,
 		DSYS_fchmod,
@@ -362,7 +367,6 @@ func checkSyscall(n long) bool { //TODO- eventually after making the C code clea
 		DSYS_fstat,
 		DSYS_fsync,
 		DSYS_ftruncate,
-		DSYS_futex,
 		DSYS_getcwd,
 		DSYS_getdents,
 		DSYS_geteuid,
@@ -378,12 +382,8 @@ func checkSyscall(n long) bool { //TODO- eventually after making the C code clea
 		DSYS_mprotect,
 		DSYS_mremap,
 		DSYS_munmap,
-		DSYS_nanosleep,
 		DSYS_open,
 		DSYS_pipe,
-		DSYS_pipe2,
-		DSYS_pread,
-		DSYS_pwrite,
 		DSYS_read,
 		DSYS_readlink,
 		DSYS_readv,
@@ -400,25 +400,23 @@ func checkSyscall(n long) bool { //TODO- eventually after making the C code clea
 		DSYS_write,
 		DSYS_writev:
 
-		return true
+		// ok
+
 	case
-		DSYS_rt_sigaction,   //TODO
-		DSYS_rt_sigprocmask: //TODO
+		DSYS_clock_gettime,
+		DSYS_nanosleep,
+		DSYS_pread,
+		DSYS_pwrite,
+		DSYS_rt_sigaction, //TODO
+		DSYS_rt_sigprocmask:
 
-		return false // ignore the syscall //TODO later
+		if !locked && tls != 0 {
+			runtime.LockOSThread()
+			(*s1__pthread)(unsafe.Pointer(tls)).Fos_thread_locked = 1
+			locked = true
+		}
 	default:
-		panic(n)
-	}
-}
-
-func __syscall(tls TLS, n long, a1, a2, a3, a4, a5, a6 uintptr) (long, int32) {
-	if !checkSyscall(n) {
-		return 0, 0 // ignore
-	}
-
-	var locked bool
-	if tls != 0 {
-		locked = (*s1__pthread)(unsafe.Pointer(tls)).Fos_thread_locked != 0
+		panic(fmt.Errorf("SYSCALL %s", syscalls[int(n)]))
 	}
 
 	if !locked {
