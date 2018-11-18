@@ -1,18 +1,5 @@
-# crt
+`github.com/cznic/crt` has moved to [`modernc.org/crt`](https://godoc.org/modernc.org/crt) ([vcs](https://gitlab.com/cznic/crt)).
 
-Package crt provides C-runtime services. Work In Progress. API unstable.
+Please update your import paths to `modernc.org/crt`.
 
-Installation
-
-    $ go get github.com/cznic/crt
-
-Documentation: [godoc.org/github.com/cznic/crt](http://godoc.org/github.com/cznic/crt)
-
-Building with `make` requires the following Go packages
-
-* github.com/golang/lint/golint
-* github.com/mdempsky/maligned
-* github.com/mdempsky/unconvert
-* honnef.co/go/tools/cmd/unused
-* honnef.co/go/tools/cmd/gosimple
-* github.com/client9/misspell/cmd/misspell
+This repo is now archived.
